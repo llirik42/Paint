@@ -22,9 +22,9 @@ public class MenuArea extends JPanel {
         final JPopupMenu editMenu = new JPopupMenu();
         editMenu.setBackground(BACKGROUND_COLOR);
         final ButtonGroup group = new ButtonGroup();
-        final JButton drawLineButton = createButton("Draw line", "DRAW LINE ACTION", actionListener);
-        final JButton drawStampButton = createButton("Draw stamp", "DRAW STAMP ACTION", actionListener);
-        final JButton fillButton = createButton("Fill", "FILL ACTION", actionListener);
+        final JRadioButton drawLineButton = createRadionButton("Draw line", "DRAW LINE ACTION", actionListener);
+        final JRadioButton drawStampButton = createRadionButton("Draw stamp", "DRAW STAMP ACTION", actionListener);
+        final JRadioButton fillButton = createRadionButton("Fill", "FILL ACTION", actionListener);
         final JButton clearButton = createButton("Clear", "CLEAR ACTION", actionListener);
         final JButton changeColorButton = createButton("Change color", "CHANGE COLOR ACTION", actionListener);
         final JButton changeRotationButton = createButton("Change rotation", "CHANGE ROTATION ACTION", actionListener);
@@ -54,6 +54,17 @@ public class MenuArea extends JPanel {
 
     private static JButton createButton(String label, String actionCommand, ActionListener actionListener) {
         final JButton result = new JButton(label);
+        result.setBorderPainted(false);
+        result.setFont(FONT);
+        result.setBackground(BACKGROUND_COLOR);
+        result.setActionCommand(actionCommand);
+        result.addActionListener(actionListener);
+
+        return result;
+    }
+
+    private static JRadioButton createRadionButton(String label, String actionCommand, ActionListener actionListener) {
+        final JRadioButton result = new JRadioButton(label);
         result.setBorderPainted(false);
         result.setFont(FONT);
         result.setBackground(BACKGROUND_COLOR);
