@@ -1,28 +1,54 @@
 package ru.nsu.kondrenko.view;
 
 import javax.swing.*;
-import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class View {
+    private static final FileFilter fileFilter = new FileNameExtensionFilter("Images", "png", "bmp", "jpeg", "jpg", "gif");
+
+    private final JFileChooser fileChooser;
+    private final JFrame frame;
+
     public View(String viewName, int minWidth, int minHeight, ActionListener actionListener) {
-        final JFrame jFrame = new JFrame(viewName);
-        jFrame.setVisible(true);
-        jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        jFrame.setMinimumSize(new Dimension(minWidth, minHeight));
+        fileChooser = new JFileChooser();
+        initFileChooser();
+
+        frame = new JFrame(viewName);
+        initFrame(minWidth, minHeight, actionListener);
+    }
+
+    public File selectImageFile() {
+        final int code = fileChooser.showOpenDialog(frame);
+
+        if (code == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+
+        return null;
+    }
+
+    private void initFileChooser() {
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.addChoosableFileFilter(fileFilter);
+    }
+
+    private void initFrame(int minWidth, int minHeight, ActionListener actionListener) {
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(minWidth, minHeight));
+        frame.setResizable(false);
 
         final DrawingArea drawingArea = new DrawingArea();
-        jFrame.add(drawingArea, BorderLayout.CENTER);
+        frame.add(drawingArea, BorderLayout.CENTER);
 
-        final ButtonsArea buttonsArea = new ButtonsArea(actionListener);
-        jFrame.add(buttonsArea, BorderLayout.NORTH);
+        final UpperArea toolsArea = new UpperArea(actionListener);
+        frame.add(toolsArea, BorderLayout.NORTH);
 
-        final MenuArea menuArea = new MenuArea(actionListener);
-        jFrame.add(menuArea.getJMenuBar());
-
-        jFrame.setResizable(false);
-
-        jFrame.pack();
+        frame.pack();
+        frame.setVisible(true);
     }
 }

@@ -4,13 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class ButtonsArea extends JPanel {
+public class ToolsArea extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(0.85f, 0.85f, 0.85f);
 
-    public ButtonsArea(ActionListener actionListener) {
+    public ToolsArea(ActionListener actionListener) {
+        setLayout(new FlowLayout(FlowLayout.LEFT));
         setBackground(BACKGROUND_COLOR);
 
-        setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;

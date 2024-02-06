@@ -9,7 +9,6 @@ public class Main {
 
     public static void main(String[] args) {
         Controller controller = new Controller();
-
         final View view = new View("Paint", MIN_WIDTH, MIN_HEIGHT, controller);
     }
 }
