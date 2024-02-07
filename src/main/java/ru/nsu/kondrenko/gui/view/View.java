@@ -48,7 +48,7 @@ public class View {
         final MenuArea menuArea = new MenuArea(actionListener);
         frame.setJMenuBar(menuArea.getMenuBar());
 
-//        frame.add(new ToolsArea(actionListener));
+        frame.add(new ToolsArea(actionListener), BorderLayout.NORTH);
 
         frame.pack();
         frame.setVisible(true);

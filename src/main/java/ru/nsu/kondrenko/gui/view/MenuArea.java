@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 public class MenuArea extends JPanel {
     private static final Font FONT = new Font("Roboto", Font.BOLD, 14);
 
-    private static final Color MENU_BACKGROUND_COLOR = new Color(0.85f, 0.85f, 0.85f);
-    private static final Color BUTTONS_FONT_COLOR = new Color(0.16f, 0.15f, 0.15f);
+    private static final Color MENU_BACKGROUND_COLOR = new Color(0.75f, 0.75f, 0.75f);
+    private static final Color BUTTONS_FONT_COLOR = new Color(0.14f, 0.13f, 0.13f);
 
     private static final String FILE_MENU_TITLE = "File";
     private static final String EDIT_MENU_TITLE = "Edit";
