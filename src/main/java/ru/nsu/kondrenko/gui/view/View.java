@@ -1,4 +1,4 @@
-package ru.nsu.kondrenko.view;
+package ru.nsu.kondrenko.gui.view;
 
 import javax.swing.*;
 import java.awt.*;

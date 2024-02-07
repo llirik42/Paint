@@ -1,4 +1,4 @@
-package ru.nsu.kondrenko.view;
+package ru.nsu.kondrenko.gui.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +16,10 @@ public class MenuArea extends JPanel {
         fileMenu.setBackground(BACKGROUND_COLOR);
         final JButton openButton = createButton("Open", "OPEN-ACTION", actionListener);
         final JButton saveButton = createButton("Save", "SAVE ACTION", actionListener);
+        final JButton exitButton = createButton("Exit", "EXIT ACTION", actionListener);
         fileMenu.add(openButton);
         fileMenu.add(saveButton);
+        fileMenu.add(exitButton);
 
         final JPopupMenu editMenu = new JPopupMenu();
         editMenu.setBackground(BACKGROUND_COLOR);

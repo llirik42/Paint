@@ -1,7 +1,7 @@
-package ru.nsu.kondrenko;
+package ru.nsu.kondrenko.gui;
 
-import ru.nsu.kondrenko.controller.Controller;
-import ru.nsu.kondrenko.view.View;
+import ru.nsu.kondrenko.gui.controller.Controller;
+import ru.nsu.kondrenko.gui.view.View;
 
 public class Main {
     private static final int MIN_WIDTH = 640;
