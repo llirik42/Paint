@@ -45,8 +45,10 @@ public class View {
         final DrawingArea drawingArea = new DrawingArea();
         frame.add(drawingArea, BorderLayout.CENTER);
 
-        final UpperArea toolsArea = new UpperArea(actionListener);
-        frame.add(toolsArea, BorderLayout.NORTH);
+        final MenuArea menuArea = new MenuArea(actionListener);
+        frame.setJMenuBar(menuArea.getMenuBar());
+
+//        frame.add(new ToolsArea(actionListener));
 
         frame.pack();
         frame.setVisible(true);
