@@ -5,6 +5,11 @@ import ru.nsu.kondrenko.gui.ActionCommands;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
+record MenuItemProperties(String label, String actionCommand) {}
 
 public class MenuArea extends JPanel {
     private static final Font FONT = new Font("Go", Font.BOLD, 14);
@@ -16,21 +21,38 @@ public class MenuArea extends JPanel {
     private static final String EDIT_MENU_TITLE = "Edit";
     private static final String HELP_MENU_TITLE = "Help";
 
-    private static final String OPEN_BUTTON_LABEL = "Open";
-    private static final String SAVE_BUTTON_LABEL = "Save";
-    private static final String EXIT_BUTTON_LABEL = "Exit";
-    private static final String DRAW_LINE_BUTTON_LABEL = "Draw line";
-    private static final String DRAW_STAMP_BUTTON_LABEL = "Draw stamp";
-    private static final String FILL_BUTTON_LABEL = "Fill";
-    private static final String CLEAR_BUTTON_LABEL = "Clear";
-    private static final String CHANGE_COLOR_BUTTON_LABEL = "Change color";
-    private static final String CHANGE_THICKNESS_BUTTON_LABEL = "Change thickness";
-    private static final String CHANGE_STAMP_BUTTON_LABEL = "Change stamp";
-    private static final String CHANGE_ROTATION_BUTTON_LABEL = "Change rotation";
-    private static final String CHANGE_RADIUS_BUTTON_LABEL = "Change radius";
+    private static final List<Function<ActionListener, JMenu>> MENUS_CREATION_METHODS = Arrays.asList(
+            MenuArea::createFileMenu,
+            MenuArea::createEditMenu,
+            MenuArea::createHelpMenu
+    );
 
-    private static final String SHOW_HELP_BUTTON_LABEL = "Help";
-    private static final String SHOW_ABOUT_BUTTON_LABEL = "About";
+    private static final List<MenuItemProperties> FILE_MENU_ITEMS_PROPERTIES = Arrays.asList(
+            new MenuItemProperties("Open", ActionCommands.OPEN_ACTION_COMMAND),
+            new MenuItemProperties("Save", ActionCommands.SAVE_ACTION_COMMAND),
+            new MenuItemProperties("Exit", ActionCommands.EXIT_ACTION_COMMAND)
+    );
+
+    private static final List<MenuItemProperties> EDIT_MENU_DRAWING_ITEMS_PROPERTIES = Arrays.asList(
+            new MenuItemProperties("Draw line", ActionCommands.DRAW_LINE_ACTION_COMMAND),
+            new MenuItemProperties("Draw stamp", ActionCommands.DRAW_STAMP_ACTION_COMMAND),
+            new MenuItemProperties("Fill", ActionCommands.FILL_ACTION_COMMAND)
+    );
+
+    private static final List<MenuItemProperties> EDIT_MENU_OTHER_ITEMS_PROPERTIES = Arrays.asList(
+            new MenuItemProperties("Clear", ActionCommands.CLEAR_ACTION_COMMAND),
+            new MenuItemProperties("Change color", ActionCommands.CHANGE_COLOR_ACTION_COMMAND),
+            new MenuItemProperties("Change thickness", ActionCommands.CHANGE_THICKNESS_ACTION_COMMAND),
+            new MenuItemProperties("Change stamp", ActionCommands.CHANGE_STAMP_ACTION_COMMAND),
+            new MenuItemProperties("Change rotation", ActionCommands.CHANGE_ROTATION_ACTION_COMMAND),
+            new MenuItemProperties("Change radius", ActionCommands.CHANGE_RADIUS_ACTION_COMMAND)
+    );
+
+    private static final List<MenuItemProperties> HELP_MENU_ITEMS_PROPERTIES = Arrays.asList(
+            new MenuItemProperties("Help", ActionCommands.SHOW_HELP_ACTION_COMMAND),
+            new MenuItemProperties("About", ActionCommands.SHOW_ABOUT_ACTION_COMMAND)
+    );
+
 
     private final JMenuBar menuBar;
 
@@ -41,37 +63,19 @@ public class MenuArea extends JPanel {
         menuBar = new JMenuBar();
         menuBar.setBackground(MENU_BACKGROUND_COLOR);
 
-        final JMenu fileMenu = createFileMenu(actionListener);
-        final JMenu editMenu = createEditMenu(actionListener);
-        final JMenu helpMenu = createHelpMenu(actionListener);
-
-        menuBar.add(fileMenu);
-        menuBar.add(editMenu);
-        menuBar.add(helpMenu);
+        for (final var it : MENUS_CREATION_METHODS) {
+            final JMenu menu = it.apply(actionListener);
+            menuBar.add(menu);
+        }
     }
 
     private static JMenu createFileMenu(ActionListener actionListener) {
         final JMenu result = createMenu(FILE_MENU_TITLE);
 
-        final JMenuItem openButton = createMenuItem(
-                OPEN_BUTTON_LABEL,
-                ActionCommands.OPEN_ACTION_COMMAND,
-                actionListener
-        );
-        final JMenuItem saveButton = createMenuItem(
-                SAVE_BUTTON_LABEL,
-                ActionCommands.SAVE_ACTION_COMMAND,
-                actionListener
-        );
-        final JMenuItem exitButton = createMenuItem(
-                EXIT_BUTTON_LABEL,
-                ActionCommands.EXIT_ACTION_COMMAND,
-                actionListener
-        );
-
-        result.add(openButton);
-        result.add(saveButton);
-        result.add(exitButton);
+        for (final var it : FILE_MENU_ITEMS_PROPERTIES) {
+            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
+            result.add(item);
+        }
 
         return result;
     }
@@ -80,65 +84,17 @@ public class MenuArea extends JPanel {
         final JMenu result = createMenu(EDIT_MENU_TITLE);
 
         final ButtonGroup group = new ButtonGroup();
-        final JRadioButtonMenuItem drawLineButton = createRadioButtonMenuItem(
-                DRAW_LINE_BUTTON_LABEL,
-                ActionCommands.DRAW_LINE_ACTION_COMMAND,
-                actionListener
-        );
-        final JRadioButtonMenuItem drawStampButton = createRadioButtonMenuItem(
-                DRAW_STAMP_BUTTON_LABEL,
-                ActionCommands.DRAW_STAMP_ACTION_COMMAND,
-                actionListener
-        );
-        final JRadioButtonMenuItem fillButton = createRadioButtonMenuItem(
-                FILL_BUTTON_LABEL,
-                ActionCommands.FILL_ACTION_COMMAND,
-                actionListener
-        );
-
-        final JMenuItem clearButton = createMenuItem(
-                CLEAR_BUTTON_LABEL,
-                ActionCommands.CLEAR_ACTION_COMMAND,
-                actionListener
-        );
-        final JMenuItem changeColorButton = createMenuItem(
-                CHANGE_COLOR_BUTTON_LABEL,
-                ActionCommands.CHANGE_COLOR_ACTION_COMMAND, actionListener);
-        final JMenuItem changeThicknessButton = createMenuItem(
-                CHANGE_THICKNESS_BUTTON_LABEL,
-                ActionCommands.CHANGE_THICKNESS_ACTION_COMMAND,
-                actionListener
-        );
-        final JMenuItem changeStampButton = createMenuItem(
-                CHANGE_STAMP_BUTTON_LABEL,
-                ActionCommands.CHANGE_STAMP_ACTION_COMMAND,
-                actionListener
-        );
-        final JMenuItem changeRotationButton = createMenuItem(
-                CHANGE_ROTATION_BUTTON_LABEL,
-                ActionCommands.CHANGE_ROTATION_ACTION_COMMAND,
-                actionListener
-        );
-        final JMenuItem changeRadiusButton = createMenuItem(
-                CHANGE_RADIUS_BUTTON_LABEL,
-                ActionCommands.CHANGE_RADIUS_ACTION_COMMAND,
-                actionListener
-        );
-
-        group.add(drawLineButton);
-        group.add(drawStampButton);
-        group.add(fillButton);
-
-        result.add(drawLineButton);
-        result.add(drawStampButton);
-        result.add(fillButton);
+        for (final var it : EDIT_MENU_DRAWING_ITEMS_PROPERTIES) {
+            final JRadioButtonMenuItem item = createRadioButtonMenuItem(it.label(), it.actionCommand(), actionListener);
+            group.add(item);
+            result.add(item);
+        }
         result.add(new JSeparator());
-        result.add(clearButton);
-        result.add(changeColorButton);
-        result.add(changeThicknessButton);
-        result.add(changeStampButton);
-        result.add(changeRotationButton);
-        result.add(changeRadiusButton);
+
+        for (final var it : EDIT_MENU_OTHER_ITEMS_PROPERTIES) {
+            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
+            result.add(item);
+        }
 
         return result;
     }
@@ -146,19 +102,10 @@ public class MenuArea extends JPanel {
     private static JMenu createHelpMenu(ActionListener actionListener) {
         final JMenu result = createMenu(HELP_MENU_TITLE);
 
-        final JMenuItem helpButton = createMenuItem(
-                SHOW_HELP_BUTTON_LABEL,
-                ActionCommands.SHOW_HELP_ACTION_COMMAND,
-                actionListener
-        );
-        final JMenuItem aboutButton = createMenuItem(
-                SHOW_ABOUT_BUTTON_LABEL,
-                ActionCommands.SHOW_ABOUT_ACTION_COMMAND,
-                actionListener
-        );
-
-        result.add(helpButton);
-        result.add(aboutButton);
+        for (final var it : HELP_MENU_ITEMS_PROPERTIES) {
+            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
+            result.add(item);
+        }
 
         return result;
     }
