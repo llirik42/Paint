@@ -1,16 +1,37 @@
 package ru.nsu.kondrenko.gui.controller;
 
 import ru.nsu.kondrenko.gui.ActionCommands;
+import ru.nsu.kondrenko.model.ImageReader;
+import ru.nsu.kondrenko.model.ImageReadingException;
+import ru.nsu.kondrenko.model.Context;
+import ru.nsu.kondrenko.model.ContextState;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class Controller implements ActionListener {
+public class Controller extends MouseAdapter implements ActionListener {
     private final Map<String, Runnable> actionCommandsMap = new HashMap<>();
 
-    public Controller() {
+    private boolean hasPrevousCoordinates;
+    private int prevX;
+    private int prevY;
+
+    private final ImageReader reader;
+
+    private final Context context;
+
+    public Controller(Context context) {
+        this.context = context;
+        this.reader = new ImageReader();
+        this.hasPrevousCoordinates = false;
+
         actionCommandsMap.put(ActionCommands.OPEN_ACTION_COMMAND, this::handleOpenActionCommand);
         actionCommandsMap.put(ActionCommands.SAVE_ACTION_COMMAND, this::handleSaveActionCommand);
         actionCommandsMap.put(ActionCommands.EXIT_ACTION_COMMAND, this::handleExitActionCommand);
@@ -31,19 +52,41 @@ public class Controller implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        actionCommandsMap.get(actionEvent.getActionCommand()).run();
+        if (actionEvent.getSource() instanceof JFileChooser fileChooser) {
+            handleJFileChooserEvent(actionEvent, fileChooser);
+        } else {
+            actionCommandsMap.get(actionEvent.getActionCommand()).run();
+        }
+    }
+
+    private void handleJFileChooserEvent(ActionEvent actionEvent, JFileChooser fileChooser) {
+        final String actionCommand = actionEvent.getActionCommand();
+
+        if (Objects.equals(actionCommand, JFileChooser.APPROVE_SELECTION)) {
+            try {
+                final BufferedImage image = reader.read(fileChooser.getSelectedFile());
+                context.setImage(image);
+                context.setState(ContextState.REPAINTING);
+            } catch (ImageReadingException exception) {
+                // TODO: handle
+            }
+        } else if (Objects.equals(actionCommand, JFileChooser.CANCEL_SELECTION)) {
+            System.out.println("Selection canceled");
+        } else {
+            // Ignored
+        }
     }
 
     private void handleOpenActionCommand() {
-        System.out.println("Open");
+        context.setState(ContextState.OPENING_FILE);
     }
 
     private void handleSaveActionCommand() {
-        System.out.println("Save");
+        context.setState(ContextState.SAVING_FILE);
     }
 
     private void handleExitActionCommand() {
-        System.out.println("Exit");
+        context.setState(ContextState.EXITING);
     }
 
     private void handleDrawLineActionCommand() {
@@ -88,5 +131,28 @@ public class Controller implements ActionListener {
 
     private void handleShowAboutActionCommand() {
         System.out.println("About");
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        final int curX = e.getX();
+        final int curY = e.getY();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        System.out.println(curX);
+//        System.out.println(curY);
+//        System.out.println("\n");
     }
 }

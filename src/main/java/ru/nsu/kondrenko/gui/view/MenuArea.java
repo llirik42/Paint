@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-record MenuItemProperties(String label, String actionCommand) {}
-
 public class MenuArea extends JPanel {
     private static final Font FONT = new Font("Go", Font.BOLD, 14);
 
@@ -20,25 +18,16 @@ public class MenuArea extends JPanel {
     private static final String FILE_MENU_TITLE = "File";
     private static final String EDIT_MENU_TITLE = "Edit";
     private static final String HELP_MENU_TITLE = "Help";
-
-    private static final List<Function<ActionListener, JMenu>> MENUS_CREATION_METHODS = Arrays.asList(
-            MenuArea::createFileMenu,
-            MenuArea::createEditMenu,
-            MenuArea::createHelpMenu
-    );
-
     private static final List<MenuItemProperties> FILE_MENU_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Open", ActionCommands.OPEN_ACTION_COMMAND),
             new MenuItemProperties("Save", ActionCommands.SAVE_ACTION_COMMAND),
             new MenuItemProperties("Exit", ActionCommands.EXIT_ACTION_COMMAND)
     );
-
     private static final List<MenuItemProperties> EDIT_MENU_DRAWING_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Draw line", ActionCommands.DRAW_LINE_ACTION_COMMAND),
             new MenuItemProperties("Draw stamp", ActionCommands.DRAW_STAMP_ACTION_COMMAND),
             new MenuItemProperties("Fill", ActionCommands.FILL_ACTION_COMMAND)
     );
-
     private static final List<MenuItemProperties> EDIT_MENU_OTHER_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Clear", ActionCommands.CLEAR_ACTION_COMMAND),
             new MenuItemProperties("Change color", ActionCommands.CHANGE_COLOR_ACTION_COMMAND),
@@ -47,13 +36,15 @@ public class MenuArea extends JPanel {
             new MenuItemProperties("Change rotation", ActionCommands.CHANGE_ROTATION_ACTION_COMMAND),
             new MenuItemProperties("Change radius", ActionCommands.CHANGE_RADIUS_ACTION_COMMAND)
     );
-
     private static final List<MenuItemProperties> HELP_MENU_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Help", ActionCommands.SHOW_HELP_ACTION_COMMAND),
             new MenuItemProperties("About", ActionCommands.SHOW_ABOUT_ACTION_COMMAND)
     );
-
-
+    private static final List<Function<ActionListener, JMenu>> MENUS_CREATION_METHODS = Arrays.asList(
+            MenuArea::createFileMenu,
+            MenuArea::createEditMenu,
+            MenuArea::createHelpMenu
+    );
     private final JMenuBar menuBar;
 
     public MenuArea(ActionListener actionListener) {

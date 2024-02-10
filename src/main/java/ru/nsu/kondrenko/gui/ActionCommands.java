@@ -1,6 +1,8 @@
 package ru.nsu.kondrenko.gui;
 
 public final class ActionCommands {
+    public static final String APPROVE_FILE_SELECTION = "APPROVE-FILE";
+
     public static final String OPEN_ACTION_COMMAND = "OPEN";
     public static final String SAVE_ACTION_COMMAND = "SAVE";
     public static final String EXIT_ACTION_COMMAND = "EXIT";

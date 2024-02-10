@@ -1,11 +1,17 @@
 package ru.nsu.kondrenko.model;
 
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public interface Context {
-    void setColor(Color color);
+    void setState(ContextState state);
 
-    Color getColor();
+    ContextState getState();
 
+    void setImage(BufferedImage image);
 
+    BufferedImage getImage();
+
+    void addListener(ContextListener listener);
+
+    void removeListener(ContextListener listener);
 }
