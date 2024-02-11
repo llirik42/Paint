@@ -4,6 +4,7 @@ import ru.nsu.kondrenko.gui.ActionCommands;
 import ru.nsu.kondrenko.model.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -172,8 +173,9 @@ public class Controller implements ActionListener, ComponentListener, MouseListe
 
     @Override
     public void componentResized(ComponentEvent componentEvent) {
-        final int drawingAreaWidth = componentEvent.getComponent().getWidth();
-        final int drawingAreaHeight = componentEvent.getComponent().getHeight();
+        final Component drawingArea = componentEvent.getComponent();
+        final int drawingAreaWidth = drawingArea.getWidth();
+        final int drawingAreaHeight = drawingArea.getHeight();
 
         final BufferedImage oldImage = context.getImage();
         final int oldImageWidth = oldImage.getWidth();
