@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Controller implements ActionListener, ComponentListener, MouseListener {
+public class Controller extends Adapter {
     private final Map<String, Runnable> actionCommandsMap = new HashMap<>();
     private final ImageReader reader;
     private final ImageSaver saver;
@@ -147,31 +147,6 @@ public class Controller implements ActionListener, ComponentListener, MouseListe
     }
 
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
     public void componentResized(ComponentEvent componentEvent) {
         final Component drawingArea = componentEvent.getComponent();
         final int drawingAreaWidth = drawingArea.getWidth();
@@ -190,20 +165,5 @@ public class Controller implements ActionListener, ComponentListener, MouseListe
 
         final BufferedImage newImage = Utils.resizeBufferedImage(newImageWidth, newImageHeight, oldImage);
         context.setImage(newImage);
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent componentEvent) {
-
-    }
-
-    @Override
-    public void componentShown(ComponentEvent componentEvent) {
-
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent componentEvent) {
-
     }
 }
