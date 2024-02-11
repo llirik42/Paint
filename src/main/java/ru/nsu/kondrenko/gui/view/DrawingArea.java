@@ -7,12 +7,12 @@ import java.awt.image.BufferedImage;
 public class DrawingArea extends JPanel {
     private BufferedImage image;
 
-    void setImage(BufferedImage image) {
-        this.image = image;
-    }
-
     public DrawingArea() {
         setBackground(Color.WHITE);
+    }
+
+    void setImage(BufferedImage image) {
+        this.image = image;
     }
 
     @Override

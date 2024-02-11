@@ -10,6 +10,10 @@ public class ContextImpl implements Context {
     private BufferedImage image;
     private ContextState state;
 
+    public ContextImpl(BufferedImage startImage) {
+        image = startImage;
+    }
+
     @Override
     public void setState(ContextState state) {
         this.state = state;

@@ -1,9 +1,9 @@
 package ru.nsu.kondrenko.gui.view;
 
 import ru.nsu.kondrenko.model.ImageReader;
-import ru.nsu.kondrenko.model.ImageReadingException;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     private final ImageReader reader;
@@ -18,7 +18,7 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     private final ImageIcon changeRadiusToolIcon;
     private final ImageIcon changeRotationToolIcon;
 
-    public ToolsIconsSupplierImpl() throws ImageReadingException {
+    public ToolsIconsSupplierImpl() throws IOException {
         reader = new ImageReader();
         lineToolIcon = loadImageIcon("/line.png");
         stampToolIcon = loadImageIcon("/hexagon.png");
@@ -76,7 +76,7 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
         return changeRotationToolIcon;
     }
 
-    private ImageIcon loadImageIcon(final String path) throws ImageReadingException {
+    private ImageIcon loadImageIcon(final String path) throws IOException {
         return new ImageIcon(reader.readAsResource(path));
     }
 }

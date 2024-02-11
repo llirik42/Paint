@@ -1,35 +1,30 @@
 package ru.nsu.kondrenko.gui.controller;
 
 import ru.nsu.kondrenko.gui.ActionCommands;
-import ru.nsu.kondrenko.model.ImageReader;
-import ru.nsu.kondrenko.model.ImageReadingException;
-import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ContextState;
+import ru.nsu.kondrenko.model.*;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Controller extends MouseAdapter implements ActionListener {
+public class Controller implements ActionListener, ComponentListener, MouseListener {
     private final Map<String, Runnable> actionCommandsMap = new HashMap<>();
-
-    private boolean hasPrevousCoordinates;
+    private final ImageReader reader;
+    private final ImageSaver saver;
+    private final Context context;
+    private final boolean hasPrevousCoordinates;
     private int prevX;
     private int prevY;
-
-    private final ImageReader reader;
-
-    private final Context context;
 
     public Controller(Context context) {
         this.context = context;
         this.reader = new ImageReader();
+        this.saver = new ImageSaver();
         this.hasPrevousCoordinates = false;
 
         actionCommandsMap.put(ActionCommands.OPEN_ACTION_COMMAND, this::handleOpenActionCommand);
@@ -62,18 +57,35 @@ public class Controller extends MouseAdapter implements ActionListener {
     private void handleJFileChooserEvent(ActionEvent actionEvent, JFileChooser fileChooser) {
         final String actionCommand = actionEvent.getActionCommand();
 
-        if (Objects.equals(actionCommand, JFileChooser.APPROVE_SELECTION)) {
-            try {
-                final BufferedImage image = reader.read(fileChooser.getSelectedFile());
-                context.setImage(image);
-                context.setState(ContextState.REPAINTING);
-            } catch (ImageReadingException exception) {
-                // TODO: handle
-            }
-        } else if (Objects.equals(actionCommand, JFileChooser.CANCEL_SELECTION)) {
-            System.out.println("Selection canceled");
+        if (!Objects.equals(actionCommand, JFileChooser.APPROVE_SELECTION)) {
+            return;
+        }
+
+        if (context.getState() == ContextState.SAVING_FILE) {
+            handleApproveSavingFile(fileChooser);
+        } else if (context.getState() == ContextState.OPENING_FILE) {
+            handleApproveOpeningFile(fileChooser);
         } else {
             // Ignored
+        }
+    }
+
+    private void handleApproveOpeningFile(JFileChooser fileChooser) {
+        try {
+            final BufferedImage image = reader.read(fileChooser.getSelectedFile());
+            context.setImage(image);
+            context.setState(ContextState.REPAINTING);
+        } catch (IOException exception) {
+            // TODO: handle
+        }
+    }
+
+    private void handleApproveSavingFile(JFileChooser fileChooser) {
+        try {
+            final File pngFile = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".png");
+            saver.saveAsPNG(context.getImage(), pngFile);
+        } catch (IOException exception) {
+            // TODO: handle
         }
     }
 
@@ -134,25 +146,62 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        final int curX = e.getX();
-        final int curY = e.getY();
+    public void mouseClicked(MouseEvent mouseEvent) {
 
+    }
 
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
 
+    }
 
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) {
 
+    }
 
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
 
+    }
 
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
 
+    }
 
+    @Override
+    public void componentResized(ComponentEvent componentEvent) {
+        final int drawingAreaWidth = componentEvent.getComponent().getWidth();
+        final int drawingAreaHeight = componentEvent.getComponent().getHeight();
 
+        final BufferedImage oldImage = context.getImage();
+        final int oldImageWidth = oldImage.getWidth();
+        final int oldImageHeight = oldImage.getHeight();
 
+        final int newImageWidth = Integer.max(drawingAreaWidth, oldImageWidth);
+        final int newImageHeight = Integer.max(drawingAreaHeight, oldImageHeight);
 
+        if (newImageWidth == oldImageWidth && newImageHeight == oldImageHeight) {
+            return;
+        }
 
-//        System.out.println(curX);
-//        System.out.println(curY);
-//        System.out.println("\n");
+        final BufferedImage newImage = Utils.resizeBufferedImage(newImageWidth, newImageHeight, oldImage);
+        context.setImage(newImage);
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent componentEvent) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent componentEvent) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent componentEvent) {
+
     }
 }

@@ -3,32 +3,31 @@ package ru.nsu.kondrenko.gui.view;
 import ru.nsu.kondrenko.model.Context;
 import ru.nsu.kondrenko.model.ContextListener;
 import ru.nsu.kondrenko.model.ContextState;
-import ru.nsu.kondrenko.model.ImageReadingException;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class View implements ContextListener {
-    private static final FileFilter fileFilter = new FileNameExtensionFilter("Images", "png", "bmp", "jpeg", "jpg", "gif");
+    private static final FileFilter filesOpeningFilter = new FileNameExtensionFilter("Images", "png", "bmp", "jpeg", "jpg", "gif");
 
     private final Map<ContextState, Consumer<Context>> contextStateChangeHandlers;
 
-    private final JFileChooser fileChooser;
+    private final JFileChooser openingFileChooser;
+    private final JFileChooser savingFileChooser;
     private final JFrame frame;
     private final DrawingArea drawingArea;
 
-    public View(String viewName, int minWidth, int minHeight, ActionListener actionListener, MouseListener mouseListener) throws ImageReadingException {
+    public View(String viewName, int minWidth, int minHeight, ActionListener actionListener, MouseListener mouseListener, ComponentListener drawingAreaListener) throws IOException {
         contextStateChangeHandlers = new HashMap<>() {{
             put(ContextState.OPENING_FILE, View.this::onOpeningFile);
             put(ContextState.SAVING_FILE, View.this::onSavingFile);
@@ -37,19 +36,16 @@ public class View implements ContextListener {
         }};
 
         drawingArea = new DrawingArea();
+        drawingArea.addComponentListener(drawingAreaListener);
 
-        fileChooser = new JFileChooser();
+        openingFileChooser = new JFileChooser();
         initFileChooser(actionListener);
+
+        savingFileChooser = new JFileChooser();
+        savingFileChooser.addActionListener(actionListener);
 
         frame = new JFrame(viewName);
         initFrame(minWidth, minHeight, actionListener, mouseListener);
-
-        frame.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                System.out.println(frame.getWidth() + " " + frame.getHeight());
-            }
-        });
-
     }
 
     public void show() {
@@ -62,7 +58,7 @@ public class View implements ContextListener {
     }
 
     private void onOpeningFile(Context context) {
-        final int code = fileChooser.showOpenDialog(frame);
+        final int code = openingFileChooser.showOpenDialog(frame);
 
         if (code == JFileChooser.ERROR_OPTION) {
             showError("Cannot open file");
@@ -70,7 +66,11 @@ public class View implements ContextListener {
     }
 
     private void onSavingFile(Context context) {
+        final int code = savingFileChooser.showSaveDialog(frame);
 
+        if (code == JFileChooser.ERROR_OPTION) {
+            showError("Cannot save file");
+        }
     }
 
     private void onExiting(Context context) {
@@ -87,12 +87,12 @@ public class View implements ContextListener {
     }
 
     private void initFileChooser(ActionListener actionListener) {
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.addChoosableFileFilter(fileFilter);
-        fileChooser.addActionListener(actionListener);
+        openingFileChooser.setAcceptAllFileFilterUsed(false);
+        openingFileChooser.addChoosableFileFilter(filesOpeningFilter);
+        openingFileChooser.addActionListener(actionListener);
     }
 
-    private void initFrame(int minWidth, int minHeight, ActionListener actionListener, MouseListener mouseListener) throws ImageReadingException {
+    private void initFrame(int minWidth, int minHeight, ActionListener actionListener, MouseListener mouseListener) throws IOException {
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setMinimumSize(new Dimension(minWidth, minHeight));
         frame.addMouseListener(mouseListener);
