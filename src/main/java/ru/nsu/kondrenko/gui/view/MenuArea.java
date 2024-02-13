@@ -17,7 +17,7 @@ public class MenuArea extends JPanel {
 
     private static final String FILE_MENU_TITLE = "File";
     private static final String EDIT_MENU_TITLE = "Edit";
-    private static final String HELP_MENU_TITLE = "Help";
+    private static final String HELP_MENU_TITLE = "Info";
     private static final List<MenuItemProperties> FILE_MENU_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Open", ActionCommands.OPEN_ACTION_COMMAND),
             new MenuItemProperties("Save", ActionCommands.SAVE_ACTION_COMMAND),
@@ -25,7 +25,8 @@ public class MenuArea extends JPanel {
     );
     private static final List<MenuItemProperties> EDIT_MENU_DRAWING_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Draw line", ActionCommands.DRAW_LINE_ACTION_COMMAND),
-            new MenuItemProperties("Draw stamp", ActionCommands.DRAW_STAMP_ACTION_COMMAND),
+            new MenuItemProperties("Draw polygon", ActionCommands.DRAW_POLYGON_ACTION_COMMAND),
+            new MenuItemProperties("Draw star", ActionCommands.DRAW_STAR_ACTION_COMMAND),
             new MenuItemProperties("Fill", ActionCommands.FILL_ACTION_COMMAND)
     );
     private static final List<MenuItemProperties> EDIT_MENU_OTHER_ITEMS_PROPERTIES = Arrays.asList(
@@ -36,7 +37,7 @@ public class MenuArea extends JPanel {
             new MenuItemProperties("Change rotation", ActionCommands.CHANGE_ROTATION_ACTION_COMMAND),
             new MenuItemProperties("Change radius", ActionCommands.CHANGE_RADIUS_ACTION_COMMAND)
     );
-    private static final List<MenuItemProperties> HELP_MENU_ITEMS_PROPERTIES = Arrays.asList(
+    private static final List<MenuItemProperties> HELP_ABOUT_MENU_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Help", ActionCommands.SHOW_HELP_ACTION_COMMAND),
             new MenuItemProperties("About", ActionCommands.SHOW_ABOUT_ACTION_COMMAND)
     );
@@ -93,7 +94,7 @@ public class MenuArea extends JPanel {
     private static JMenu createHelpMenu(ActionListener actionListener) {
         final JMenu result = createMenu(HELP_MENU_TITLE);
 
-        for (final var it : HELP_MENU_ITEMS_PROPERTIES) {
+        for (final var it : HELP_ABOUT_MENU_ITEMS_PROPERTIES) {
             final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
             result.add(item);
         }

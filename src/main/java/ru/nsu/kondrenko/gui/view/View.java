@@ -26,26 +26,40 @@ public class View implements ContextListener {
     private final JFileChooser savingFileChooser;
     private final JFrame frame;
     private final DrawingArea drawingArea;
+    private final ToolsArea toolsArea;
 
-    public View(String viewName, int minWidth, int minHeight, ActionListener actionListener, MouseListener mouseListener, ComponentListener drawingAreaListener) throws IOException {
+    public View(String viewName,
+                int minWidth,
+                int minHeight,
+                BufferedImage startImage,
+                ActionListener buttonsListener,
+                ActionListener filesActionsListener,
+                MouseListener mouseListener,
+                ComponentListener drawingAreaListener
+    ) throws IOException {
         contextStateChangeHandlers = new HashMap<>() {{
             put(ContextState.OPENING_FILE, View.this::onOpeningFile);
             put(ContextState.SAVING_FILE, View.this::onSavingFile);
             put(ContextState.EXITING, View.this::onExiting);
             put(ContextState.REPAINTING, View.this::onRepainting);
+            put(ContextState.DRAWING_LINE, View.this::onDrawingLine);
+            put(ContextState.DRAWING_POLYGON, View.this::onDrawingPolygon);
         }};
 
-        drawingArea = new DrawingArea();
+        final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
+        toolsArea = new ToolsArea(toolsIconsSupplier, buttonsListener);
+
+        drawingArea = new DrawingArea(startImage.getWidth(), startImage.getHeight(), mouseListener);
         drawingArea.addComponentListener(drawingAreaListener);
 
         openingFileChooser = new JFileChooser();
-        initFileChooser(actionListener);
+        initFileChooser(filesActionsListener);
 
         savingFileChooser = new JFileChooser();
-        savingFileChooser.addActionListener(actionListener);
+        savingFileChooser.addActionListener(filesActionsListener);
 
         frame = new JFrame(viewName);
-        initFrame(minWidth, minHeight, actionListener, mouseListener);
+        initFrame(minWidth, minHeight, buttonsListener);
     }
 
     public void show() {
@@ -79,11 +93,15 @@ public class View implements ContextListener {
     }
 
     private void onRepainting(Context context) {
-        final BufferedImage image = context.getImage();
-        drawingArea.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
-        drawingArea.setImage(image);
-        drawingArea.repaint();
-        frame.pack();
+        repaint(context.getImage());
+    }
+
+    private void onDrawingLine(Context context) {
+
+    }
+
+    private void onDrawingPolygon(Context context) {
+
     }
 
     private void initFileChooser(ActionListener actionListener) {
@@ -92,10 +110,9 @@ public class View implements ContextListener {
         openingFileChooser.addActionListener(actionListener);
     }
 
-    private void initFrame(int minWidth, int minHeight, ActionListener actionListener, MouseListener mouseListener) throws IOException {
+    private void initFrame(int minWidth, int minHeight, ActionListener actionListener) {
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setMinimumSize(new Dimension(minWidth, minHeight));
-        frame.addMouseListener(mouseListener);
 
         final JScrollPane scrollPane = new JScrollPane(drawingArea);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -105,7 +122,7 @@ public class View implements ContextListener {
         final MenuArea menuArea = new MenuArea(actionListener);
         frame.setJMenuBar(menuArea.getMenuBar());
 
-        frame.add(new ToolsArea(new ToolsIconsSupplierImpl(), actionListener), BorderLayout.NORTH);
+        frame.add(toolsArea, BorderLayout.NORTH);
 
         frame.pack();
     }
@@ -117,5 +134,12 @@ public class View implements ContextListener {
                 "Error",
                 JOptionPane.ERROR_MESSAGE
         );
+    }
+
+    private void repaint(BufferedImage image) {
+        drawingArea.resizeSoftly(image.getWidth(), image.getHeight());
+        drawingArea.setImage(image);
+        drawingArea.repaint();
+        frame.pack();
     }
 }

@@ -1,14 +1,13 @@
 package ru.nsu.kondrenko.gui;
 
 public final class ActionCommands {
-    public static final String APPROVE_FILE_SELECTION = "APPROVE-FILE";
-
     public static final String OPEN_ACTION_COMMAND = "OPEN";
     public static final String SAVE_ACTION_COMMAND = "SAVE";
     public static final String EXIT_ACTION_COMMAND = "EXIT";
 
     public static final String DRAW_LINE_ACTION_COMMAND = "DRAW-LINE";
-    public static final String DRAW_STAMP_ACTION_COMMAND = "DRAW STAMP";
+    public static final String DRAW_POLYGON_ACTION_COMMAND = "DRAW-POLYGON";
+    public static final String DRAW_STAR_ACTION_COMMAND = "DRAW-STAR";
     public static final String FILL_ACTION_COMMAND = "FILL";
     public static final String CLEAR_ACTION_COMMAND = "CLEAR";
     public static final String CHANGE_COLOR_ACTION_COMMAND = "CHANGE-COLOR";
