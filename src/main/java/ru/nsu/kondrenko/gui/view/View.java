@@ -130,6 +130,7 @@ public class View implements ContextListener {
         drawingArea.resizeSoftly(image.getWidth(), image.getHeight());
         drawingArea.setImage(image);
         drawingArea.repaint();
+        drawingArea.revalidate();
         frame.pack();
     }
 }

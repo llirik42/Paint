@@ -1,7 +1,6 @@
 package ru.nsu.kondrenko.gui.controller;
 
 import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ContextState;
 import ru.nsu.kondrenko.model.ImageUtils;
 
 import java.awt.*;
