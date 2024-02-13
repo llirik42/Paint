@@ -3,6 +3,7 @@ package ru.nsu.kondrenko.gui.controller;
 import ru.nsu.kondrenko.gui.ActionCommands;
 import ru.nsu.kondrenko.model.Context;
 import ru.nsu.kondrenko.model.ContextState;
+import ru.nsu.kondrenko.model.ContextTools;
 import ru.nsu.kondrenko.model.ImageUtils;
 
 import java.awt.event.ActionEvent;
@@ -55,26 +56,26 @@ public class ButtonsController implements ActionListener {
     }
 
     private void handleDrawLineActionCommand() {
-        context.setState(ContextState.DRAWING_LINE);
+        context.setTool(ContextTools.DRAW_LINE);
     }
 
     private void handleDrawPolygonActionCommand() {
-        context.setState(ContextState.DRAWING_POLYGON);
+        context.setTool(ContextTools.DRAW_POLYGON);
     }
 
     private void handleDrawStarActionCommand() {
-        context.setState(ContextState.DRAWING_STAR);
+        context.setTool(ContextTools.DRAW_STAR);
     }
 
     private void handleFillActionCommand() {
-        context.setState(ContextState.FILLING);
+        context.setTool(ContextTools.FILL);
     }
 
     private void handleClearActionCommand() {
         final BufferedImage currentImage = context.getImage();
         final int width = currentImage.getWidth();
         final int height = currentImage.getHeight();
-        context.setImage(ImageUtils.createWhiteBufferedImage(width, height));
+        context.setImage(ImageUtils.createBlankImage(width, height));
         context.setState(ContextState.REPAINTING);
     }
 

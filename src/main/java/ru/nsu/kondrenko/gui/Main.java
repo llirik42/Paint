@@ -18,15 +18,28 @@ public class Main {
     private static final int MIN_FRAME_WIDTH = 640;
     private static final int MIN_FRAME_HEIGHT = 480;
 
+    private static final BufferedImage START_IMAGE = ImageUtils.createBlankImage(
+            MIN_FRAME_WIDTH,
+            MIN_FRAME_HEIGHT
+    );
+
+    private static final Color START_COLOR = Color.BLACK;
+
+    private static final int START_THICKNESS = 1;
+    private static final int START_RADIUS = 100;
+    private static final int START_NUMBER_OF_SIDES = 4;
+    private static final int START_ROTATION = 0;
+
     public static void main(String[] args) {
         try {
-            final BufferedImage startImage = ImageUtils.createWhiteBufferedImage(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT);
-            final Context context = new ContextImpl();
-            context.setImage(startImage);
-            context.setNumberOfSides(5);
-            context.setRadius(150);
-            context.setColor(Color.GREEN);
-            context.setRotation(-15);
+            final Context context = new ContextImpl(
+                    START_IMAGE,
+                    START_COLOR,
+                    START_THICKNESS,
+                    START_RADIUS,
+                    START_NUMBER_OF_SIDES,
+                    START_ROTATION
+            );
 
             final ButtonsController buttonsController = new ButtonsController(context);
             final FilesActionsController filesActionsController = new FilesActionsController(context);
@@ -37,7 +50,7 @@ public class Main {
                     WINDOW_TITLE,
                     MIN_FRAME_WIDTH,
                     MIN_FRAME_HEIGHT,
-                    startImage,
+                    START_IMAGE,
                     buttonsController,
                     filesActionsController,
                     mouseController,

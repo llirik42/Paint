@@ -8,14 +8,26 @@ import java.util.List;
 public class ContextImpl implements Context {
     private final List<ContextListener> listeners = new ArrayList<>();
 
-    private BufferedImage image;
+    private ContextTools tool;
     private ContextState state;
+    private BufferedImage image;
     private Color color;
     private String errorMessage;
     private int thickness;
     private int radius;
     private int numberOfSides;
     private int rotation;
+
+    public ContextImpl(BufferedImage image, Color color, int thickness, int radius, int numberOfSides, int rotation) {
+        this.tool = ContextTools.NONE;
+        this.state = ContextState.IDLE;
+        this.image = image;
+        this.color = color;
+        this.thickness = thickness;
+        this.radius = radius;
+        this.numberOfSides = numberOfSides;
+        this.rotation = rotation;
+    }
 
     @Override
     public void setState(ContextState state) {
@@ -29,6 +41,16 @@ public class ContextImpl implements Context {
     @Override
     public ContextState getState() {
         return state;
+    }
+
+    @Override
+    public void setTool(ContextTools tool) {
+        this.tool = tool;
+    }
+
+    @Override
+    public ContextTools getTool() {
+        return tool;
     }
 
     @Override

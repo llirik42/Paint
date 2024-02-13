@@ -8,6 +8,10 @@ public interface Context {
 
     ContextState getState();
 
+    void setTool(ContextTools tool);
+
+    ContextTools getTool();
+
     void setImage(BufferedImage image);
 
     BufferedImage getImage();

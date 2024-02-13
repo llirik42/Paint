@@ -9,7 +9,7 @@ public final class ImageUtils {
 
     }
 
-    public static BufferedImage createWhiteBufferedImage(int width, int height) {
+    public static BufferedImage createBlankImage(int width, int height) {
         final BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         final Graphics2D graphics = (Graphics2D)result.getGraphics();

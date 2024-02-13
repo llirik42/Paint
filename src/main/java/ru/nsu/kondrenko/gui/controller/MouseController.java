@@ -3,6 +3,7 @@ package ru.nsu.kondrenko.gui.controller;
 import ru.nsu.kondrenko.model.Context;
 import ru.nsu.kondrenko.model.ContextState;
 import ru.nsu.kondrenko.model.ImageUtils;
+import ru.nsu.kondrenko.model.ContextTools;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -22,18 +23,20 @@ public class MouseController extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        final ContextState state = context.getState();
+        final ContextTools tool = context.getTool();
 
-        if (state != ContextState.DRAWING_LINE && state != ContextState.DRAWING_POLYGON && state != ContextState.DRAWING_STAR) {
+        if (tool == ContextTools.NONE) {
             return;
         }
 
-        if (state == ContextState.DRAWING_LINE) {
+        if (tool == ContextTools.DRAW_LINE) {
             handleDrawingLineState(mouseEvent);
-        } else if (state == ContextState.DRAWING_POLYGON) {
+        } else if (tool == ContextTools.DRAW_POLYGON) {
             handleDrawingPolygonState(mouseEvent);
-        } else {
+        } else if (tool == ContextTools.DRAW_STAR){
             handleDrawingStarState(mouseEvent);
+        } else {
+            handleFilling(mouseEvent);
         }
 
         context.setState(ContextState.REPAINTING);
@@ -55,6 +58,10 @@ public class MouseController extends MouseAdapter {
 
     private void handleDrawingStarState(MouseEvent mouseEvent) {
         drawStarToContext(mouseEvent);
+    }
+
+    private void handleFilling(MouseEvent mouseEvent) {
+        fillInContext(mouseEvent);
     }
 
     private void drawLineToContext(MouseEvent mouseEvent) {
@@ -88,5 +95,11 @@ public class MouseController extends MouseAdapter {
         final int x = mouseEvent.getX();
         final int y = mouseEvent.getY();
         ImageUtils.drawStar(image, color, x, y, thickness, numberOfSides, radius, rotationDeg);
+    }
+
+    private void fillInContext(MouseEvent mouseEvent) {
+        final BufferedImage image = context.getImage();
+        final Color color = context.getColor();
+        ImageUtils.fill(image, color, mouseEvent.getX(), mouseEvent.getY());
     }
 }

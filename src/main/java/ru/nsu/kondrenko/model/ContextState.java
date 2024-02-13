@@ -1,16 +1,13 @@
 package ru.nsu.kondrenko.model;
 
 public enum ContextState {
+    IDLE,
+    REPAINTING,
+    CLEARING,
+
     OPENING_FILE,
     SAVING_FILE,
     EXITING,
-
-    REPAINTING,
-
-    DRAWING_LINE,
-    DRAWING_STAR,
-    DRAWING_POLYGON,
-    FILLING,
 
     CHANGING_COLOR,
     CHANGING_THICKNESS,

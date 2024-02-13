@@ -42,9 +42,6 @@ public class View implements ContextListener {
             put(ContextState.SAVING_FILE, View.this::onSavingFile);
             put(ContextState.EXITING, View.this::onExiting);
             put(ContextState.REPAINTING, View.this::onRepainting);
-            put(ContextState.DRAWING_LINE, View.this::onDrawingLine);
-            put(ContextState.DRAWING_POLYGON, View.this::onDrawingPolygon);
-            put(ContextState.DRAWING_STAR, View.this::onDrawingStar);
         }};
 
         final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
@@ -95,18 +92,6 @@ public class View implements ContextListener {
 
     private void onRepainting(Context context) {
         repaint(context.getImage());
-    }
-
-    private void onDrawingLine(Context context) {
-
-    }
-
-    private void onDrawingPolygon(Context context) {
-
-    }
-
-    private void onDrawingStar(Context context) {
-
     }
 
     private void initFileChooser(ActionListener actionListener) {
