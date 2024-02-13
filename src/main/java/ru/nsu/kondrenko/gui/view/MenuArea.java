@@ -33,7 +33,7 @@ public class MenuArea extends JPanel {
             new MenuItemProperties("Clear", ActionCommands.CLEAR_ACTION_COMMAND),
             new MenuItemProperties("Choose color", ActionCommands.CHOOSE_COLOR_ACTION_COMMAND),
             new MenuItemProperties("Choose thickness", ActionCommands.CHOOSE_THICKNESS_ACTION_COMMAND),
-            new MenuItemProperties("Choose stamp", ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND),
+            new MenuItemProperties("Choose number of sides", ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND),
             new MenuItemProperties("Choose rotation", ActionCommands.CHOOSE_ROTATION_ACTION_COMMAND),
             new MenuItemProperties("Choose radius", ActionCommands.CHOOSE_RADIUS_ACTION_COMMAND)
     );
