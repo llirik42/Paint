@@ -3,9 +3,11 @@ package ru.nsu.kondrenko.gui.controller;
 import ru.nsu.kondrenko.gui.ActionCommands;
 import ru.nsu.kondrenko.model.Context;
 import ru.nsu.kondrenko.model.ContextState;
+import ru.nsu.kondrenko.model.ImageUtils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +71,11 @@ public class ButtonsController implements ActionListener {
     }
 
     private void handleClearActionCommand() {
-
+        final BufferedImage currentImage = context.getImage();
+        final int width = currentImage.getWidth();
+        final int height = currentImage.getHeight();
+        context.setImage(ImageUtils.createWhiteBufferedImage(width, height));
+        context.setState(ContextState.REPAINTING);
     }
 
     private void handleChangeColorActionCommand() {

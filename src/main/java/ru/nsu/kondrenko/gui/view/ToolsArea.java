@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ToolsArea extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(0.85f, 0.85f, 0.85f);
-    private static final int ICON_SIZE = 18;
+    private static final int ICON_SIZE = 20;
 
     public ToolsArea(ToolsIconsSupplier toolsIconsSupplier, ActionListener actionListener) {
         final List<ToolButtonProperties> toolButtonsProperties = Arrays.asList(

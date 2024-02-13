@@ -48,7 +48,7 @@ public final class ImageUtils {
         return result;
     }
 
-    public static void drawPolygon(BufferedImage image, Color color, int x, int y, int n, int radius, int rotationDeg) {
+    public static void drawPolygon(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDeg) {
         final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
         final double radians = Math.PI * rotationDeg / 180;
         final Polygon polygon = new Polygon();
@@ -62,7 +62,7 @@ public final class ImageUtils {
         graphics2D.drawPolygon(polygon);
     }
 
-    public static void drawStar(BufferedImage image, Color color, int x, int y, int n, int radius, int rotationDeg) {
+    public static void drawStar(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDeg) {
         final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
         final double radians = Math.PI * rotationDeg / 180;
 
@@ -72,23 +72,49 @@ public final class ImageUtils {
         graphics2D.draw(starShape);
     }
 
-    public static BufferedImage drawLine(BufferedImage image, int thickness, int x1, int y1, int x2, int y2) {
-        return thickness == 1 ? drawLineByAlgorithm(image, x1, y1, x2, y2) : drawLineByStandardLibrary(image, thickness, x1, y1, x2, y2);
+    public static void fill(BufferedImage image, Color color, int x, int y) {
+
     }
 
-    private static BufferedImage drawLineByStandardLibrary(BufferedImage image, int thickness, int x1, int y1, int x2, int y2) {
-        return image;
+    public static void drawLine(BufferedImage image, Color color, int thickness, int x1, int y1, int x2, int y2) {
+        drawThinLine(image, color, x1, y1, x2, y2);
     }
 
-    private static BufferedImage drawLineByAlgorithm(BufferedImage image, int x1, int y1, int x2, int y2) {
-        return image;
+    private static void drawThinLine(BufferedImage image, Color color, int x1, int y1, int x2, int y2) {
+        final int rgb = color.getRGB();
+
+        if (x1 == x2) {
+            final int minY = Integer.min(y1, y2);
+            final int maxY = Integer.max(y1, y2);
+
+            for (int y = minY; y <= maxY; y++) {
+                image.setRGB(x1, y, rgb);
+            }
+        } else {
+            final int dx = x2 - x1;
+            final int dy = y2 - y1;
+
+            int y = y1;
+            int error = -dx;
+
+            for (int x = 0; x <= dx; x++) {
+                System.out.println(y);
+                error += 2 * dy;
+
+                if (error > 0) {
+                    error -= 2 * dx;
+                    y += 1;
+                }
+
+                image.setRGB(x + x1, y, color.getRGB());
+            }
+        }
     }
 
     private static Shape createStar(double centerX, double centerY,
                                     double innerRadius, double outerRadius, int numRays,
-                                    double startAngleRad)
-    {
-        Path2D path = new Path2D.Double();
+                                    double startAngleRad) {
+        final Path2D path = new Path2D.Double();
         double deltaAngleRad = Math.PI / numRays;
         for (int i = 0; i < numRays * 2; i++)
         {
