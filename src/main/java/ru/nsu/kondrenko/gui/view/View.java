@@ -44,6 +44,7 @@ public class View implements ContextListener {
             put(ContextState.REPAINTING, View.this::onRepainting);
             put(ContextState.DRAWING_LINE, View.this::onDrawingLine);
             put(ContextState.DRAWING_POLYGON, View.this::onDrawingPolygon);
+            put(ContextState.DRAWING_STAR, View.this::onDrawingStar);
         }};
 
         final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
@@ -101,6 +102,10 @@ public class View implements ContextListener {
     }
 
     private void onDrawingPolygon(Context context) {
+
+    }
+
+    private void onDrawingStar(Context context) {
 
     }
 

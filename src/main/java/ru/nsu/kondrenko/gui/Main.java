@@ -23,10 +23,10 @@ public class Main {
             final BufferedImage startImage = ImageUtils.createWhiteBufferedImage(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT);
             final Context context = new ContextImpl();
             context.setImage(startImage);
-            context.setNumberOfSides(3);
+            context.setNumberOfSides(5);
             context.setRadius(150);
             context.setColor(Color.GREEN);
-            context.setRotation(0);
+            context.setRotation(-15);
 
             final ButtonsController buttonsController = new ButtonsController(context);
             final FilesActionsController filesActionsController = new FilesActionsController(context);

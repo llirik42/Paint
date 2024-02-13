@@ -5,7 +5,9 @@ import javax.swing.*;
 public interface ToolsIconsSupplier {
     ImageIcon getLineToolIcon();
 
-    ImageIcon getStampToolIcon();
+    ImageIcon getPolygonToolIcon();
+
+    ImageIcon getStarToolIcon();
 
     ImageIcon getFillToolIcon();
 

@@ -9,7 +9,8 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     private final ImageReader reader;
 
     private final ImageIcon lineToolIcon;
-    private final ImageIcon stampToolIcon;
+    private final ImageIcon polygonToolIcon;
+    private final ImageIcon startToolIcon;
     private final ImageIcon fillToolIcon;
     private final ImageIcon clearToolIcon;
     private final ImageIcon changeColorToolIcon;
@@ -21,7 +22,8 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     public ToolsIconsSupplierImpl() throws IOException {
         reader = new ImageReader();
         lineToolIcon = loadImageIcon("/line.png");
-        stampToolIcon = loadImageIcon("/hexagon.png");
+        polygonToolIcon = loadImageIcon("/hexagon.png");
+        startToolIcon = loadImageIcon("/star.png");
         fillToolIcon = loadImageIcon("/fill.png");
         clearToolIcon = loadImageIcon("/eraser.png");
         changeColorToolIcon = loadImageIcon("/palette.png");
@@ -37,8 +39,13 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     }
 
     @Override
-    public ImageIcon getStampToolIcon() {
-        return stampToolIcon;
+    public ImageIcon getPolygonToolIcon() {
+        return polygonToolIcon;
+    }
+
+    @Override
+    public ImageIcon getStarToolIcon() {
+        return startToolIcon;
     }
 
     @Override

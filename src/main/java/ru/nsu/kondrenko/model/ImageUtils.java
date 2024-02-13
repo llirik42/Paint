@@ -1,6 +1,7 @@
 package ru.nsu.kondrenko.model;
 
 import java.awt.*;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 
 public final class ImageUtils {
@@ -57,34 +58,18 @@ public final class ImageUtils {
             polygon.addPoint((int) (x + radius * Math.cos(angle)), (int) (y + radius * Math.sin(angle)));
         }
 
-        final Color oldColor = graphics2D.getColor();
         graphics2D.setColor(color);
         graphics2D.drawPolygon(polygon);
-        graphics2D.setColor(oldColor);
     }
 
-    public static BufferedImage drawStar(BufferedImage image, Color color, int x, int y, int n, int radius, int rotationDeg) {
-        return image;
+    public static void drawStar(BufferedImage image, Color color, int x, int y, int n, int radius, int rotationDeg) {
+        final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
+        final double radians = Math.PI * rotationDeg / 180;
 
-//        final Graphics2D graphics2D = (Graphics2D)image.getGraphics();
-//
-//        final int[] xPoints = new int[n];
-//        final int[] yPoints = new int[n];
-//
-//        for (int i = 0; i < n; i++) {
-//            final double x = Math.cos(i*((2*Math.PI)/radius))*radius[i % 4];
-//            final double y = Math.sin(i*((2*Math.PI)/radius))*radius[i % 4];
-//
-//            xPoints[i] = (int) x + x1;
-//            yPoints[i] = (int) y + y1;
-//        }
-//
-//        g.setColor(Color.WHITE);
-//        g.fillPolygon(X, Y, nPoints);
-//
-//
-//
-//        gr
+        final Shape starShape = createStar(x, y, (double) radius / 2, radius, n, radians);
+
+        graphics2D.setColor(color);
+        graphics2D.draw(starShape);
     }
 
     public static BufferedImage drawLine(BufferedImage image, int thickness, int x1, int y1, int x2, int y2) {
@@ -97,5 +82,41 @@ public final class ImageUtils {
 
     private static BufferedImage drawLineByAlgorithm(BufferedImage image, int x1, int y1, int x2, int y2) {
         return image;
+    }
+
+    private static Shape createStar(double centerX, double centerY,
+                                    double innerRadius, double outerRadius, int numRays,
+                                    double startAngleRad)
+    {
+        Path2D path = new Path2D.Double();
+        double deltaAngleRad = Math.PI / numRays;
+        for (int i = 0; i < numRays * 2; i++)
+        {
+            double angleRad = startAngleRad + i * deltaAngleRad;
+            double ca = Math.cos(angleRad);
+            double sa = Math.sin(angleRad);
+            double relX = ca;
+            double relY = sa;
+            if ((i & 1) == 0)
+            {
+                relX *= outerRadius;
+                relY *= outerRadius;
+            }
+            else
+            {
+                relX *= innerRadius;
+                relY *= innerRadius;
+            }
+            if (i == 0)
+            {
+                path.moveTo(centerX + relX, centerY + relY);
+            }
+            else
+            {
+                path.lineTo(centerX + relX, centerY + relY);
+            }
+        }
+        path.closePath();
+        return path;
     }
 }
