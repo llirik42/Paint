@@ -2,8 +2,8 @@ package ru.nsu.kondrenko.gui.controller;
 
 import ru.nsu.kondrenko.model.Context;
 import ru.nsu.kondrenko.model.ContextState;
-import ru.nsu.kondrenko.model.ImageUtils;
 import ru.nsu.kondrenko.model.ContextTools;
+import ru.nsu.kondrenko.model.ImageDrawing;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -33,7 +33,7 @@ public class MouseController extends MouseAdapter {
             handleDrawingLineState(mouseEvent);
         } else if (tool == ContextTools.DRAW_POLYGON) {
             handleDrawingPolygonState(mouseEvent);
-        } else if (tool == ContextTools.DRAW_STAR){
+        } else if (tool == ContextTools.DRAW_STAR) {
             handleDrawingStarState(mouseEvent);
         } else {
             handleFilling(mouseEvent);
@@ -70,7 +70,7 @@ public class MouseController extends MouseAdapter {
         final int thickness = context.getThickness();
         final int curX = mouseEvent.getX();
         final int curY = mouseEvent.getY();
-        ImageUtils.drawLine(image, color, thickness, prevX, prevY, curX, curY);
+        ImageDrawing.drawLine(image, color, thickness, prevX, prevY, curX, curY);
     }
 
     private void drawPolygonToContext(MouseEvent mouseEvent) {
@@ -82,7 +82,7 @@ public class MouseController extends MouseAdapter {
         final int rotationDeg = context.getRotation();
         final int x = mouseEvent.getX();
         final int y = mouseEvent.getY();
-        ImageUtils.drawPolygon(image, color, x, y, thickness, numberOfSides, radius, rotationDeg);
+        ImageDrawing.drawPolygon(image, color, x, y, thickness, numberOfSides, radius, rotationDeg);
     }
 
     private void drawStarToContext(MouseEvent mouseEvent) {
@@ -94,12 +94,12 @@ public class MouseController extends MouseAdapter {
         final int rotationDeg = context.getRotation();
         final int x = mouseEvent.getX();
         final int y = mouseEvent.getY();
-        ImageUtils.drawStar(image, color, x, y, thickness, numberOfSides, radius, rotationDeg);
+        ImageDrawing.drawStar(image, color, x, y, thickness, numberOfSides, radius, rotationDeg);
     }
 
     private void fillInContext(MouseEvent mouseEvent) {
         final BufferedImage image = context.getImage();
         final Color color = context.getColor();
-        ImageUtils.fill(image, color, mouseEvent.getX(), mouseEvent.getY());
+        ImageDrawing.fill(image, color, mouseEvent.getX(), mouseEvent.getY());
     }
 }
