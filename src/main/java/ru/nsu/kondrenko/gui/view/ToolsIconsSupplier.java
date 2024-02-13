@@ -3,23 +3,47 @@ package ru.nsu.kondrenko.gui.view;
 import javax.swing.*;
 
 public interface ToolsIconsSupplier {
-    ImageIcon getLineToolIcon();
+    ImageIcon getDrawLineIcon();
 
-    ImageIcon getPolygonToolIcon();
+    ImageIcon getDrawPolygonIcon();
 
-    ImageIcon getStarToolIcon();
+    ImageIcon getDrawStarIcon();
 
-    ImageIcon getFillToolIcon();
+    ImageIcon getFillIcon();
 
-    ImageIcon getClearToolIcon();
+    ImageIcon getClearIcon();
 
-    ImageIcon getChangeColorToolIcon();
+    ImageIcon getChooseColorIcon();
 
-    ImageIcon getChangeThicknessToolIcon();
+    ImageIcon getChooseThicknessIcon();
 
-    ImageIcon getChangeStampToolIcon();
+    ImageIcon getChooseNumberOfSidesIcon();
 
-    ImageIcon getChangeRadiusToolIcon();
+    ImageIcon getChooseRadiusIcon();
 
-    ImageIcon getChangeRotationToolIcon();
+    ImageIcon getChooseRotationIcon();
+
+    ImageIcon getBlackIcon();
+
+    ImageIcon getWhiteIcon();
+
+    ImageIcon getRedIcon();
+
+    ImageIcon getGreenIcon();
+
+    ImageIcon getBlueIcon();
+
+    ImageIcon getMagentaIcon();
+
+    ImageIcon getPinkIcon();
+
+    ImageIcon getOrangeIcon();
+
+    ImageIcon getYellowIcon();
+
+    ImageIcon getCyanIcon();
+
+    ImageIcon getLightGreyIcon();
+
+    ImageIcon getDarkGreyIcon();
 }

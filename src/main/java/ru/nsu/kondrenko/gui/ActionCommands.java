@@ -8,13 +8,28 @@ public final class ActionCommands {
     public static final String DRAW_LINE_ACTION_COMMAND = "DRAW-LINE";
     public static final String DRAW_POLYGON_ACTION_COMMAND = "DRAW-POLYGON";
     public static final String DRAW_STAR_ACTION_COMMAND = "DRAW-STAR";
+
     public static final String FILL_ACTION_COMMAND = "FILL";
     public static final String CLEAR_ACTION_COMMAND = "CLEAR";
-    public static final String CHANGE_COLOR_ACTION_COMMAND = "CHANGE-COLOR";
-    public static final String CHANGE_THICKNESS_ACTION_COMMAND = "CHANGE-THICKNESS";
-    public static final String CHANGE_STAMP_ACTION_COMMAND = "CHANGE-STAMP";
-    public static final String CHANGE_RADIUS_ACTION_COMMAND = "CHANGE-RADIUS";
-    public static final String CHANGE_ROTATION_ACTION_COMMAND = "CHANGE-ROTATION";
+
+    public static final String CHANGE_COLOR_TO_BLACK_ACTION_COMMAND = "CHANGE-TO-BLACK";
+    public static final String CHANGE_COLOR_TO_WHITE_ACTION_COMMAND = "CHANGE-TO-WHITE";
+    public static final String CHANGE_COLOR_TO_RED_ACTION_COMMAND = "CHANGE-TO-RED";
+    public static final String CHANGE_COLOR_TO_GREEN_ACTION_COMMAND = "CHANGE-TO-GREEN";
+    public static final String CHANGE_COLOR_TO_BLUE_ACTION_COMMAND = "CHANGE-TO-BLUE";
+    public static final String CHANGE_COLOR_TO_MAGENTA_ACTION_COMMAND = "CHANGE-TO-MAGENTA";
+    public static final String CHANGE_COLOR_TO_PINK_ACTION_COMMAND = "CHANGE-TO-PINK";
+    public static final String CHANGE_COLOR_TO_ORANGE_ACTION_COMMAND = "CHANGE-TO-ORANGE";
+    public static final String CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND = "CHANGE-TO_YELLOW";
+    public static final String CHANGE_COLOR_TO_CYAN_ACTION_COMMAND = "CHANGE-TO-CYAN";
+    public static final String CHANGE_COLOR_TO_LIGHT_GREY_ACTION_COMMAND = "CHANGE-TO-LIGHT-GREY";
+    public static final String CHANGE_COLOR_TO_DARK_GREY_ACTION_COMMAND = "CHANGE-TO-DARK-GREY";
+
+    public static final String CHOOSE_COLOR_ACTION_COMMAND = "CHOOSE-COLOR";
+    public static final String CHOOSE_THICKNESS_ACTION_COMMAND = "CHOOSE-THICKNESS";
+    public static final String CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND = "CHOOSE-NUMBER-OF-SIDES";
+    public static final String CHOOSE_RADIUS_ACTION_COMMAND = "CHOOSE-RADIUS";
+    public static final String CHOOSE_ROTATION_ACTION_COMMAND = "CHOOSE-ROTATION";
 
     public static final String SHOW_HELP_ACTION_COMMAND = "SHOW-HELP";
     public static final String SHOW_ABOUT_ACTION_COMMAND = "SHOW-ABOUT";

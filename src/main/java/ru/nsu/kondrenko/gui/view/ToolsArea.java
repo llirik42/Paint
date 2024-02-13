@@ -14,16 +14,16 @@ public class ToolsArea extends JPanel {
 
     public ToolsArea(ToolsIconsSupplier toolsIconsSupplier, ActionListener actionListener) {
         final List<ToolButtonProperties> toolButtonsProperties = Arrays.asList(
-                new ToolButtonProperties(toolsIconsSupplier.getLineToolIcon(), ActionCommands.DRAW_LINE_ACTION_COMMAND, "draw line"),
-                new ToolButtonProperties(toolsIconsSupplier.getPolygonToolIcon(), ActionCommands.DRAW_POLYGON_ACTION_COMMAND, "draw polygon"),
-                new ToolButtonProperties(toolsIconsSupplier.getStarToolIcon(), ActionCommands.DRAW_STAR_ACTION_COMMAND, "draw star"),
-                new ToolButtonProperties(toolsIconsSupplier.getFillToolIcon(), ActionCommands.FILL_ACTION_COMMAND, "fill"),
-                new ToolButtonProperties(toolsIconsSupplier.getClearToolIcon(), ActionCommands.CLEAR_ACTION_COMMAND, "clear"),
-                new ToolButtonProperties(toolsIconsSupplier.getChangeColorToolIcon(), ActionCommands.CHANGE_COLOR_ACTION_COMMAND, "change color"),
-                new ToolButtonProperties(toolsIconsSupplier.getChangeThicknessToolIcon(), ActionCommands.CHANGE_THICKNESS_ACTION_COMMAND, "change thickness"),
-                new ToolButtonProperties(toolsIconsSupplier.getChangeStampToolIcon(), ActionCommands.CHANGE_STAMP_ACTION_COMMAND, "change stamp"),
-                new ToolButtonProperties(toolsIconsSupplier.getChangeRadiusToolIcon(), ActionCommands.CHANGE_RADIUS_ACTION_COMMAND, "change radius"),
-                new ToolButtonProperties(toolsIconsSupplier.getChangeRotationToolIcon(), ActionCommands.CHANGE_ROTATION_ACTION_COMMAND, "change rotation")
+                new ToolButtonProperties(toolsIconsSupplier.getDrawLineIcon(), ActionCommands.DRAW_LINE_ACTION_COMMAND, "draw line"),
+                new ToolButtonProperties(toolsIconsSupplier.getDrawPolygonIcon(), ActionCommands.DRAW_POLYGON_ACTION_COMMAND, "draw polygon"),
+                new ToolButtonProperties(toolsIconsSupplier.getDrawStarIcon(), ActionCommands.DRAW_STAR_ACTION_COMMAND, "draw star"),
+                new ToolButtonProperties(toolsIconsSupplier.getFillIcon(), ActionCommands.FILL_ACTION_COMMAND, "fill"),
+                new ToolButtonProperties(toolsIconsSupplier.getClearIcon(), ActionCommands.CLEAR_ACTION_COMMAND, "clear"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseColorIcon(), ActionCommands.CHOOSE_COLOR_ACTION_COMMAND, "change color"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseThicknessIcon(), ActionCommands.CHOOSE_THICKNESS_ACTION_COMMAND, "change thickness"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseNumberOfSidesIcon(), ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND, "change stamp"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseRadiusIcon(), ActionCommands.CHOOSE_RADIUS_ACTION_COMMAND, "change radius"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseRotationIcon(), ActionCommands.CHOOSE_ROTATION_ACTION_COMMAND, "change rotation")
         );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
