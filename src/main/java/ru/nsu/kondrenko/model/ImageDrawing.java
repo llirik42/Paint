@@ -3,6 +3,9 @@ package ru.nsu.kondrenko.model;
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
+import java.util.Stack;
+
+record Span(int x, int y) {}
 
 public final class ImageDrawing {
     private ImageDrawing() {
@@ -11,11 +14,22 @@ public final class ImageDrawing {
 
     public static void drawLine(BufferedImage image, Color color, int thickness, int x1, int y1, int x2, int y2) {
         drawThinLine(image, color, x1, y1, x2, y2);
+
         // TODO: add handling of thickness
     }
 
     public static void drawPolygon(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
+        if (thickness == 1) {
+            drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
+        } else {
+            drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
+            drawThinPolygon(image, color, x, y, n, radius + thickness, rotationDegrees);
+
+
+        }
+
+
+
         // TODO: add handling of thickness
     }
 
@@ -24,8 +38,39 @@ public final class ImageDrawing {
         // TODO: add handling of thickness
     }
 
-    public static void fill(BufferedImage image, Color color, int x, int y) {
-        // TODO: implement
+    public static void fill(BufferedImage image, Color color, int x0, int y0) {
+        final int startRGB = image.getRGB(x0, y0);
+        final int destRGB = color.getRGB();
+        final Stack<Span> spans = new Stack<>();
+        final int imageWidth = image.getWidth();
+        final int imageHeight = image.getHeight();
+
+        spans.add(new Span(x0, y0));
+
+        while (!spans.empty()) {
+            final Span currentSpan = spans.pop();
+            final int y = currentSpan.y();
+
+            int lx = currentSpan.x();
+            while (lx > 0 && image.getRGB(lx, y) == startRGB) {
+                image.setRGB(lx, y, destRGB);
+                lx--;
+            }
+
+            int rx = currentSpan.x() + 1;
+            while (rx < imageWidth - 1 && image.getRGB(rx, y) == startRGB) {
+                image.setRGB(rx, y, destRGB);
+                rx++;
+            }
+
+            if (y > 0) {
+                scan(lx + 1, rx, y - 1, startRGB, image, spans);
+            }
+
+            if (y < imageHeight - 1) {
+                scan(lx + 1, rx, y + 1, startRGB, image, spans);
+            }
+        }
     }
 
     private static void drawThinLine(BufferedImage image, Color color, int x1, int y1, int x2, int y2) {
@@ -114,5 +159,22 @@ public final class ImageDrawing {
 
     private static double degreesToRadians(int degrees) {
         return Math.PI * degrees / 180;
+    }
+
+    private static void scan(int lx, int rx, int y, int startRGB, BufferedImage image, Stack<Span> spans) {
+        boolean foundSpan = false;
+        int spanPoint = 0;
+
+        for (int x = lx; x < rx; x++) {
+            final int currentRGB = image.getRGB(x, y);
+
+            if (!foundSpan && currentRGB == startRGB) {
+                spanPoint = x;
+                foundSpan = true;
+            } else if (foundSpan && currentRGB != startRGB) {
+                spans.add(new Span(spanPoint, y));
+                foundSpan = false;
+            }
+        }
     }
 }
