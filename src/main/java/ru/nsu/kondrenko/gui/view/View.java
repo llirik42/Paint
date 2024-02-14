@@ -118,7 +118,7 @@ public class View implements ContextListener {
     }
 
     private void onSelectingThickness(Context context) {
-        context.setThickness(showSelectRotationDialogWindow(context.getThickness()));
+        context.setThickness(showSelectThicknessDialogWindow(context.getThickness()));
     }
 
     private void onSelectingNumberOfVertices(Context context) {
