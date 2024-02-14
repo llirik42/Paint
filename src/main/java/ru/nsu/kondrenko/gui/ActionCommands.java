@@ -22,8 +22,6 @@ public final class ActionCommands {
     public static final String CHANGE_COLOR_TO_ORANGE_ACTION_COMMAND = "CHANGE-TO-ORANGE";
     public static final String CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND = "CHANGE-TO_YELLOW";
     public static final String CHANGE_COLOR_TO_CYAN_ACTION_COMMAND = "CHANGE-TO-CYAN";
-    public static final String CHANGE_COLOR_TO_LIGHT_GREY_ACTION_COMMAND = "CHANGE-TO-LIGHT-GREY";
-    public static final String CHANGE_COLOR_TO_DARK_GREY_ACTION_COMMAND = "CHANGE-TO-DARK-GREY";
 
     public static final String CHOOSE_COLOR_ACTION_COMMAND = "CHOOSE-COLOR";
     public static final String CHOOSE_THICKNESS_ACTION_COMMAND = "CHOOSE-THICKNESS";

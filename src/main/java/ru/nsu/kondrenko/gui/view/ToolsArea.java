@@ -9,7 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ToolsArea extends JPanel {
-    private static final Color BACKGROUND_COLOR = new Color(0.85f, 0.85f, 0.85f);
+    private static final Color AREA_BACKGROUND_COLOR = new Color(0.85f, 0.85f, 0.85f);
+    private static final Color BUTTONS_BACKGROUND_COLOR = new Color(0.72f, 0.72f, 0.71f);
+
+    private static final int TOOL_SIZE = 26;
     private static final int ICON_SIZE = 20;
 
     public ToolsArea(ToolsIconsSupplier toolsIconsSupplier, ActionListener actionListener) {
@@ -19,15 +22,26 @@ public class ToolsArea extends JPanel {
                 new ToolButtonProperties(toolsIconsSupplier.getDrawStarIcon(), ActionCommands.DRAW_STAR_ACTION_COMMAND, "draw star"),
                 new ToolButtonProperties(toolsIconsSupplier.getFillIcon(), ActionCommands.FILL_ACTION_COMMAND, "fill"),
                 new ToolButtonProperties(toolsIconsSupplier.getClearIcon(), ActionCommands.CLEAR_ACTION_COMMAND, "clear"),
-                new ToolButtonProperties(toolsIconsSupplier.getChooseColorIcon(), ActionCommands.CHOOSE_COLOR_ACTION_COMMAND, "change color"),
-                new ToolButtonProperties(toolsIconsSupplier.getChooseThicknessIcon(), ActionCommands.CHOOSE_THICKNESS_ACTION_COMMAND, "change thickness"),
-                new ToolButtonProperties(toolsIconsSupplier.getChooseNumberOfSidesIcon(), ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND, "change stamp"),
-                new ToolButtonProperties(toolsIconsSupplier.getChooseRadiusIcon(), ActionCommands.CHOOSE_RADIUS_ACTION_COMMAND, "change radius"),
-                new ToolButtonProperties(toolsIconsSupplier.getChooseRotationIcon(), ActionCommands.CHOOSE_ROTATION_ACTION_COMMAND, "change rotation")
+                new ToolButtonProperties(toolsIconsSupplier.getChooseThicknessIcon(), ActionCommands.CHOOSE_THICKNESS_ACTION_COMMAND, "choose thickness"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseNumberOfSidesIcon(), ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND, "choose type of polygon"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseRadiusIcon(), ActionCommands.CHOOSE_RADIUS_ACTION_COMMAND, "choose radius"),
+                new ToolButtonProperties(toolsIconsSupplier.getChooseRotationIcon(), ActionCommands.CHOOSE_ROTATION_ACTION_COMMAND, "choose rotation"),
+
+                new ToolButtonProperties(toolsIconsSupplier.getChooseColorIcon(), ActionCommands.CHOOSE_COLOR_ACTION_COMMAND, "choose color"),
+                new ToolButtonProperties(toolsIconsSupplier.getBlackIcon(), ActionCommands.CHANGE_COLOR_TO_BLACK_ACTION_COMMAND, "change color to black"),
+                new ToolButtonProperties(toolsIconsSupplier.getWhiteIcon(), ActionCommands.CHANGE_COLOR_TO_WHITE_ACTION_COMMAND, "change color to white"),
+                new ToolButtonProperties(toolsIconsSupplier.getRedIcon(), ActionCommands.CHANGE_COLOR_TO_RED_ACTION_COMMAND, "change color to red"),
+                new ToolButtonProperties(toolsIconsSupplier.getGreenIcon(), ActionCommands.CHANGE_COLOR_TO_GREEN_ACTION_COMMAND, "change color to green"),
+                new ToolButtonProperties(toolsIconsSupplier.getBlueIcon(), ActionCommands.CHANGE_COLOR_TO_BLUE_ACTION_COMMAND, "change color to blue"),
+                new ToolButtonProperties(toolsIconsSupplier.getMagentaIcon(), ActionCommands.CHANGE_COLOR_TO_MAGENTA_ACTION_COMMAND, "change color to magenta"),
+                new ToolButtonProperties(toolsIconsSupplier.getPinkIcon(), ActionCommands.CHANGE_COLOR_TO_PINK_ACTION_COMMAND, "change color to pink"),
+                new ToolButtonProperties(toolsIconsSupplier.getOrangeIcon(), ActionCommands.CHANGE_COLOR_TO_ORANGE_ACTION_COMMAND, "change color to orange"),
+                new ToolButtonProperties(toolsIconsSupplier.getYellowIcon(), ActionCommands.CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND, "change color to yellow"),
+                new ToolButtonProperties(toolsIconsSupplier.getCyanIcon(), ActionCommands.CHANGE_COLOR_TO_CYAN_ACTION_COMMAND, "change color to cyan")
         );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        setBackground(BACKGROUND_COLOR);
+        setBackground(AREA_BACKGROUND_COLOR);
 
         for (final var it : toolButtonsProperties) {
             final JButton button = createToolButton(it.icon(), it.actionCommand(), it.tip(), actionListener);
@@ -35,7 +49,7 @@ public class ToolsArea extends JPanel {
         }
     }
 
-    private static JButton createToolButton(ImageIcon icon, String actionCommand, String tip, ActionListener actionListener) {
+    private JButton createToolButton(ImageIcon icon, String actionCommand, String tip, ActionListener actionListener) {
         final Image image = icon.getImage();
         final Image scaledImage = image.getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
         final ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -44,6 +58,9 @@ public class ToolsArea extends JPanel {
         result.setActionCommand(actionCommand);
         result.setToolTipText(tip);
         result.addActionListener(actionListener);
+        result.setPreferredSize(new Dimension(TOOL_SIZE, TOOL_SIZE));
+        result.setBackground(BUTTONS_BACKGROUND_COLOR);
+        result.setBorderPainted(false);
 
         return result;
     }

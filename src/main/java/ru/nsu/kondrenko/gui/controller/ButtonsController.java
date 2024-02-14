@@ -29,24 +29,22 @@ public class ButtonsController implements ActionListener {
         actionCommandsMap.put(ActionCommands.DRAW_STAR_ACTION_COMMAND, () -> context.setTool(ContextTools.DRAW_STAR));
         actionCommandsMap.put(ActionCommands.FILL_ACTION_COMMAND, () -> context.setTool(ContextTools.FILL));
         actionCommandsMap.put(ActionCommands.CLEAR_ACTION_COMMAND, this::handleClearActionCommand);
-        actionCommandsMap.put(ActionCommands.CHOOSE_COLOR_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_COLOR));
         actionCommandsMap.put(ActionCommands.CHOOSE_THICKNESS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_THICKNESS));
         actionCommandsMap.put(ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_NUMBER_OF_SIDES));
         actionCommandsMap.put(ActionCommands.CHOOSE_ROTATION_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_ROTATION));
         actionCommandsMap.put(ActionCommands.CHOOSE_RADIUS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_RADIUS));
 
+        actionCommandsMap.put(ActionCommands.CHOOSE_COLOR_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_COLOR));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLACK_ACTION_COMMAND, () -> context.setColor(Color.BLACK));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_WHITE_ACTION_COMMAND, () -> context.setColor(Color.WHITE));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_RED_ACTION_COMMAND, () -> context.setColor(Color.RED));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_GREEN_ACTION_COMMAND, () -> context.setColor(Color.GREEN));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLUE_ACTION_COMMAND, () -> context.setColor(Color.BLACK));
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLUE_ACTION_COMMAND, () -> context.setColor(Color.BLUE));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_MAGENTA_ACTION_COMMAND, () -> context.setColor(Color.MAGENTA));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_PINK_ACTION_COMMAND, () -> context.setColor(Color.PINK));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_ORANGE_ACTION_COMMAND, () -> context.setColor(Color.ORANGE));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND, () -> context.setColor(Color.YELLOW));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_CYAN_ACTION_COMMAND, () -> context.setColor(Color.CYAN));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_LIGHT_GREY_ACTION_COMMAND, () -> context.setColor(Color.LIGHT_GRAY));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_DARK_GREY_ACTION_COMMAND, () -> context.setColor(Color.DARK_GRAY));
 
         actionCommandsMap.put(ActionCommands.SHOW_HELP_ACTION_COMMAND, () -> context.setState(ContextState.DISPLAYING_HELP));
         actionCommandsMap.put(ActionCommands.SHOW_ABOUT_ACTION_COMMAND, () -> context.setState(ContextState.DISPLAYING_ABOUT));

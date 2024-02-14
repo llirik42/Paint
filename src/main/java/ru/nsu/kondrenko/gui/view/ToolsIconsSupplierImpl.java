@@ -41,7 +41,7 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
         clearIcon = loadImageIcon("/icons/clear.png");
         chooseColorIcon = loadImageIcon("/icons/palette.png");
         chooseThicknessIcon = loadImageIcon("/icons/thickness.png");
-        chooseNumberOfSidesIcon = loadImageIcon("/icons/swap.png");
+        chooseNumberOfSidesIcon = loadImageIcon("/icons/shapes.png");
         chooseRadiusIcon = loadImageIcon("/icons/radius.png");
         chooseRotationIcon = loadImageIcon("/icons/rotation.png");
 
