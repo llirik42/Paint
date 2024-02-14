@@ -31,11 +31,11 @@ public class MenuArea extends JPanel {
     );
     private static final List<MenuItemProperties> EDIT_MENU_OTHER_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Clear", ActionCommands.CLEAR_ACTION_COMMAND),
-            new MenuItemProperties("Choose color", ActionCommands.CHOOSE_COLOR_ACTION_COMMAND),
-            new MenuItemProperties("Choose thickness", ActionCommands.CHOOSE_THICKNESS_ACTION_COMMAND),
-            new MenuItemProperties("Choose number of sides", ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND),
-            new MenuItemProperties("Choose rotation", ActionCommands.CHOOSE_ROTATION_ACTION_COMMAND),
-            new MenuItemProperties("Choose radius", ActionCommands.CHOOSE_RADIUS_ACTION_COMMAND)
+            new MenuItemProperties("Select color", ActionCommands.SELECT_COLOR_ACTION_COMMAND),
+            new MenuItemProperties("Select thickness", ActionCommands.SELECT_THICKNESS_ACTION_COMMAND),
+            new MenuItemProperties("Select number of vertices", ActionCommands.SELECT_NUMBER_OF_VERTICES_ACTION_COMMAND),
+            new MenuItemProperties("Select rotation", ActionCommands.SELECT_ROTATION_ACTION_COMMAND),
+            new MenuItemProperties("Select radius", ActionCommands.SELECT_RADIUS_ACTION_COMMAND)
     );
     private static final List<MenuItemProperties> HELP_ABOUT_MENU_ITEMS_PROPERTIES = Arrays.asList(
             new MenuItemProperties("Help", ActionCommands.SHOW_HELP_ACTION_COMMAND),

@@ -28,11 +28,7 @@ public class FilesActionsController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent.getSource() instanceof JFileChooser fileChooser) {
-            handleJFileChooserEvent(actionEvent, fileChooser);
-        } else {
-            // TODO: handle error
-        }
+        handleJFileChooserEvent(actionEvent, (JFileChooser)actionEvent.getSource());
     }
 
     private void handleJFileChooserEvent(ActionEvent actionEvent, JFileChooser fileChooser) {
@@ -44,10 +40,8 @@ public class FilesActionsController implements ActionListener {
 
         if (context.getState() == ContextState.SAVING_FILE) {
             handleApproveSavingFile(fileChooser);
-        } else if (context.getState() == ContextState.OPENING_FILE) {
-            handleApproveOpeningFile(fileChooser);
         } else {
-            // Ignored
+            handleApproveOpeningFile(fileChooser);
         }
     }
 
@@ -57,7 +51,8 @@ public class FilesActionsController implements ActionListener {
             context.setImage(image);
             context.setState(ContextState.REPAINTING);
         } catch (IOException exception) {
-            // TODO: handle
+            context.setErrorMessage(exception.getLocalizedMessage());
+            context.setState(ContextState.ERROR);
         }
     }
 
@@ -66,7 +61,8 @@ public class FilesActionsController implements ActionListener {
             final File pngFile = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".png");
             saver.saveAsPNG(context.getImage(), pngFile);
         } catch (IOException exception) {
-            // TODO: handle
+            context.setErrorMessage(exception.getLocalizedMessage());
+            context.setState(ContextState.ERROR);
         }
     }
 }

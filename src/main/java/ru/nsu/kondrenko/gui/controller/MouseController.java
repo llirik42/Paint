@@ -77,7 +77,7 @@ public class MouseController extends MouseAdapter {
         final BufferedImage image = context.getImage();
         final Color color = context.getColor();
         final int thickness = context.getThickness();
-        final int numberOfSides = context.getNumberOfSides();
+        final int numberOfSides = context.getNumberOfVertices();
         final int radius = context.getRadius();
         final int rotationDeg = context.getRotation();
         final int x = mouseEvent.getX();
@@ -89,7 +89,7 @@ public class MouseController extends MouseAdapter {
         final BufferedImage image = context.getImage();
         final Color color = context.getColor();
         final int thickness = context.getThickness();
-        final int numberOfSides = context.getNumberOfSides();
+        final int numberOfSides = context.getNumberOfVertices();
         final int radius = context.getRadius();
         final int rotationDeg = context.getRotation();
         final int x = mouseEvent.getX();

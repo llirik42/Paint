@@ -23,11 +23,11 @@ public final class ActionCommands {
     public static final String CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND = "CHANGE-TO_YELLOW";
     public static final String CHANGE_COLOR_TO_CYAN_ACTION_COMMAND = "CHANGE-TO-CYAN";
 
-    public static final String CHOOSE_COLOR_ACTION_COMMAND = "CHOOSE-COLOR";
-    public static final String CHOOSE_THICKNESS_ACTION_COMMAND = "CHOOSE-THICKNESS";
-    public static final String CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND = "CHOOSE-NUMBER-OF-SIDES";
-    public static final String CHOOSE_RADIUS_ACTION_COMMAND = "CHOOSE-RADIUS";
-    public static final String CHOOSE_ROTATION_ACTION_COMMAND = "CHOOSE-ROTATION";
+    public static final String SELECT_COLOR_ACTION_COMMAND = "SELECT-COLOR";
+    public static final String SELECT_THICKNESS_ACTION_COMMAND = "SELECT-THICKNESS";
+    public static final String SELECT_NUMBER_OF_VERTICES_ACTION_COMMAND = "SELECT-NUMBER-OF-VERTICES";
+    public static final String SELECT_RADIUS_ACTION_COMMAND = "SELECT-RADIUS";
+    public static final String SELECT_ROTATION_ACTION_COMMAND = "SELECT-ROTATION";
 
     public static final String SHOW_HELP_ACTION_COMMAND = "SHOW-HELP";
     public static final String SHOW_ABOUT_ACTION_COMMAND = "SHOW-ABOUT";

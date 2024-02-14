@@ -15,7 +15,7 @@ public class ContextImpl implements Context {
     private String errorMessage;
     private int thickness;
     private int radius;
-    private int numberOfSides;
+    private int numberOfVertices;
     private int rotation;
 
     public ContextImpl(BufferedImage image, Color color, int thickness, int radius, int numberOfSides, int rotation) {
@@ -25,7 +25,7 @@ public class ContextImpl implements Context {
         this.color = color;
         this.thickness = thickness;
         this.radius = radius;
-        this.numberOfSides = numberOfSides;
+        this.numberOfVertices = numberOfSides;
         this.rotation = rotation;
     }
 
@@ -69,11 +69,6 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void removeListener(ContextListener listener) {
-        listeners.remove(listener);
-    }
-
-    @Override
     public void setThickness(int thickness) {
         this.thickness = thickness;
     }
@@ -94,13 +89,13 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void setNumberOfSides(int numberOfSides) {
-        this.numberOfSides = numberOfSides;
+    public void setNumberOfVertices(int numberOfSides) {
+        this.numberOfVertices = numberOfSides;
     }
 
     @Override
-    public int getNumberOfSides() {
-        return numberOfSides;
+    public int getNumberOfVertices() {
+        return numberOfVertices;
     }
 
     @Override

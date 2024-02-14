@@ -29,8 +29,6 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     private final ImageIcon orangeIcon;
     private final ImageIcon yellowIcon;
     private final ImageIcon cyanIcon;
-    private final ImageIcon lightGreyIcon;
-    private final ImageIcon darkGreyIcon;
 
     public ToolsIconsSupplierImpl() throws IOException {
         reader = new ImageReader();
@@ -55,8 +53,6 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
         orangeIcon = loadColorIcon("orange");
         yellowIcon = loadColorIcon("yellow");
         cyanIcon = loadColorIcon("cyan");
-        lightGreyIcon = loadColorIcon("light_grey");
-        darkGreyIcon = loadColorIcon("dark_grey");
     }
 
     @Override
@@ -85,27 +81,27 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     }
 
     @Override
-    public ImageIcon getChooseColorIcon() {
+    public ImageIcon getSelectColorIcon() {
         return chooseColorIcon;
     }
 
     @Override
-    public ImageIcon getChooseThicknessIcon() {
+    public ImageIcon getSelectThicknessIcon() {
         return chooseThicknessIcon;
     }
 
     @Override
-    public ImageIcon getChooseNumberOfSidesIcon() {
+    public ImageIcon getSelectNumberOfVerticesIcon() {
         return chooseNumberOfSidesIcon;
     }
 
     @Override
-    public ImageIcon getChooseRadiusIcon() {
+    public ImageIcon getSelectRadiusIcon() {
         return chooseRadiusIcon;
     }
 
     @Override
-    public ImageIcon getChooseRotationIcon() {
+    public ImageIcon getSelectRotationIcon() {
         return chooseRotationIcon;
     }
 
@@ -157,16 +153,6 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     @Override
     public ImageIcon getCyanIcon() {
         return cyanIcon;
-    }
-
-    @Override
-    public ImageIcon getLightGreyIcon() {
-        return lightGreyIcon;
-    }
-
-    @Override
-    public ImageIcon getDarkGreyIcon() {
-        return darkGreyIcon;
     }
 
     private ImageIcon loadColorIcon(final String colorName) throws IOException {

@@ -17,6 +17,7 @@ public class FrameResizingController extends ComponentAdapter {
 
     @Override
     public void componentResized(ComponentEvent componentEvent) {
+        // TODO: create new image and change context less often (not every time the window changes)
         final Component drawingArea = componentEvent.getComponent();
         final int drawingAreaWidth = drawingArea.getWidth();
         final int drawingAreaHeight = drawingArea.getHeight();

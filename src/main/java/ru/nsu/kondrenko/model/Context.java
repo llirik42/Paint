@@ -18,8 +18,6 @@ public interface Context {
 
     void addListener(ContextListener listener);
 
-    void removeListener(ContextListener listener);
-
     void setThickness(int thickness);
 
     int getThickness();
@@ -28,9 +26,9 @@ public interface Context {
 
     Color getColor();
 
-    void setNumberOfSides(int numberOfSides);
+    void setNumberOfVertices(int numberOfSides);
 
-    int getNumberOfSides();
+    int getNumberOfVertices();
 
     void setRadius(int radius);
 

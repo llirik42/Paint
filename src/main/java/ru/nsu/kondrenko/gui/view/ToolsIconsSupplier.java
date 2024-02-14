@@ -13,15 +13,15 @@ public interface ToolsIconsSupplier {
 
     ImageIcon getClearIcon();
 
-    ImageIcon getChooseColorIcon();
+    ImageIcon getSelectColorIcon();
 
-    ImageIcon getChooseThicknessIcon();
+    ImageIcon getSelectThicknessIcon();
 
-    ImageIcon getChooseNumberOfSidesIcon();
+    ImageIcon getSelectNumberOfVerticesIcon();
 
-    ImageIcon getChooseRadiusIcon();
+    ImageIcon getSelectRadiusIcon();
 
-    ImageIcon getChooseRotationIcon();
+    ImageIcon getSelectRotationIcon();
 
     ImageIcon getBlackIcon();
 
@@ -42,8 +42,4 @@ public interface ToolsIconsSupplier {
     ImageIcon getYellowIcon();
 
     ImageIcon getCyanIcon();
-
-    ImageIcon getLightGreyIcon();
-
-    ImageIcon getDarkGreyIcon();
 }

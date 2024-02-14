@@ -3,7 +3,6 @@ package ru.nsu.kondrenko.model;
 public enum ContextState {
     IDLE,
     REPAINTING,
-    CLEARING,
 
     OPENING_FILE,
     SAVING_FILE,
@@ -15,7 +14,8 @@ public enum ContextState {
     CHOOSING_RADIUS,
     CHOOSING_ROTATION,
 
-    DISPLAYING_ERROR,
+    ERROR,
+
     DISPLAYING_HELP,
     DISPLAYING_ABOUT
 }

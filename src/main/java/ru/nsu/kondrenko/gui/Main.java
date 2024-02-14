@@ -27,7 +27,7 @@ public class Main {
 
     private static final int START_THICKNESS = 1;
     private static final int START_RADIUS = 100;
-    private static final int START_NUMBER_OF_SIDES = 7;
+    private static final int START_NUMBER_OF_SIDES = 4;
     private static final int START_ROTATION = 0;
 
     public static void main(String[] args) {

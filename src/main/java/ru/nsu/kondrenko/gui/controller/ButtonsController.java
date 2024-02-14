@@ -29,12 +29,12 @@ public class ButtonsController implements ActionListener {
         actionCommandsMap.put(ActionCommands.DRAW_STAR_ACTION_COMMAND, () -> context.setTool(ContextTools.DRAW_STAR));
         actionCommandsMap.put(ActionCommands.FILL_ACTION_COMMAND, () -> context.setTool(ContextTools.FILL));
         actionCommandsMap.put(ActionCommands.CLEAR_ACTION_COMMAND, this::handleClearActionCommand);
-        actionCommandsMap.put(ActionCommands.CHOOSE_THICKNESS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_THICKNESS));
-        actionCommandsMap.put(ActionCommands.CHOOSE_NUMBER_OF_SIDES_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_NUMBER_OF_SIDES));
-        actionCommandsMap.put(ActionCommands.CHOOSE_ROTATION_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_ROTATION));
-        actionCommandsMap.put(ActionCommands.CHOOSE_RADIUS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_RADIUS));
+        actionCommandsMap.put(ActionCommands.SELECT_THICKNESS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_THICKNESS));
+        actionCommandsMap.put(ActionCommands.SELECT_NUMBER_OF_VERTICES_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_NUMBER_OF_SIDES));
+        actionCommandsMap.put(ActionCommands.SELECT_ROTATION_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_ROTATION));
+        actionCommandsMap.put(ActionCommands.SELECT_RADIUS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_RADIUS));
 
-        actionCommandsMap.put(ActionCommands.CHOOSE_COLOR_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_COLOR));
+        actionCommandsMap.put(ActionCommands.SELECT_COLOR_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_COLOR));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLACK_ACTION_COMMAND, () -> context.setColor(Color.BLACK));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_WHITE_ACTION_COMMAND, () -> context.setColor(Color.WHITE));
         actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_RED_ACTION_COMMAND, () -> context.setColor(Color.RED));

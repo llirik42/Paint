@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class View implements ContextListener {
+    // TODO: вынести поддерживаемые типы в модель и читать оттуда
     private static final FileFilter filesOpeningFilter = new FileNameExtensionFilter("Images", "png", "bmp", "jpeg", "jpg", "gif");
 
     private final Map<ContextState, Consumer<Context>> contextStateChangeHandlers;
@@ -37,11 +38,21 @@ public class View implements ContextListener {
                 MouseListener mouseListener,
                 ComponentListener drawingAreaListener
     ) throws IOException {
+
         contextStateChangeHandlers = new HashMap<>() {{
+            put(ContextState.IDLE, View.this::onIdle);
+            put(ContextState.REPAINTING, View.this::onRepainting);
             put(ContextState.OPENING_FILE, View.this::onOpeningFile);
             put(ContextState.SAVING_FILE, View.this::onSavingFile);
             put(ContextState.EXITING, View.this::onExiting);
-            put(ContextState.REPAINTING, View.this::onRepainting);
+            put(ContextState.CHOOSING_COLOR, View.this::onChoosingColor);
+            put(ContextState.CHOOSING_THICKNESS, View.this::onSelectingThickness);
+            put(ContextState.CHOOSING_NUMBER_OF_SIDES, View.this::onSelectingNumberOfVertices);
+            put(ContextState.CHOOSING_RADIUS, View.this::onSelectingRadius);
+            put(ContextState.CHOOSING_ROTATION, View.this::onSelectingRotation);
+            put(ContextState.ERROR, View.this::onError);
+            put(ContextState.DISPLAYING_HELP, View.this::onDisplayingHelp);
+            put(ContextState.DISPLAYING_ABOUT, View.this::onDisplayingAbout);
         }};
 
         final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
@@ -69,6 +80,14 @@ public class View implements ContextListener {
         contextStateChangeHandlers.get(context.getState()).accept(context);
     }
 
+    private void onIdle(Context context) {
+
+    }
+
+    private void onRepainting(Context context) {
+        repaint(context.getImage());
+    }
+
     private void onOpeningFile(Context context) {
         final int code = openingFileChooser.showOpenDialog(frame);
 
@@ -90,8 +109,54 @@ public class View implements ContextListener {
         frame.dispose();
     }
 
-    private void onRepainting(Context context) {
-        repaint(context.getImage());
+    private void onChoosingColor(Context context) {
+        final Color newContextColor = showChooseColorDialogWindow(context.getColor());
+
+        if (newContextColor != null) {
+            context.setColor(newContextColor);
+        }
+    }
+
+    private void onSelectingThickness(Context context) {
+        context.setThickness(showSelectRotationDialogWindow(context.getThickness()));
+    }
+
+    private void onSelectingNumberOfVertices(Context context) {
+        context.setNumberOfVertices(showSelectNumberOfVerticesDialogWindow(context.getNumberOfVertices()));
+    }
+
+    private void onSelectingRadius(Context context) {
+        context.setRadius(showSelectRadiusDialogWindow(context.getRadius()));
+    }
+
+    private void onSelectingRotation(Context context) {
+        context.setRotation(showSelectRotationDialogWindow(context.getRotation()));
+    }
+
+    private void onError(Context context) {
+        showError(context.getErrorMessage());
+    }
+
+    private void onDisplayingHelp(Context context) {
+        // TODO: сделать нормальный help
+
+        JOptionPane.showMessageDialog(
+                null,
+                "Help",
+                "Help",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    private void onDisplayingAbout(Context context) {
+        // TODO: сделать нормальный help
+
+        JOptionPane.showMessageDialog(
+                null,
+                "About",
+                "About",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     private void initFileChooser(ActionListener actionListener) {
@@ -117,10 +182,80 @@ public class View implements ContextListener {
         frame.pack();
     }
 
-    private void showError(String message) {
+    private Color showChooseColorDialogWindow(Color startColor) {
+        return JColorChooser.showDialog(null, "Color selection", startColor);
+    }
+
+    private int showSelectThicknessDialogWindow(int startThickness) {
+        return selectInteger("Select thickness", 1, 20, startThickness);
+    }
+
+    private int showSelectNumberOfVerticesDialogWindow(int startNumberOfVertices) {
+        return selectInteger("Select number of vertices", 3, 20, startNumberOfVertices);
+    }
+
+    private int showSelectRadiusDialogWindow(int startRadius) {
+        return selectInteger("Select radius", 10, 1000, startRadius);
+    }
+
+    private int showSelectRotationDialogWindow(int startRotation) {
+        return selectInteger("Select rotation", 0, 360, startRotation);
+    }
+
+    private int selectInteger(String message, int minValue, int maxValue, int startValue) {
+        final int[] result = {startValue};
+
+        final JSlider slider = new JSlider(minValue, maxValue, startValue);
+        final JTextField textField = new JTextField(Integer.toString(startValue));
+
+        slider.addChangeListener(changeEvent -> {
+            final JSlider source = (JSlider)changeEvent.getSource();
+            result[0] = source.getValue();
+            textField.setText(Integer.toString(result[0]));
+        });
+        textField.addActionListener(actionEvent -> {
+            final String actionCommand = actionEvent.getActionCommand();
+
+            try {
+                result[0] = Integer.parseInt(actionCommand);
+
+                if (result[0] < minValue || result[0] > maxValue) {
+                    throw new Exception();
+                }
+            } catch (Exception exception) {
+                showError("Incorrect value!");
+            }
+        });
+
+        final JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 1));
+        panel.add(textField);
+        panel.add(slider);
+
+        JOptionPane.showConfirmDialog(null,
+                panel,
+                message,
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        try {
+            result[0] = Integer.parseInt(textField.getText());
+
+            if (result[0] < minValue || result[0] > maxValue) {
+                throw new Exception();
+            }
+        } catch (Exception exception) {
+            showError("Incorrect value!");
+        }
+
+        return result[0];
+    }
+
+    private void showError(String errorMessage) {
         JOptionPane.showMessageDialog(
                 null,
-                message,
+                errorMessage,
                 "Error",
                 JOptionPane.ERROR_MESSAGE
         );
