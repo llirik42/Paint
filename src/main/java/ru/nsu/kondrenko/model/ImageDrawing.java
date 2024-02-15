@@ -3,7 +3,6 @@ package ru.nsu.kondrenko.model;
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
-import java.util.Map;
 import java.util.Stack;
 
 record Span(int x, int y) {}
@@ -20,15 +19,11 @@ public final class ImageDrawing {
     }
 
     public static void drawPolygon(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        for (int i = 0; i < thickness; i++) {
-            drawThinPolygon(image, color, x, y, n, radius + i, rotationDegrees);
-        }
+        drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
     }
 
     public static void drawStar(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        for (int i = 0; i < thickness; i++) {
-            drawThinStar(image, color, x, y, n, radius + i, rotationDegrees);
-        }
+        drawThinStar(image, color, x, y, n, radius, rotationDegrees);
     }
 
     public static void fill(BufferedImage image, Color color, int x0, int y0) {
@@ -67,168 +62,120 @@ public final class ImageDrawing {
     }
 
     private static void drawThinLine(BufferedImage image, Color color, int x1, int y1, int x2, int y2) {
-        final int rgb = color.getRGB();
+        final int colorRGB = color.getRGB();
+        final int dxAbs = Math.abs(x2 - x1);
+        final int dyAbs = Math.abs(y2 - y1);
 
-        if (x1 == x2) {
+        if (dxAbs == 0) {
             final int minY = Integer.min(y1, y2);
             final int maxY = Integer.max(y1, y2);
 
             for (int y = minY; y <= maxY; y++) {
-                image.setRGB(x1, y, rgb);
+                image.setRGB(x1, y, colorRGB);
             }
 
             return;
         }
 
-        if (y1 == y2) {
+        if (dyAbs == 0) {
             final int minX = Integer.min(x1, x2);
             final int maxX = Integer.max(x1, x2);
 
             for (int x = minX; x <= maxX; x++) {
-                image.setRGB(x, y1, rgb);
+                image.setRGB(x, y1, colorRGB);
             }
 
             return;
         }
 
-        final int dxAbs = Math.abs(x2 - x1);
-        final int dyAbs = Math.abs(y2 - y1);
+        if (dxAbs > dyAbs) {
+            final int dx = Integer.max(x1, x2) - Integer.min(x1, x2);
+            final int dy = Integer.max(y1, y2) - Integer.min(y1, y2);
+            final int xOffset = Integer.min(x1, x2);
+            final int yDelta = Integer.signum(y2 - y1) * Integer.signum(x2 - x1);
 
-        if (x1 < x2 && dxAbs > dyAbs && y1 > y2) {
-            final int dx = x2 - x1;
-            final int dy = y2 - y1;
-
-            int y = y1;
             int error = -dx;
+            int y = x1 < x2 ? y1 : y2;
 
-            for (int x = 0; x < dx; x++) {
-                error -= 2 * dy;
-
-                if (error > 0) {
-                    error -= 2 * dx;
-                    y--;
-                }
-
-                image.setRGB(x + x1, y, color.getRGB());
-            }
-        } else if (x1 < x2 && dxAbs > dyAbs && y1 < y2) {
-            final int dx = x2 - x1;
-            final int dy = y2 - y1;
-
-            int y = y1;
-            int error = -dx;
-
-            for (int x = 0; x < dx; x++) {
+            for (int x = 0; x <= dx; x++) {
                 error += 2 * dy;
 
                 if (error > 0) {
                     error -= 2 * dx;
-                    y++;
+                    y += yDelta;
                 }
 
-                image.setRGB(x + x1, y, color.getRGB());
+                image.setRGB(x + xOffset, y, colorRGB);
             }
-        } else if (x1 > x2 && dxAbs > dyAbs && y1 < y2) {
-            final int dx = x1 - x2;
-            final int dy = y2 - y1;
+        } else {
+            if (y1 > y2 && x1 < x2) {
+                final int dx = x2 - x1;
+                final int dy = y1 - y2;
 
-            int y = y2;
-            int error = -dx;
+                int x = x2;
+                int error = -dy;
 
-            for (int x = 0; x < dx; x++) {
-                error += 2 * dy;
+                for (int y = 0; y <= dy; y++) {
+                    error += 2 * dx;
 
-                if (error > 0) {
-                    error -= 2 * dx;
-                    y--;
+                    if (error > 0) {
+                        error -= 2 * dy;
+                        x--;
+                    }
+
+                    image.setRGB(x, y + y2, colorRGB);
                 }
+            } else if (y1 > y2 && x1 > x2) {
+                final int dx = x1 - x2;
+                final int dy = y1 - y2;
 
-                image.setRGB(x + x2, y, color.getRGB());
-            }
-        } else if (x1 > x2 && dxAbs > dyAbs && y1 > y2) {
-            final int dx = x1 - x2;
-            final int dy = y1 - y2;
+                int x = x2;
+                int error = -dy;
 
-            int y = y2;
-            int error = -dx;
+                for (int y = 0; y <= dy; y++) {
+                    error += 2 * dx;
 
-            for (int x = 0; x < dx; x++) {
-                error += 2 * dy;
+                    if (error > 0) {
+                        error -= 2 * dy;
+                        x++;
+                    }
 
-                if (error > 0) {
-                    error -= 2 * dx;
-                    y++;
+                    image.setRGB(x, y + y2, colorRGB);
                 }
+            } else if (y1 < y2 && x1 < x2) {
+                final int dx = x2 - x1;
+                final int dy = y2 - y1;
 
-                image.setRGB(x + x2, y, color.getRGB());
-            }
-        } else if (y1 > y2 && dxAbs < dyAbs && x1 < x2) {
-            final int dx = x2 - x1;
-            final int dy = y1 - y2;
+                int x = x1;
+                int error = -dy;
 
-            int x = x2;
-            int error = -dy;
+                for (int y = 0; y <= dy; y++) {
+                    error += 2 * dx;
 
-            for (int y = 0; y < dy; y++) {
-                error += 2 * dx;
+                    if (error > 0) {
+                        error -= 2 * dy;
+                        x++;
+                    }
 
-                if (error > 0) {
-                    error -= 2 * dy;
-                    x--;
+                    image.setRGB(x, y + y1, colorRGB);
                 }
+            } else if (y1 < y2 && x1 > x2) {
+                final int dx = x1 - x2;
+                final int dy = y2 - y1;
 
-                image.setRGB(x, y + y2, color.getRGB());
-            }
-        } else if (y1 > y2 && dxAbs < dyAbs && x1 > x2) {
-            final int dx = x1 - x2;
-            final int dy = y1 - y2;
+                int x = x1;
+                int error = -dy;
 
-            int x = x2;
-            int error = -dy;
+                for (int y = 0; y <= dy; y++) {
+                    error += 2 * dx;
 
-            for (int y = 0; y < dy; y++) {
-                error += 2 * dx;
+                    if (error > 0) {
+                        error -= 2 * dy;
+                        x--;
+                    }
 
-                if (error > 0) {
-                    error -= 2 * dy;
-                    x++;
+                    image.setRGB(x, y + y1, colorRGB);
                 }
-
-                image.setRGB(x, y + y2, color.getRGB());
-            }
-        } else if (y1 < y2 && dxAbs < dyAbs && x1 < x2) {
-            final int dx = x2 - x1;
-            final int dy = y2 - y1;
-
-            int x = x1;
-            int error = -dy;
-
-            for (int y = 0; y < dy; y++) {
-                error += 2 * dx;
-
-                if (error > 0) {
-                    error -= 2 * dy;
-                    x++;
-                }
-
-                image.setRGB(x, y + y1, color.getRGB());
-            }
-        } else if (y1 < y2 && dxAbs < dyAbs && x1 > x2) {
-            final int dx = x1 - x2;
-            final int dy = y2 - y1;
-
-            int x = x1;
-            int error = -dy;
-
-            for (int y = 0; y < dy; y++) {
-                error += 2 * dx;
-
-                if (error > 0) {
-                    error -= 2 * dy;
-                    x--;
-                }
-
-                image.setRGB(x, y + y1, color.getRGB());
             }
         }
     }
