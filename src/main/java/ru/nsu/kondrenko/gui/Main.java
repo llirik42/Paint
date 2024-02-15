@@ -5,9 +5,7 @@ import ru.nsu.kondrenko.gui.controller.FilesActionsController;
 import ru.nsu.kondrenko.gui.controller.FrameResizingController;
 import ru.nsu.kondrenko.gui.controller.MouseController;
 import ru.nsu.kondrenko.gui.view.View;
-import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ContextImpl;
-import ru.nsu.kondrenko.model.ImageUtils;
+import ru.nsu.kondrenko.model.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,8 +39,11 @@ public class Main {
                     START_ROTATION
             );
 
+            final ImageReader imageReader = new ImageReaderImpl();
+            final ImageSaver imageSaver = new ImageSaverImpl();
+
             final ButtonsController buttonsController = new ButtonsController(context);
-            final FilesActionsController filesActionsController = new FilesActionsController(context);
+            final FilesActionsController filesActionsController = new FilesActionsController(context, imageReader, imageSaver);
             final MouseController mouseController = new MouseController(context);
             final FrameResizingController frameResizingController = new FrameResizingController(context);
 
