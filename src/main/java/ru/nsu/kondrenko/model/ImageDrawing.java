@@ -5,8 +5,6 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
-record Span(int x, int y) {}
-
 public final class ImageDrawing {
     private ImageDrawing() {
 
@@ -16,7 +14,7 @@ public final class ImageDrawing {
         if (thickness == 1) {
             drawThinLine(image, color, x1, y1, x2, y2);
         } else {
-            final Graphics2D graphics2D = (Graphics2D)image.getGraphics();
+            final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
             graphics2D.setColor(color);
             graphics2D.setStroke(new BasicStroke(thickness));
             graphics2D.drawLine(x1, y1, x2, y2);
@@ -24,19 +22,16 @@ public final class ImageDrawing {
     }
 
     public static void drawPolygon(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
+        final Polygon polygon = createPolygon(x, y, n, radius, rotationDegrees);
         final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
-
         graphics2D.setColor(color);
         graphics2D.setStroke(new BasicStroke(thickness));
-
-        final Polygon polygon = createPolygon(x, y, n, radius, rotationDegrees);
         graphics2D.drawPolygon(polygon);
     }
 
     public static void drawStar(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
+        final Shape starShape = createStarShape(x, y, (double) radius / 2, radius, n, rotationDegrees);
         final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
-        final double radians = degreesToRadians(rotationDegrees);
-        final Shape starShape = createStarShape(x, y, (double) radius / 2, radius, n, radians);
         graphics2D.setColor(color);
         graphics2D.setStroke(new BasicStroke(thickness));
         graphics2D.draw(starShape);
@@ -45,35 +40,57 @@ public final class ImageDrawing {
     public static void fill(BufferedImage image, Color color, int x0, int y0) {
         final int startRGB = image.getRGB(x0, y0);
         final int destRGB = color.getRGB();
-        final Stack<Span> spans = new Stack<>();
+        final Stack<Point> spansPoints = new Stack<>();
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
 
-        spans.add(new Span(x0, y0));
+        final Point startSpanPoint = new Point(x0, y0);
+        spansPoints.add(startSpanPoint);
 
-        while (!spans.empty()) {
-            final Span currentSpan = spans.pop();
-            final int y = currentSpan.y();
+        while (!spansPoints.empty()) {
+            final Point currentSpanPoint = spansPoints.pop();
+            final int y = currentSpanPoint.y;
 
-            int lx = currentSpan.x();
+            int lx = currentSpanPoint.x;
             while (lx >= 0 && image.getRGB(lx, y) == startRGB) {
                 image.setRGB(lx, y, destRGB);
                 lx--;
             }
 
-            int rx = currentSpan.x() + 1;
+            int rx = currentSpanPoint.x + 1;
             while (rx < imageWidth && image.getRGB(rx, y) == startRGB) {
                 image.setRGB(rx, y, destRGB);
                 rx++;
             }
 
             if (y > 0) {
-                scan(lx + 1, rx, y - 1, startRGB, image, spans);
+                scanForSpans(lx + 1, rx, y - 1, startRGB, image, spansPoints);
             }
 
             if (y < imageHeight - 1) {
-                scan(lx + 1, rx, y + 1, startRGB, image, spans);
+                scanForSpans(lx + 1, rx, y + 1, startRGB, image, spansPoints);
             }
+        }
+    }
+
+    private static void scanForSpans(int lx, int rx, int y, int startRGB, BufferedImage image, Stack<Point> spansPoints) {
+        boolean foundSpan = false;
+        int spanPointX = 0;
+
+        for (int x = lx; x < rx; x++) {
+            final int currentRGB = image.getRGB(x, y);
+
+            if (!foundSpan && currentRGB == startRGB) {
+                spanPointX = x;
+                foundSpan = true;
+            } else if (foundSpan && currentRGB != startRGB) {
+                spansPoints.add(new Point(spanPointX, y));
+                foundSpan = false;
+            }
+        }
+
+        if (foundSpan) {
+            spansPoints.add(new Point(spanPointX, y));
         }
     }
 
@@ -141,74 +158,48 @@ public final class ImageDrawing {
         }
     }
 
-    private static Shape createStarShape(double centerX, double centerY, double innerRadius, double outerRadius, int n, double rotationDegrees) {
-        final Path2D path = new Path2D.Double();
-
-        final double deltaAngle = Math.PI / n;
-
-        for (int i = 0; i < n * 2; i++) {
-            final double angleRad = rotationDegrees + i * deltaAngle;
-
-            double relX = Math.cos(angleRad);;
-            double relY = Math.sin(angleRad);;
-
-            if (i % 2 == 0)  {
-                relX *= outerRadius;
-                relY *= outerRadius;
-            }
-            else  {
-                relX *= innerRadius;
-                relY *= innerRadius;
-            }
-            if (i == 0)  {
-                path.moveTo(centerX + relX, centerY + relY);
-            }
-            else  {
-                path.lineTo(centerX + relX, centerY + relY);
-            }
-        }
-
-        path.closePath();
-
-        return path;
-    }
-
-    private static double degreesToRadians(int degrees) {
-        return Math.PI * degrees / 180;
-    }
-
-    private static Polygon createPolygon(int x, int y, int n, int radius, int rotationDegrees) {
-        final double radians = degreesToRadians(rotationDegrees);
+    private static Polygon createPolygon(int x0, int y0, int n, int radius, int rotationDegrees) {
+        final double radians = Math.toRadians(rotationDegrees);
         final Polygon polygon = new Polygon();
 
         for (int i = 0; i < n; i++) {
             final double angle = i * 2 * Math.PI / n + radians;
-            final int currentX = (int) Math.floor(x + radius * Math.cos(angle));
-            final int currentY = (int) Math.floor(y + radius * Math.sin(angle));
+            final int currentX = (int) Math.floor(x0 + radius * Math.cos(angle));
+            final int currentY = (int) Math.floor(y0 + radius * Math.sin(angle));
             polygon.addPoint(currentX, currentY);
         }
 
         return polygon;
     }
 
-    private static void scan(int lx, int rx, int y, int startRGB, BufferedImage image, Stack<Span> spans) {
-        boolean foundSpan = false;
-        int spanPoint = 0;
+    private static Shape createStarShape(double x0, double yo, double innerRadius, double outerRadius, int n, int rotationDegrees) {
+        final Path2D path = new Path2D.Double();
 
-        for (int x = lx; x < rx; x++) {
-            final int currentRGB = image.getRGB(x, y);
+        final double deltaAngle = Math.PI / n;
+        final double radians = Math.toRadians(rotationDegrees);
 
-            if (!foundSpan && currentRGB == startRGB) {
-                spanPoint = x;
-                foundSpan = true;
-            } else if (foundSpan && currentRGB != startRGB) {
-                spans.add(new Span(spanPoint, y));
-                foundSpan = false;
+        for (int i = 0; i < n * 2; i++) {
+            final double angleRad = radians + i * deltaAngle;
+
+            double relX = Math.cos(angleRad);
+            double relY = Math.sin(angleRad);
+
+            if (i % 2 == 0) {
+                relX *= outerRadius;
+                relY *= outerRadius;
+            } else {
+                relX *= innerRadius;
+                relY *= innerRadius;
+            }
+            if (i == 0) {
+                path.moveTo(x0 + relX, yo + relY);
+            } else {
+                path.lineTo(x0 + relX, yo + relY);
             }
         }
 
-        if (foundSpan) {
-            spans.add(new Span(spanPoint, y));
-        }
+        path.closePath();
+
+        return path;
     }
 }
