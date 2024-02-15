@@ -4,41 +4,41 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public interface Context {
-    void setState(ContextState state);
-
     ContextState getState();
 
-    void setTool(ContextTools tool);
+    void setState(ContextState state);
 
     ContextTools getTool();
 
-    void setImage(BufferedImage image);
+    void setTool(ContextTools tool);
 
     BufferedImage getImage();
 
-    void addListener(ContextListener listener);
+    void setImage(BufferedImage image);
 
-    void setThickness(int thickness);
+    void addListener(ContextListener listener);
 
     int getThickness();
 
-    void setColor(Color color);
+    void setThickness(int thickness);
 
     Color getColor();
 
-    void setNumberOfVertices(int numberOfSides);
+    void setColor(Color color);
 
     int getNumberOfVertices();
 
-    void setRadius(int radius);
+    void setNumberOfVertices(int numberOfVertices);
 
     int getRadius();
 
-    void setRotation(int rotation);
+    void setRadius(int radius);
 
     int getRotation();
 
-    void setErrorMessage(String errorMessage);
+    void setRotation(int rotation);
 
     String getErrorMessage();
+
+    void setErrorMessage(String errorMessage);
 }

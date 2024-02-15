@@ -33,7 +33,7 @@ public class FrameResizingController extends ComponentAdapter {
             return;
         }
 
-        final BufferedImage newImage = ImageUtils.increaseBufferedImage(newImageWidth, newImageHeight, oldImage);
+        final BufferedImage newImage = ImageUtils.enhanceImage(oldImage, newImageWidth, newImageHeight);
         context.setImage(newImage);
     }
 }

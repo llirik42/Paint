@@ -1,12 +1,12 @@
 package ru.nsu.kondrenko.gui.view;
 
-import ru.nsu.kondrenko.model.ImageReader;
+import ru.nsu.kondrenko.model.ImageReaderImpl;
 
 import javax.swing.*;
 import java.io.IOException;
 
 public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
-    private final ImageReader reader;
+    private final ImageReaderImpl reader;
 
     private final ImageIcon drawLineIcon;
     private final ImageIcon drawPolygonIcon;
@@ -31,7 +31,7 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     private final ImageIcon cyanIcon;
 
     public ToolsIconsSupplierImpl() throws IOException {
-        reader = new ImageReader();
+        reader = new ImageReaderImpl();
         drawLineIcon = loadImageIcon("/icons/line.png");
         drawPolygonIcon = loadImageIcon("/icons/polygon.png");
         drawStarIcon = loadImageIcon("/icons/star.png");

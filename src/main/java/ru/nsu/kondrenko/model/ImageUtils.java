@@ -18,13 +18,13 @@ public final class ImageUtils {
         return result;
     }
 
-    public static BufferedImage increaseBufferedImage(int newWidth, int newHeight, BufferedImage oldImage) {
+    public static BufferedImage enhanceImage(BufferedImage oldImage, int newWidth, int newHeight) {
         final int oldWidth = oldImage.getWidth();
         final int oldHeight = oldImage.getHeight();
+        final int whiteRGB = Color.WHITE.getRGB();
 
-        final BufferedImage result = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        final BufferedImage result = new BufferedImage(newWidth, newHeight, oldImage.getType());
 
-        // TODO: refactor
         for (int x = 0; x < oldWidth; x++) {
             for (int y = 0; y < oldHeight; y++) {
                 result.setRGB(x, y, oldImage.getRGB(x, y));
@@ -33,13 +33,13 @@ public final class ImageUtils {
 
         for (int x = oldWidth; x < newWidth; x++) {
             for (int y = 0; y < newHeight; y++) {
-                result.setRGB(x, y, Color.white.getRGB());
+                result.setRGB(x, y, whiteRGB);
             }
         }
 
         for (int y = oldHeight; y < newHeight; y++) {
             for (int x = 0; x < newWidth; x++) {
-                result.setRGB(x, y, Color.white.getRGB());
+                result.setRGB(x, y, whiteRGB);
             }
 
         }

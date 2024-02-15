@@ -18,15 +18,20 @@ public class ContextImpl implements Context {
     private int numberOfVertices;
     private int rotation;
 
-    public ContextImpl(BufferedImage image, Color color, int thickness, int radius, int numberOfSides, int rotation) {
+    public ContextImpl(BufferedImage image, Color color, int thickness, int radius, int numberOfVertices, int rotation) {
         this.tool = ContextTools.NONE;
         this.state = ContextState.IDLE;
         this.image = image;
         this.color = color;
         this.thickness = thickness;
         this.radius = radius;
-        this.numberOfVertices = numberOfSides;
+        this.numberOfVertices = numberOfVertices;
         this.rotation = rotation;
+    }
+
+    @Override
+    public ContextState getState() {
+        return state;
     }
 
     @Override
@@ -39,8 +44,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public ContextState getState() {
-        return state;
+    public ContextTools getTool() {
+        return tool;
     }
 
     @Override
@@ -49,8 +54,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public ContextTools getTool() {
-        return tool;
+    public BufferedImage getImage() {
+        return image;
     }
 
     @Override
@@ -59,18 +64,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    @Override
     public void addListener(ContextListener listener) {
         listeners.add(listener);
-    }
-
-    @Override
-    public void setThickness(int thickness) {
-        this.thickness = thickness;
     }
 
     @Override
@@ -79,8 +74,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void setColor(Color color) {
-        this.color = color;
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
     }
 
     @Override
@@ -89,8 +84,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void setNumberOfVertices(int numberOfSides) {
-        this.numberOfVertices = numberOfSides;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override
@@ -99,8 +94,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void setRadius(int radius) {
-        this.radius = radius;
+    public void setNumberOfVertices(int numberOfVertices) {
+        this.numberOfVertices = numberOfVertices;
     }
 
     @Override
@@ -109,8 +104,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     @Override
@@ -119,12 +114,17 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
     }
 
     @Override
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    @Override
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

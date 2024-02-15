@@ -2,8 +2,8 @@ package ru.nsu.kondrenko.gui.controller;
 
 import ru.nsu.kondrenko.model.Context;
 import ru.nsu.kondrenko.model.ContextState;
-import ru.nsu.kondrenko.model.ImageReader;
-import ru.nsu.kondrenko.model.ImageSaver;
+import ru.nsu.kondrenko.model.ImageReaderImpl;
+import ru.nsu.kondrenko.model.ImageSaverImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,15 +15,15 @@ import java.util.Objects;
 
 public class FilesActionsController implements ActionListener {
     private final Context context;
-    private final ImageReader reader;
-    private final ImageSaver saver;
+    private final ImageReaderImpl reader;
+    private final ImageSaverImpl saver;
 
     public FilesActionsController(Context context) {
         this.context = context;
 
         // TODO: do dependency injection
-        this.reader = new ImageReader();
-        this.saver = new ImageSaver();
+        this.reader = new ImageReaderImpl();
+        this.saver = new ImageSaverImpl();
     }
 
     @Override
