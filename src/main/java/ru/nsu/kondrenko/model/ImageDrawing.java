@@ -14,16 +14,18 @@ public final class ImageDrawing {
 
     public static void drawLine(BufferedImage image, Color color, int thickness, int x1, int y1, int x2, int y2) {
         drawThinLine(image, color, x1, y1, x2, y2);
-
-        // TODO: add handling of thickness
     }
 
     public static void drawPolygon(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
+        drawThinPolygon(image, color, 285, 154, 4, radius, rotationDegrees);
+
+        //drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
+        // TODO: add handling of thickness
     }
 
     public static void drawStar(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
         drawThinStar(image, color, x, y, n, radius, rotationDegrees);
+        // TODO: add handling of thickness
     }
 
     public static void fill(BufferedImage image, Color color, int x0, int y0) {
@@ -40,13 +42,13 @@ public final class ImageDrawing {
             final int y = currentSpan.y();
 
             int lx = currentSpan.x();
-            while (lx > 0 && image.getRGB(lx, y) == startRGB) {
+            while (lx >= 0 && image.getRGB(lx, y) == startRGB) {
                 image.setRGB(lx, y, destRGB);
                 lx--;
             }
 
             int rx = currentSpan.x() + 1;
-            while (rx < imageWidth - 1 && image.getRGB(rx, y) == startRGB) {
+            while (rx < imageWidth && image.getRGB(rx, y) == startRGB) {
                 image.setRGB(rx, y, destRGB);
                 rx++;
             }
@@ -88,12 +90,12 @@ public final class ImageDrawing {
             return;
         }
 
-        if (dxAbs > dyAbs) {
-            final int dx = Integer.max(x1, x2) - Integer.min(x1, x2);
-            final int dy = Integer.max(y1, y2) - Integer.min(y1, y2);
-            final int xOffset = Integer.min(x1, x2);
-            final int yDelta = Integer.signum(y2 - y1) * Integer.signum(x2 - x1);
+        final int dx = Integer.max(x1, x2) - Integer.min(x1, x2);
+        final int dy = Integer.max(y1, y2) - Integer.min(y1, y2);
+        final int delta = Integer.signum(y2 - y1) * Integer.signum(x2 - x1);
 
+        if (dxAbs > dyAbs) {
+            final int xOffset = Integer.min(x1, x2);
             int error = -dx;
             int y = x1 < x2 ? y1 : y2;
 
@@ -102,80 +104,25 @@ public final class ImageDrawing {
 
                 if (error > 0) {
                     error -= 2 * dx;
-                    y += yDelta;
+                    y += delta;
                 }
 
                 image.setRGB(x + xOffset, y, colorRGB);
             }
         } else {
-            if (y1 > y2 && x1 < x2) {
-                final int dx = x2 - x1;
-                final int dy = y1 - y2;
+            final int yOffset = Integer.min(y1, y2);
+            int error = -dy;
+            int x = y1 > y2 ? x2 : x1;
 
-                int x = x2;
-                int error = -dy;
+            for (int y = 0; y <= dy; y++) {
+                error += 2 * dx;
 
-                for (int y = 0; y <= dy; y++) {
-                    error += 2 * dx;
-
-                    if (error > 0) {
-                        error -= 2 * dy;
-                        x--;
-                    }
-
-                    image.setRGB(x, y + y2, colorRGB);
+                if (error > 0) {
+                    error -= 2 * dy;
+                    x += delta;
                 }
-            } else if (y1 > y2 && x1 > x2) {
-                final int dx = x1 - x2;
-                final int dy = y1 - y2;
 
-                int x = x2;
-                int error = -dy;
-
-                for (int y = 0; y <= dy; y++) {
-                    error += 2 * dx;
-
-                    if (error > 0) {
-                        error -= 2 * dy;
-                        x++;
-                    }
-
-                    image.setRGB(x, y + y2, colorRGB);
-                }
-            } else if (y1 < y2 && x1 < x2) {
-                final int dx = x2 - x1;
-                final int dy = y2 - y1;
-
-                int x = x1;
-                int error = -dy;
-
-                for (int y = 0; y <= dy; y++) {
-                    error += 2 * dx;
-
-                    if (error > 0) {
-                        error -= 2 * dy;
-                        x++;
-                    }
-
-                    image.setRGB(x, y + y1, colorRGB);
-                }
-            } else if (y1 < y2 && x1 > x2) {
-                final int dx = x1 - x2;
-                final int dy = y2 - y1;
-
-                int x = x1;
-                int error = -dy;
-
-                for (int y = 0; y <= dy; y++) {
-                    error += 2 * dx;
-
-                    if (error > 0) {
-                        error -= 2 * dy;
-                        x--;
-                    }
-
-                    image.setRGB(x, y + y1, colorRGB);
-                }
+                image.setRGB(x, y + yOffset, colorRGB);
             }
         }
     }
@@ -254,6 +201,10 @@ public final class ImageDrawing {
                 spans.add(new Span(spanPoint, y));
                 foundSpan = false;
             }
+        }
+
+        if (foundSpan) {
+            spans.add(new Span(spanPoint, y));
         }
     }
 }
