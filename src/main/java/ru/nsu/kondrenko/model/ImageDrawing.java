@@ -13,19 +13,33 @@ public final class ImageDrawing {
     }
 
     public static void drawLine(BufferedImage image, Color color, int thickness, int x1, int y1, int x2, int y2) {
-        drawThinLine(image, color, x1, y1, x2, y2);
+        if (thickness == 1) {
+            drawThinLine(image, color, x1, y1, x2, y2);
+        } else {
+            final Graphics2D graphics2D = (Graphics2D)image.getGraphics();
+            graphics2D.setColor(color);
+            graphics2D.setStroke(new BasicStroke(thickness));
+            graphics2D.drawLine(x1, y1, x2, y2);
+        }
     }
 
     public static void drawPolygon(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        drawThinPolygon(image, color, 285, 154, 4, radius, rotationDegrees);
+        final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
 
-        //drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
-        // TODO: add handling of thickness
+        graphics2D.setColor(color);
+        graphics2D.setStroke(new BasicStroke(thickness));
+
+        final Polygon polygon = createPolygon(x, y, n, radius, rotationDegrees);
+        graphics2D.drawPolygon(polygon);
     }
 
     public static void drawStar(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        drawThinStar(image, color, x, y, n, radius, rotationDegrees);
-        // TODO: add handling of thickness
+        final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
+        final double radians = degreesToRadians(rotationDegrees);
+        final Shape starShape = createStarShape(x, y, (double) radius / 2, radius, n, radians);
+        graphics2D.setColor(color);
+        graphics2D.setStroke(new BasicStroke(thickness));
+        graphics2D.draw(starShape);
     }
 
     public static void fill(BufferedImage image, Color color, int x0, int y0) {
@@ -127,30 +141,6 @@ public final class ImageDrawing {
         }
     }
 
-    private static void drawThinPolygon(BufferedImage image, Color color, int x, int y, int n, int radius, int rotationDegrees) {
-        final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
-        final double radians = degreesToRadians(rotationDegrees);
-        final Polygon polygon = new Polygon();
-
-        for (int i = 0; i < n; i++) {
-            final double angle = i * 2 * Math.PI / n + radians;
-            final int currentX = (int) Math.floor(x + radius * Math.cos(angle));
-            final int currentY = (int) Math.floor(y + radius * Math.sin(angle));
-            polygon.addPoint(currentX, currentY);
-        }
-
-        graphics2D.setColor(color);
-        graphics2D.drawPolygon(polygon);
-    }
-
-    private static void drawThinStar(BufferedImage image, Color color, int x, int y, int n, int radius, int rotationDegrees) {
-        final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
-        final double radians = degreesToRadians(rotationDegrees);
-        final Shape starShape = createStarShape(x, y, (double) radius / 2, radius, n, radians);
-        graphics2D.setColor(color);
-        graphics2D.draw(starShape);
-    }
-
     private static Shape createStarShape(double centerX, double centerY, double innerRadius, double outerRadius, int n, double rotationDegrees) {
         final Path2D path = new Path2D.Double();
 
@@ -185,6 +175,20 @@ public final class ImageDrawing {
 
     private static double degreesToRadians(int degrees) {
         return Math.PI * degrees / 180;
+    }
+
+    private static Polygon createPolygon(int x, int y, int n, int radius, int rotationDegrees) {
+        final double radians = degreesToRadians(rotationDegrees);
+        final Polygon polygon = new Polygon();
+
+        for (int i = 0; i < n; i++) {
+            final double angle = i * 2 * Math.PI / n + radians;
+            final int currentX = (int) Math.floor(x + radius * Math.cos(angle));
+            final int currentY = (int) Math.floor(y + radius * Math.sin(angle));
+            polygon.addPoint(currentX, currentY);
+        }
+
+        return polygon;
     }
 
     private static void scan(int lx, int rx, int y, int startRGB, BufferedImage image, Stack<Span> spans) {
