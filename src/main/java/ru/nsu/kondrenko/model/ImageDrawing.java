@@ -3,6 +3,7 @@ package ru.nsu.kondrenko.model;
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 import java.util.Stack;
 
 record Span(int x, int y) {}
@@ -19,23 +20,15 @@ public final class ImageDrawing {
     }
 
     public static void drawPolygon(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        if (thickness == 1) {
-            drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
-        } else {
-            drawThinPolygon(image, color, x, y, n, radius, rotationDegrees);
-            drawThinPolygon(image, color, x, y, n, radius + thickness, rotationDegrees);
-
-
+        for (int i = 0; i < thickness; i++) {
+            drawThinPolygon(image, color, x, y, n, radius + i, rotationDegrees);
         }
-
-
-
-        // TODO: add handling of thickness
     }
 
     public static void drawStar(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        drawThinStar(image, color, x, y, n, radius, rotationDegrees);
-        // TODO: add handling of thickness
+        for (int i = 0; i < thickness; i++) {
+            drawThinStar(image, color, x, y, n, radius + i, rotationDegrees);
+        }
     }
 
     public static void fill(BufferedImage image, Color color, int x0, int y0) {
@@ -83,22 +76,91 @@ public final class ImageDrawing {
             for (int y = minY; y <= maxY; y++) {
                 image.setRGB(x1, y, rgb);
             }
-        } else {
+
+            return;
+        }
+
+        if (y1 == y2) {
+            final int minX = Integer.min(x1, x2);
+            final int maxX = Integer.max(x1, x2);
+
+            for (int x = minX; x <= maxX; x++) {
+                image.setRGB(x, y1, rgb);
+            }
+
+            return;
+        }
+
+        final int dxAbs = Math.abs(x2 - x1);
+        final int dyAbs = Math.abs(y2 - y1);
+
+        if (x1 < x2 && dxAbs > dyAbs && y1 > y2) {
             final int dx = x2 - x1;
             final int dy = y2 - y1;
 
             int y = y1;
             int error = -dx;
 
-            for (int x = 0; x <= dx; x++) {
+            for (int x = 0; x < dx; x++) {
+                error -= 2 * dy;
+
+                if (error > 0) {
+                    error -= 2 * dx;
+                    y--;
+                }
+
+                image.setRGB(x + x1, y, color.getRGB());
+            }
+        } else if (x1 < x2 && dxAbs > dyAbs && y1 < y2) {
+            final int dx = x2 - x1;
+            final int dy = y2 - y1;
+
+            int y = y1;
+            int error = -dx;
+
+            for (int x = 0; x < dx; x++) {
                 error += 2 * dy;
 
                 if (error > 0) {
                     error -= 2 * dx;
-                    y += 1;
+                    y++;
                 }
 
                 image.setRGB(x + x1, y, color.getRGB());
+            }
+        } else if (y1 > y2 && dxAbs < dyAbs && x1 < x2) {
+            final int dx = x2 - x1;
+            final int dy = y1 - y2;
+
+            int x = x2;
+            int error = -dy;
+
+            for (int y = 0; y < dy; y++) {
+                error += 2 * dx;
+
+                if (error > 0) {
+                    error -= 2 * dy;
+                    x--;
+                }
+
+                image.setRGB(x, y + y2, color.getRGB());
+            }
+        } else if (y1 < y2 && dxAbs < dyAbs && x1 < x2) {
+            final int dx = x2 - x1;
+            final int dy = y2 - y1;
+
+            int x = x1;
+            int error = -dy;
+
+            for (int y = 0; y < dy; y++) {
+                error += 2 * dx;
+
+                if (error > 0) {
+                    error -= 2 * dy;
+                    x++;
+                }
+
+                image.setRGB(x, y + y1, color.getRGB());
             }
         }
     }
@@ -110,7 +172,9 @@ public final class ImageDrawing {
 
         for (int i = 0; i < n; i++) {
             final double angle = i * 2 * Math.PI / n + radians;
-            polygon.addPoint((int) (x + radius * Math.cos(angle)), (int) (y + radius * Math.sin(angle)));
+            final int currentX = (int) Math.floor(x + radius * Math.cos(angle));
+            final int currentY = (int) Math.floor(y + radius * Math.sin(angle));
+            polygon.addPoint(currentX, currentY);
         }
 
         graphics2D.setColor(color);
