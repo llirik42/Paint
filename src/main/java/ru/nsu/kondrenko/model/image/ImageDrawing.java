@@ -40,6 +40,11 @@ public final class ImageDrawing {
     public static void fill(BufferedImage image, Color color, int x0, int y0) {
         final int startRGB = image.getRGB(x0, y0);
         final int destRGB = color.getRGB();
+
+        if (startRGB == destRGB) {
+            return;
+        }
+
         final Stack<Point> spansPoints = new Stack<>();
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
