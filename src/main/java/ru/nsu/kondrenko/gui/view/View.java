@@ -203,6 +203,8 @@ public class View implements ContextListener {
     }
 
     private int selectInteger(String message, int minValue, int maxValue, int startValue) {
+        final String incorrectValueMessage = String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
+
         final int[] result = {startValue};
 
         final JSlider slider = new JSlider(minValue, maxValue, startValue);
@@ -223,7 +225,7 @@ public class View implements ContextListener {
                     throw new Exception();
                 }
             } catch (Exception exception) {
-                showError("Incorrect value!");
+                showError(incorrectValueMessage);
             }
         });
 
@@ -246,7 +248,7 @@ public class View implements ContextListener {
                 throw new Exception();
             }
         } catch (Exception exception) {
-            showError("Incorrect value!");
+            showError(incorrectValueMessage);
         }
 
         return result[0];
