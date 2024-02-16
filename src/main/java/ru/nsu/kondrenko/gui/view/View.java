@@ -3,6 +3,7 @@ package ru.nsu.kondrenko.gui.view;
 import ru.nsu.kondrenko.model.Context;
 import ru.nsu.kondrenko.model.ContextListener;
 import ru.nsu.kondrenko.model.ContextState;
+import ru.nsu.kondrenko.model.ContextTools;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -28,6 +29,8 @@ public class View implements ContextListener {
     private final JFrame frame;
     private final DrawingArea drawingArea;
     private final ToolsArea toolsArea;
+
+    private MenuArea menuArea;
 
     public View(String viewName,
                 int minWidth,
@@ -78,6 +81,35 @@ public class View implements ContextListener {
     @Override
     public void onContextStateChange(Context context) {
         contextStateChangeHandlers.get(context.getState()).accept(context);
+    }
+
+    @Override
+    public void onContextToolChange(Context context) {
+        final ContextTools tool = context.getTool();
+
+        toolsArea.unselectAll();
+
+        switch (tool) {
+            case DRAW_LINE -> {
+                this.menuArea.setDrawLineEnabled();
+                this.toolsArea.setDrawLine();
+            }
+
+            case DRAW_POLYGON -> {
+                this.menuArea.setDrawPolygonEnabled();
+                this.toolsArea.setDrawPolygon();
+            }
+
+            case DRAW_STAR -> {
+                this.menuArea.setDrawStarEnabled();
+                this.toolsArea.setDrawStar();
+            }
+
+            case FILL -> {
+                this.menuArea.setFillEnabled();
+                this.toolsArea.setFill();
+            }
+        }
     }
 
     private void onIdle(Context context) {
@@ -174,7 +206,7 @@ public class View implements ContextListener {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        final MenuArea menuArea = new MenuArea(actionListener);
+        menuArea = new MenuArea(actionListener);
         frame.setJMenuBar(menuArea.getMenuBar());
 
         frame.add(toolsArea, BorderLayout.NORTH);

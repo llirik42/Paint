@@ -51,6 +51,10 @@ public class ContextImpl implements Context {
     @Override
     public void setTool(ContextTools tool) {
         this.tool = tool;
+
+        for (final var it : listeners) {
+            it.onContextToolChange(this);
+        }
     }
 
     @Override

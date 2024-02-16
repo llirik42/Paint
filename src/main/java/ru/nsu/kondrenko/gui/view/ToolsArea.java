@@ -15,6 +15,11 @@ public class ToolsArea extends JPanel {
     private static final int TOOL_SIZE = 26;
     private static final int ICON_SIZE = 20;
 
+    private JToggleButton drawLine;
+    private JToggleButton drawPolygon;
+    private JToggleButton drawStar;
+    private JToggleButton fill;
+
     public ToolsArea(ToolsIconsSupplier toolsIconsSupplier, ActionListener actionListener) {
         final List<ToolButtonProperties> toolButtonsProperties = Arrays.asList(
                 new ToolButtonProperties(toolsIconsSupplier.getDrawLineIcon(), ActionCommands.DRAW_LINE_ACTION_COMMAND, "draw line"),
@@ -44,9 +49,68 @@ public class ToolsArea extends JPanel {
         setBackground(AREA_BACKGROUND_COLOR);
 
         for (final var it : toolButtonsProperties) {
-            final JButton button = createToolButton(it.icon(), it.actionCommand(), it.tip(), actionListener);
+            final String actionCommand = it.actionCommand();
+
+            AbstractButton button;
+
+            switch (actionCommand) {
+                case ActionCommands.DRAW_LINE_ACTION_COMMAND -> {
+                    drawLine = createToolToggleButton(it.icon(), actionCommand, it.tip(), actionListener);
+                    button = drawLine;
+                }
+
+                case ActionCommands.DRAW_POLYGON_ACTION_COMMAND -> {
+                    drawPolygon = createToolToggleButton(it.icon(), actionCommand, it.tip(), actionListener);
+                    button = drawPolygon;
+                }
+
+                case ActionCommands.DRAW_STAR_ACTION_COMMAND -> {
+                    drawStar = createToolToggleButton(it.icon(), actionCommand, it.tip(), actionListener);
+                    button = drawStar;
+                }
+
+                case ActionCommands.FILL_ACTION_COMMAND -> {
+                    fill = createToolToggleButton(it.icon(), actionCommand, it.tip(), actionListener);
+                    button = fill;
+                }
+
+                default -> button = createToolButton(it.icon(), actionCommand, it.tip(), actionListener);
+            }
+
             add(button);
         }
+    }
+
+    public void setDrawLine() {
+        drawLine.setSelected(true);
+    }
+
+    public void setDrawPolygon() {
+        drawPolygon.setSelected(true);
+    }
+
+    public void setDrawStar() {
+        drawStar.setSelected(true);
+    }
+
+    public void setFill() {
+        fill.setSelected(true);
+    }
+
+    public void unselectAll() {
+        drawLine.setSelected(false);
+        drawPolygon.setSelected(false);
+        drawStar.setSelected(false);
+        fill.setSelected(false);
+    }
+
+    private JToggleButton createToolToggleButton(ImageIcon icon, String actionCommand, String tip, ActionListener actionListener) {
+        final Image image = icon.getImage();
+        final Image scaledImage = image.getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
+        final ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        final JToggleButton result = new JToggleButton(scaledIcon);
+        initButton(result, actionCommand, tip, actionListener);
+        return result;
     }
 
     private JButton createToolButton(ImageIcon icon, String actionCommand, String tip, ActionListener actionListener) {
@@ -54,14 +118,17 @@ public class ToolsArea extends JPanel {
         final Image scaledImage = image.getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
         final ImageIcon scaledIcon = new ImageIcon(scaledImage);
         final JButton result = new JButton(scaledIcon);
-        result.setFocusPainted(false);
-        result.setActionCommand(actionCommand);
-        result.setToolTipText(tip);
-        result.addActionListener(actionListener);
-        result.setPreferredSize(new Dimension(TOOL_SIZE, TOOL_SIZE));
-        result.setBackground(BUTTONS_BACKGROUND_COLOR);
-        result.setBorderPainted(false);
-
+        initButton(result, actionCommand, tip, actionListener);
         return result;
+    }
+
+    private void initButton(AbstractButton button, String actionCommand, String tip, ActionListener actionListener) {
+        button.setFocusPainted(false);
+        button.setActionCommand(actionCommand);
+        button.setToolTipText(tip);
+        button.addActionListener(actionListener);
+        button.setPreferredSize(new Dimension(TOOL_SIZE, TOOL_SIZE));
+        button.setBackground(BUTTONS_BACKGROUND_COLOR);
+        button.setBorderPainted(false);
     }
 }
