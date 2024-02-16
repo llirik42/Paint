@@ -20,27 +20,27 @@ public class MenuArea extends JPanel {
     private static final String HELP_MENU_TITLE = "Info";
 
     private final List<MenuItemProperties> FILE_MENU_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Open", ActionCommands.OPEN_ACTION_COMMAND),
-            new MenuItemProperties("Save", ActionCommands.SAVE_ACTION_COMMAND),
-            new MenuItemProperties("Exit", ActionCommands.EXIT_ACTION_COMMAND)
+            new MenuItemProperties("Open", ActionCommands.OPEN),
+            new MenuItemProperties("Save", ActionCommands.SAVE),
+            new MenuItemProperties("Exit", ActionCommands.EXIT)
     );
     private final List<MenuItemProperties> EDIT_MENU_DRAWING_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Draw line", ActionCommands.DRAW_LINE_ACTION_COMMAND, MenuItemType.DRAW_LINE_TOOL),
-            new MenuItemProperties("Draw polygon", ActionCommands.DRAW_POLYGON_ACTION_COMMAND, MenuItemType.DRAW_POLYGON_TOOL),
-            new MenuItemProperties("Draw star", ActionCommands.DRAW_STAR_ACTION_COMMAND, MenuItemType.DRAW_STAR_TOOL),
-            new MenuItemProperties("Fill", ActionCommands.FILL_ACTION_COMMAND, MenuItemType.FILL_TOOL)
+            new MenuItemProperties("Draw line", ActionCommands.DRAW_LINE, MenuItemType.DRAW_LINE_TOOL),
+            new MenuItemProperties("Draw polygon", ActionCommands.DRAW_POLYGON, MenuItemType.DRAW_POLYGON_TOOL),
+            new MenuItemProperties("Draw star", ActionCommands.DRAW_STAR, MenuItemType.DRAW_STAR_TOOL),
+            new MenuItemProperties("Fill", ActionCommands.FILL, MenuItemType.FILL_TOOL)
     );
     private final List<MenuItemProperties> EDIT_MENU_OTHER_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Clear", ActionCommands.CLEAR_ACTION_COMMAND),
-            new MenuItemProperties("Select color", ActionCommands.SELECT_COLOR_ACTION_COMMAND),
-            new MenuItemProperties("Select thickness", ActionCommands.SELECT_THICKNESS_ACTION_COMMAND),
-            new MenuItemProperties("Select number of vertices", ActionCommands.SELECT_NUMBER_OF_VERTICES_ACTION_COMMAND),
-            new MenuItemProperties("Select rotation", ActionCommands.SELECT_ROTATION_ACTION_COMMAND),
-            new MenuItemProperties("Select radius", ActionCommands.SELECT_RADIUS_ACTION_COMMAND)
+            new MenuItemProperties("Clear", ActionCommands.CLEAR),
+            new MenuItemProperties("Select color", ActionCommands.SELECT_COLOR),
+            new MenuItemProperties("Select thickness", ActionCommands.SELECT_THICKNESS),
+            new MenuItemProperties("Select number of vertices", ActionCommands.SELECT_NUMBER_OF_VERTICES),
+            new MenuItemProperties("Select rotation", ActionCommands.SELECT_ROTATION),
+            new MenuItemProperties("Select radius", ActionCommands.SELECT_RADIUS)
     );
     private final List<MenuItemProperties> HELP_ABOUT_MENU_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Help", ActionCommands.SHOW_HELP_ACTION_COMMAND),
-            new MenuItemProperties("About", ActionCommands.SHOW_ABOUT_ACTION_COMMAND)
+            new MenuItemProperties("Help", ActionCommands.SHOW_HELP),
+            new MenuItemProperties("About", ActionCommands.SHOW_ABOUT)
     );
     private final JMenuBar menuBar;
 

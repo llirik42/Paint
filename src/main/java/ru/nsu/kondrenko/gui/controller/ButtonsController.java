@@ -20,31 +20,31 @@ public class ButtonsController implements ActionListener {
     public ButtonsController(Context context) {
         this.context = context;
 
-        actionCommandsMap.put(ActionCommands.OPEN_ACTION_COMMAND, this::handleOpenActionCommand);
-        actionCommandsMap.put(ActionCommands.SAVE_ACTION_COMMAND, this::handleSaveActionCommand);
-        actionCommandsMap.put(ActionCommands.EXIT_ACTION_COMMAND, this::handleExitActionCommand);
-        actionCommandsMap.put(ActionCommands.DRAW_LINE_ACTION_COMMAND, this::handleDrawLineActionCommand);
-        actionCommandsMap.put(ActionCommands.DRAW_POLYGON_ACTION_COMMAND, this::handleDrawPolygonActionCommand);
-        actionCommandsMap.put(ActionCommands.DRAW_STAR_ACTION_COMMAND, this::handleDrawStarActionCommand);
-        actionCommandsMap.put(ActionCommands.FILL_ACTION_COMMAND, this::handleFillActionCommand);
-        actionCommandsMap.put(ActionCommands.CLEAR_ACTION_COMMAND, this::handleClearActionCommand);
-        actionCommandsMap.put(ActionCommands.SELECT_THICKNESS_ACTION_COMMAND, this::handleSelectThicknessActionCommand);
-        actionCommandsMap.put(ActionCommands.SELECT_NUMBER_OF_VERTICES_ACTION_COMMAND, this::handleSelectNumberOfVerticesActionCommand);
-        actionCommandsMap.put(ActionCommands.SELECT_ROTATION_ACTION_COMMAND, this::handleSelectRotationActionCommand);
-        actionCommandsMap.put(ActionCommands.SELECT_RADIUS_ACTION_COMMAND, this::handleSelectRadiusActionCommand);
-        actionCommandsMap.put(ActionCommands.SELECT_COLOR_ACTION_COMMAND, this::handleSelectColorActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLACK_ACTION_COMMAND, this::handleChangeColorToBlackActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_WHITE_ACTION_COMMAND, this::handleChangeColorToWhiteActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_RED_ACTION_COMMAND, this::handleChangeColorToRedActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_GREEN_ACTION_COMMAND, this::handleChangeColorToGreenActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLUE_ACTION_COMMAND, this::handleChangeColorToBlueActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_MAGENTA_ACTION_COMMAND, this::handleChangeColorToMagentaActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_PINK_ACTION_COMMAND, this::handleChangeColorToPinkActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_ORANGE_ACTION_COMMAND, this::handleChangeColorToOrangeActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND, this::handleChangeColorToYellowActionCommand);
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_CYAN_ACTION_COMMAND, this::handleChangeColorToCyanActionCommand);
-        actionCommandsMap.put(ActionCommands.SHOW_HELP_ACTION_COMMAND, this::handleShowHelpActionCommand);
-        actionCommandsMap.put(ActionCommands.SHOW_ABOUT_ACTION_COMMAND, this::handleShowAboutActionCommand);
+        actionCommandsMap.put(ActionCommands.OPEN, this::handleOpenActionCommand);
+        actionCommandsMap.put(ActionCommands.SAVE, this::handleSaveActionCommand);
+        actionCommandsMap.put(ActionCommands.EXIT, this::handleExitActionCommand);
+        actionCommandsMap.put(ActionCommands.DRAW_LINE, this::handleDrawLineActionCommand);
+        actionCommandsMap.put(ActionCommands.DRAW_POLYGON, this::handleDrawPolygonActionCommand);
+        actionCommandsMap.put(ActionCommands.DRAW_STAR, this::handleDrawStarActionCommand);
+        actionCommandsMap.put(ActionCommands.FILL, this::handleFillActionCommand);
+        actionCommandsMap.put(ActionCommands.CLEAR, this::handleClearActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_THICKNESS, this::handleSelectThicknessActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_NUMBER_OF_VERTICES, this::handleSelectNumberOfVerticesActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_ROTATION, this::handleSelectRotationActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_RADIUS, this::handleSelectRadiusActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_COLOR, this::handleSelectColorActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLACK, this::handleChangeColorToBlackActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_WHITE, this::handleChangeColorToWhiteActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_RED, this::handleChangeColorToRedActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_GREEN, this::handleChangeColorToGreenActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLUE, this::handleChangeColorToBlueActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_MAGENTA, this::handleChangeColorToMagentaActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_PINK, this::handleChangeColorToPinkActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_ORANGE, this::handleChangeColorToOrangeActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_YELLOW, this::handleChangeColorToYellowActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_CYAN, this::handleChangeColorToCyanActionCommand);
+        actionCommandsMap.put(ActionCommands.SHOW_HELP, this::handleShowHelpActionCommand);
+        actionCommandsMap.put(ActionCommands.SHOW_ABOUT, this::handleShowAboutActionCommand);
     }
 
     @Override
