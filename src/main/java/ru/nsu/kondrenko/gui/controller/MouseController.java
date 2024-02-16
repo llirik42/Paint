@@ -5,15 +5,13 @@ import ru.nsu.kondrenko.model.context.ContextAction;
 import ru.nsu.kondrenko.model.context.ContextTools;
 import ru.nsu.kondrenko.model.image.ImageDrawing;
 
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 public class MouseController extends MouseAdapter {
     private final Context context;
 
-    boolean hasPreviousCoordinates;
+    private boolean hasPreviousCoordinates;
     private int prevX;
     private int prevY;
 
@@ -22,7 +20,7 @@ public class MouseController extends MouseAdapter {
     }
 
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
+    public void mousePressed(MouseEvent mouseEvent) {
         final ContextTools tool = context.getTool();
 
         if (tool == ContextTools.NONE) {
@@ -47,59 +45,67 @@ public class MouseController extends MouseAdapter {
             prevX = mouseEvent.getX();
             prevY = mouseEvent.getY();
         } else {
-            drawLineToContext(mouseEvent);
+            drawLine(mouseEvent);
         }
         hasPreviousCoordinates = !hasPreviousCoordinates;
     }
 
     private void handleDrawingPolygonState(MouseEvent mouseEvent) {
-        drawPolygonToContext(mouseEvent);
+        drawPolygon(mouseEvent);
     }
 
     private void handleDrawingStarState(MouseEvent mouseEvent) {
-        drawStarToContext(mouseEvent);
+        drawStar(mouseEvent);
     }
 
     private void handleFilling(MouseEvent mouseEvent) {
-        fillInContext(mouseEvent);
+        fill(mouseEvent);
     }
 
-    private void drawLineToContext(MouseEvent mouseEvent) {
-        final BufferedImage image = context.getImage();
-        final Color color = context.getColor();
-        final int thickness = context.getThickness();
-        final int curX = mouseEvent.getX();
-        final int curY = mouseEvent.getY();
-        ImageDrawing.drawLine(image, color, thickness, prevX, prevY, curX, curY);
+    private void drawLine(MouseEvent mouseEvent) {
+        ImageDrawing.drawLine(
+                context.getImage(),
+                context.getColor(),
+                context.getThickness(),
+                prevX,
+                prevY,
+                mouseEvent.getX(),
+                mouseEvent.getY()
+        );
     }
 
-    private void drawPolygonToContext(MouseEvent mouseEvent) {
-        final BufferedImage image = context.getImage();
-        final Color color = context.getColor();
-        final int thickness = context.getThickness();
-        final int numberOfSides = context.getNumberOfVertices();
-        final int radius = context.getRadius();
-        final int rotationDeg = context.getRotation();
-        final int x = mouseEvent.getX();
-        final int y = mouseEvent.getY();
-        ImageDrawing.drawPolygon(image, color, x, y, thickness, numberOfSides, radius, rotationDeg);
+    private void drawPolygon(MouseEvent mouseEvent) {
+        ImageDrawing.drawPolygon(
+                context.getImage(),
+                context.getColor(),
+                mouseEvent.getX(),
+                mouseEvent.getY(),
+                context.getThickness(),
+                context.getNumberOfVertices(),
+                context.getRadius(),
+                context.getRotation()
+        );
     }
 
-    private void drawStarToContext(MouseEvent mouseEvent) {
-        final BufferedImage image = context.getImage();
-        final Color color = context.getColor();
-        final int thickness = context.getThickness();
-        final int numberOfSides = context.getNumberOfVertices();
-        final int radius = context.getRadius();
-        final int rotationDeg = context.getRotation();
-        final int x = mouseEvent.getX();
-        final int y = mouseEvent.getY();
-        ImageDrawing.drawStar(image, color, x, y, thickness, numberOfSides, radius, rotationDeg);
+    private void drawStar(MouseEvent mouseEvent) {
+        ImageDrawing.drawStar(
+                context.getImage(),
+                context.getColor(),
+                mouseEvent.getX(),
+                mouseEvent.getY(),
+                context.getThickness(),
+                context.getNumberOfVertices(),
+                context.getRadius(),
+                context.getRotation()
+        );
     }
 
-    private void fillInContext(MouseEvent mouseEvent) {
-        final BufferedImage image = context.getImage();
-        final Color color = context.getColor();
-        ImageDrawing.fill(image, color, mouseEvent.getX(), mouseEvent.getY());
+    private void fill(MouseEvent mouseEvent) {
+        ImageDrawing.fill(
+                context.getImage(),
+                context.getColor(),
+                mouseEvent.getX(),
+                mouseEvent.getY()
+        );
     }
 }
