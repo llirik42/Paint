@@ -1,4 +1,4 @@
-package ru.nsu.kondrenko.model;
+package ru.nsu.kondrenko.model.context;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,7 +9,7 @@ public class ContextImpl implements Context {
     private final List<ContextListener> listeners = new ArrayList<>();
 
     private ContextTools tool;
-    private ContextState state;
+    private ContextAction state;
     private BufferedImage image;
     private Color color;
     private String errorMessage;
@@ -20,7 +20,7 @@ public class ContextImpl implements Context {
 
     public ContextImpl(BufferedImage image, Color color, int thickness, int radius, int numberOfVertices, int rotation) {
         this.tool = ContextTools.NONE;
-        this.state = ContextState.IDLE;
+        this.state = ContextAction.IDLE;
         this.image = image;
         this.color = color;
         this.thickness = thickness;
@@ -30,17 +30,38 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public ContextState getState() {
+    public void addListener(ContextListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(ContextListener listener) {
+        listeners.remove(listener);
+    }
+
+    @Override
+    public void notifyListenersAboutActionChange() {
+        for (final var it : listeners) {
+            it.onContextActionChange(this);
+        }
+    }
+
+    @Override
+    public void notifyListenersAboutToolChange() {
+        for (final var it : listeners) {
+            it.onContextToolChange(this);
+        }
+    }
+
+    @Override
+    public ContextAction getAction() {
         return state;
     }
 
     @Override
-    public void setState(ContextState state) {
-        this.state = state;
-
-        for (final var it : listeners) {
-            it.onContextStateChange(this);
-        }
+    public void setAction(ContextAction action) {
+        this.state = action;
+        notifyListenersAboutActionChange();
     }
 
     @Override
@@ -51,10 +72,7 @@ public class ContextImpl implements Context {
     @Override
     public void setTool(ContextTools tool) {
         this.tool = tool;
-
-        for (final var it : listeners) {
-            it.onContextToolChange(this);
-        }
+        notifyListenersAboutToolChange();
     }
 
     @Override
@@ -65,11 +83,6 @@ public class ContextImpl implements Context {
     @Override
     public void setImage(BufferedImage image) {
         this.image = image;
-    }
-
-    @Override
-    public void addListener(ContextListener listener) {
-        listeners.add(listener);
     }
 
     @Override

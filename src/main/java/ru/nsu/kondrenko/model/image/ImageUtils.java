@@ -1,11 +1,10 @@
-package ru.nsu.kondrenko.model;
+package ru.nsu.kondrenko.model.image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public final class ImageUtils {
     private ImageUtils() {
-
     }
 
     public static BufferedImage createBlankImage(int width, int height) {

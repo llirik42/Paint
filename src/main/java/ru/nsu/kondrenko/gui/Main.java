@@ -5,7 +5,9 @@ import ru.nsu.kondrenko.gui.controller.FilesActionsController;
 import ru.nsu.kondrenko.gui.controller.FrameResizingController;
 import ru.nsu.kondrenko.gui.controller.MouseController;
 import ru.nsu.kondrenko.gui.view.View;
-import ru.nsu.kondrenko.model.*;
+import ru.nsu.kondrenko.model.context.Context;
+import ru.nsu.kondrenko.model.context.ContextImpl;
+import ru.nsu.kondrenko.model.image.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

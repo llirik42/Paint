@@ -1,9 +1,9 @@
 package ru.nsu.kondrenko.gui.view;
 
-import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ContextListener;
-import ru.nsu.kondrenko.model.ContextState;
-import ru.nsu.kondrenko.model.ContextTools;
+import ru.nsu.kondrenko.model.context.Context;
+import ru.nsu.kondrenko.model.context.ContextListener;
+import ru.nsu.kondrenko.model.context.ContextAction;
+import ru.nsu.kondrenko.model.context.ContextTools;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -22,7 +22,7 @@ public class View implements ContextListener {
     // TODO: вынести поддерживаемые типы в модель и читать оттуда
     private static final FileFilter filesOpeningFilter = new FileNameExtensionFilter("Images", "png", "bmp", "jpeg", "jpg", "gif");
 
-    private final Map<ContextState, Consumer<Context>> contextStateChangeHandlers;
+    private final Map<ContextAction, Consumer<Context>> contextStateChangeHandlers;
 
     private final JFileChooser openingFileChooser;
     private final JFileChooser savingFileChooser;
@@ -43,19 +43,19 @@ public class View implements ContextListener {
     ) throws IOException {
 
         contextStateChangeHandlers = new HashMap<>() {{
-            put(ContextState.IDLE, View.this::onIdle);
-            put(ContextState.REPAINTING, View.this::onRepainting);
-            put(ContextState.OPENING_FILE, View.this::onOpeningFile);
-            put(ContextState.SAVING_FILE, View.this::onSavingFile);
-            put(ContextState.EXITING, View.this::onExiting);
-            put(ContextState.CHOOSING_COLOR, View.this::onChoosingColor);
-            put(ContextState.CHOOSING_THICKNESS, View.this::onSelectingThickness);
-            put(ContextState.CHOOSING_NUMBER_OF_SIDES, View.this::onSelectingNumberOfVertices);
-            put(ContextState.CHOOSING_RADIUS, View.this::onSelectingRadius);
-            put(ContextState.CHOOSING_ROTATION, View.this::onSelectingRotation);
-            put(ContextState.ERROR, View.this::onError);
-            put(ContextState.DISPLAYING_HELP, View.this::onDisplayingHelp);
-            put(ContextState.DISPLAYING_ABOUT, View.this::onDisplayingAbout);
+            put(ContextAction.IDLE, View.this::onIdle);
+            put(ContextAction.REPAINT, View.this::onRepainting);
+            put(ContextAction.OPEN_FILE, View.this::onOpeningFile);
+            put(ContextAction.SAVE_FILE, View.this::onSavingFile);
+            put(ContextAction.EXIT, View.this::onExiting);
+            put(ContextAction.SELECT_COLOR, View.this::onChoosingColor);
+            put(ContextAction.SELECT_THICKNESS, View.this::onSelectingThickness);
+            put(ContextAction.SELECT_NUMBER_OF_VERTICES, View.this::onSelectingNumberOfVertices);
+            put(ContextAction.SELECT_RADIUS, View.this::onSelectingRadius);
+            put(ContextAction.SELECT_ROTATION, View.this::onSelectingRotation);
+            put(ContextAction.HANDLE_ERROR, View.this::onError);
+            put(ContextAction.DISPLAY_HELP, View.this::onDisplayingHelp);
+            put(ContextAction.DISPLAY_ABOUT, View.this::onDisplayingAbout);
         }};
 
         final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
@@ -79,8 +79,8 @@ public class View implements ContextListener {
     }
 
     @Override
-    public void onContextStateChange(Context context) {
-        contextStateChangeHandlers.get(context.getState()).accept(context);
+    public void onContextActionChange(Context context) {
+        contextStateChangeHandlers.get(context.getAction()).accept(context);
     }
 
     @Override

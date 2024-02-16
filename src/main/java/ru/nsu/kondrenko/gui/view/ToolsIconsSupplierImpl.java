@@ -1,6 +1,6 @@
 package ru.nsu.kondrenko.gui.view;
 
-import ru.nsu.kondrenko.model.ImageReaderImpl;
+import ru.nsu.kondrenko.model.image.ImageReaderImpl;
 
 import javax.swing.*;
 import java.io.IOException;

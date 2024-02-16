@@ -1,4 +1,4 @@
-package ru.nsu.kondrenko.model;
+package ru.nsu.kondrenko.model.context;
 
 public enum ContextTools {
     NONE,

@@ -1,10 +1,10 @@
 package ru.nsu.kondrenko.gui.controller;
 
 import ru.nsu.kondrenko.gui.ActionCommands;
-import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ContextState;
-import ru.nsu.kondrenko.model.ContextTools;
-import ru.nsu.kondrenko.model.ImageUtils;
+import ru.nsu.kondrenko.model.context.Context;
+import ru.nsu.kondrenko.model.context.ContextAction;
+import ru.nsu.kondrenko.model.context.ContextTools;
+import ru.nsu.kondrenko.model.image.ImageUtils;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,34 +20,31 @@ public class ButtonsController implements ActionListener {
     public ButtonsController(Context context) {
         this.context = context;
 
-        actionCommandsMap.put(ActionCommands.OPEN_ACTION_COMMAND, () -> context.setState(ContextState.OPENING_FILE));
-        actionCommandsMap.put(ActionCommands.SAVE_ACTION_COMMAND, () -> context.setState(ContextState.SAVING_FILE));
-        actionCommandsMap.put(ActionCommands.EXIT_ACTION_COMMAND, () -> context.setState(ContextState.EXITING));
-
-        actionCommandsMap.put(ActionCommands.DRAW_LINE_ACTION_COMMAND, () -> context.setTool(ContextTools.DRAW_LINE));
-        actionCommandsMap.put(ActionCommands.DRAW_POLYGON_ACTION_COMMAND, () -> context.setTool(ContextTools.DRAW_POLYGON));
-        actionCommandsMap.put(ActionCommands.DRAW_STAR_ACTION_COMMAND, () -> context.setTool(ContextTools.DRAW_STAR));
-        actionCommandsMap.put(ActionCommands.FILL_ACTION_COMMAND, () -> context.setTool(ContextTools.FILL));
+        actionCommandsMap.put(ActionCommands.OPEN_ACTION_COMMAND, this::handleOpenActionCommand);
+        actionCommandsMap.put(ActionCommands.SAVE_ACTION_COMMAND, this::handleSaveActionCommand);
+        actionCommandsMap.put(ActionCommands.EXIT_ACTION_COMMAND, this::handleExitActionCommand);
+        actionCommandsMap.put(ActionCommands.DRAW_LINE_ACTION_COMMAND, this::handleDrawLineActionCommand);
+        actionCommandsMap.put(ActionCommands.DRAW_POLYGON_ACTION_COMMAND, this::handleDrawPolygonActionCommand);
+        actionCommandsMap.put(ActionCommands.DRAW_STAR_ACTION_COMMAND, this::handleDrawStarActionCommand);
+        actionCommandsMap.put(ActionCommands.FILL_ACTION_COMMAND, this::handleFillActionCommand);
         actionCommandsMap.put(ActionCommands.CLEAR_ACTION_COMMAND, this::handleClearActionCommand);
-        actionCommandsMap.put(ActionCommands.SELECT_THICKNESS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_THICKNESS));
-        actionCommandsMap.put(ActionCommands.SELECT_NUMBER_OF_VERTICES_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_NUMBER_OF_SIDES));
-        actionCommandsMap.put(ActionCommands.SELECT_ROTATION_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_ROTATION));
-        actionCommandsMap.put(ActionCommands.SELECT_RADIUS_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_RADIUS));
-
-        actionCommandsMap.put(ActionCommands.SELECT_COLOR_ACTION_COMMAND, () -> context.setState(ContextState.CHOOSING_COLOR));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLACK_ACTION_COMMAND, () -> context.setColor(Color.BLACK));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_WHITE_ACTION_COMMAND, () -> context.setColor(Color.WHITE));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_RED_ACTION_COMMAND, () -> context.setColor(Color.RED));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_GREEN_ACTION_COMMAND, () -> context.setColor(Color.GREEN));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLUE_ACTION_COMMAND, () -> context.setColor(Color.BLUE));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_MAGENTA_ACTION_COMMAND, () -> context.setColor(Color.MAGENTA));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_PINK_ACTION_COMMAND, () -> context.setColor(Color.PINK));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_ORANGE_ACTION_COMMAND, () -> context.setColor(Color.ORANGE));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND, () -> context.setColor(Color.YELLOW));
-        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_CYAN_ACTION_COMMAND, () -> context.setColor(Color.CYAN));
-
-        actionCommandsMap.put(ActionCommands.SHOW_HELP_ACTION_COMMAND, () -> context.setState(ContextState.DISPLAYING_HELP));
-        actionCommandsMap.put(ActionCommands.SHOW_ABOUT_ACTION_COMMAND, () -> context.setState(ContextState.DISPLAYING_ABOUT));
+        actionCommandsMap.put(ActionCommands.SELECT_THICKNESS_ACTION_COMMAND, this::handleSelectThicknessActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_NUMBER_OF_VERTICES_ACTION_COMMAND, this::handleSelectNumberOfVerticesActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_ROTATION_ACTION_COMMAND, this::handleSelectRotationActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_RADIUS_ACTION_COMMAND, this::handleSelectRadiusActionCommand);
+        actionCommandsMap.put(ActionCommands.SELECT_COLOR_ACTION_COMMAND, this::handleSelectColorActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLACK_ACTION_COMMAND, this::handleChangeColorToBlackActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_WHITE_ACTION_COMMAND, this::handleChangeColorToWhiteActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_RED_ACTION_COMMAND, this::handleChangeColorToRedActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_GREEN_ACTION_COMMAND, this::handleChangeColorToGreenActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_BLUE_ACTION_COMMAND, this::handleChangeColorToBlueActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_MAGENTA_ACTION_COMMAND, this::handleChangeColorToMagentaActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_PINK_ACTION_COMMAND, this::handleChangeColorToPinkActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_ORANGE_ACTION_COMMAND, this::handleChangeColorToOrangeActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_YELLOW_ACTION_COMMAND, this::handleChangeColorToYellowActionCommand);
+        actionCommandsMap.put(ActionCommands.CHANGE_COLOR_TO_CYAN_ACTION_COMMAND, this::handleChangeColorToCyanActionCommand);
+        actionCommandsMap.put(ActionCommands.SHOW_HELP_ACTION_COMMAND, this::handleShowHelpActionCommand);
+        actionCommandsMap.put(ActionCommands.SHOW_ABOUT_ACTION_COMMAND, this::handleShowAboutActionCommand);
     }
 
     @Override
@@ -55,11 +52,107 @@ public class ButtonsController implements ActionListener {
         actionCommandsMap.get(actionEvent.getActionCommand()).run();
     }
 
+    private void handleOpenActionCommand() {
+        context.setAction(ContextAction.OPEN_FILE);
+    }
+
+    private void handleSaveActionCommand() {
+        context.setAction(ContextAction.SAVE_FILE);
+    }
+
+    private void handleExitActionCommand() {
+        context.setAction(ContextAction.EXIT);
+    }
+
+    private void handleDrawLineActionCommand() {
+        context.setTool(ContextTools.DRAW_LINE);
+    }
+
+    private void handleDrawPolygonActionCommand() {
+        context.setTool(ContextTools.DRAW_POLYGON);
+    }
+
+    private void handleDrawStarActionCommand() {
+        context.setTool(ContextTools.DRAW_STAR);
+    }
+
+    private void handleFillActionCommand() {
+        context.setTool(ContextTools.FILL);
+    }
+
     private void handleClearActionCommand() {
         final BufferedImage currentImage = context.getImage();
         final int width = currentImage.getWidth();
         final int height = currentImage.getHeight();
         context.setImage(ImageUtils.createBlankImage(width, height));
-        context.setState(ContextState.REPAINTING);
+        context.setAction(ContextAction.REPAINT);
+    }
+
+    private void handleSelectThicknessActionCommand() {
+        context.setAction(ContextAction.SELECT_THICKNESS);
+    }
+
+    private void handleSelectNumberOfVerticesActionCommand() {
+        context.setAction(ContextAction.SELECT_NUMBER_OF_VERTICES);
+    }
+
+    private void handleSelectRotationActionCommand() {
+        context.setAction(ContextAction.SELECT_ROTATION);
+    }
+
+    private void handleSelectRadiusActionCommand() {
+        context.setAction(ContextAction.SELECT_RADIUS);
+    }
+
+    private void handleSelectColorActionCommand() {
+        context.setAction(ContextAction.SELECT_COLOR);
+    }
+
+    private void handleChangeColorToBlackActionCommand() {
+        context.setColor(Color.BLACK);
+    }
+
+    private void handleChangeColorToWhiteActionCommand() {
+        context.setColor(Color.WHITE);
+    }
+
+    private void handleChangeColorToRedActionCommand() {
+        context.setColor(Color.RED);
+    }
+
+    private void handleChangeColorToGreenActionCommand() {
+        context.setColor(Color.GREEN);
+    }
+
+    private void handleChangeColorToBlueActionCommand() {
+        context.setColor(Color.BLUE);
+    }
+
+    private void handleChangeColorToMagentaActionCommand() {
+        context.setColor(Color.MAGENTA);
+    }
+
+    private void handleChangeColorToPinkActionCommand() {
+        context.setColor(Color.PINK);
+    }
+
+    private void handleChangeColorToOrangeActionCommand() {
+        context.setColor(Color.ORANGE);
+    }
+
+    private void handleChangeColorToYellowActionCommand() {
+        context.setColor(Color.YELLOW);
+    }
+
+    private void handleChangeColorToCyanActionCommand() {
+        context.setColor(Color.CYAN);
+    }
+
+    private void handleShowHelpActionCommand() {
+        context.setAction(ContextAction.DISPLAY_HELP);
+    }
+
+    private void handleShowAboutActionCommand() {
+        context.setAction(ContextAction.DISPLAY_ABOUT);
     }
 }

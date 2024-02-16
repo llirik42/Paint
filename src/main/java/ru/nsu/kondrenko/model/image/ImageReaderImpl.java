@@ -1,4 +1,4 @@
-package ru.nsu.kondrenko.model;
+package ru.nsu.kondrenko.model.image;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageReaderImpl implements ImageReader {
+    private static final String[] SUPPORTED_FORMATS = {"gif", "png", "jpeg", "jpg", "jpeg", "bmp", "wbmp"};
+
     @Override
     public BufferedImage read(File file) throws IOException {
         try {
@@ -27,5 +29,10 @@ public class ImageReaderImpl implements ImageReader {
         } catch (IOException exception) {
             throw new IOException(String.format("Error during reading resource \"%s\"", resourceName), exception);
         }
+    }
+
+    @Override
+    public String[] getSupportedFormats() {
+        return SUPPORTED_FORMATS.clone();
     }
 }

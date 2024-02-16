@@ -1,4 +1,4 @@
-package ru.nsu.kondrenko.model;
+package ru.nsu.kondrenko.model.image;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

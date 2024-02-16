@@ -1,12 +1,20 @@
-package ru.nsu.kondrenko.model;
+package ru.nsu.kondrenko.model.context;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public interface Context {
-    ContextState getState();
+    void addListener(ContextListener listener);
 
-    void setState(ContextState state);
+    void removeListener(ContextListener listener);
+
+    void notifyListenersAboutActionChange();
+
+    void notifyListenersAboutToolChange();
+
+    ContextAction getAction();
+
+    void setAction(ContextAction action);
 
     ContextTools getTool();
 
@@ -15,8 +23,6 @@ public interface Context {
     BufferedImage getImage();
 
     void setImage(BufferedImage image);
-
-    void addListener(ContextListener listener);
 
     int getThickness();
 

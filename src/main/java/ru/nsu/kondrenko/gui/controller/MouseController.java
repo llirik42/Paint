@@ -1,9 +1,9 @@
 package ru.nsu.kondrenko.gui.controller;
 
-import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ContextState;
-import ru.nsu.kondrenko.model.ContextTools;
-import ru.nsu.kondrenko.model.ImageDrawing;
+import ru.nsu.kondrenko.model.context.Context;
+import ru.nsu.kondrenko.model.context.ContextAction;
+import ru.nsu.kondrenko.model.context.ContextTools;
+import ru.nsu.kondrenko.model.image.ImageDrawing;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -39,7 +39,7 @@ public class MouseController extends MouseAdapter {
             handleFilling(mouseEvent);
         }
 
-        context.setState(ContextState.REPAINTING);
+        context.setAction(ContextAction.REPAINT);
     }
 
     private void handleDrawingLineState(MouseEvent mouseEvent) {

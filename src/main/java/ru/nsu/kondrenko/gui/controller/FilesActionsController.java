@@ -1,9 +1,9 @@
 package ru.nsu.kondrenko.gui.controller;
 
-import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ContextState;
-import ru.nsu.kondrenko.model.ImageReader;
-import ru.nsu.kondrenko.model.ImageSaver;
+import ru.nsu.kondrenko.model.context.Context;
+import ru.nsu.kondrenko.model.context.ContextAction;
+import ru.nsu.kondrenko.model.image.ImageReader;
+import ru.nsu.kondrenko.model.image.ImageSaver;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -36,7 +36,7 @@ public class FilesActionsController implements ActionListener {
             return;
         }
 
-        if (context.getState() == ContextState.SAVING_FILE) {
+        if (context.getAction() == ContextAction.SAVE_FILE) {
             handleApproveSavingFile(fileChooser);
         } else {
             handleApproveOpeningFile(fileChooser);
@@ -47,10 +47,10 @@ public class FilesActionsController implements ActionListener {
         try {
             final BufferedImage image = imageReader.read(fileChooser.getSelectedFile());
             context.setImage(image);
-            context.setState(ContextState.REPAINTING);
+            context.setAction(ContextAction.REPAINT);
         } catch (IOException exception) {
             context.setErrorMessage(exception.getLocalizedMessage());
-            context.setState(ContextState.ERROR);
+            context.setAction(ContextAction.HANDLE_ERROR);
         }
     }
 
@@ -60,7 +60,7 @@ public class FilesActionsController implements ActionListener {
             imageSaver.saveAsPNG(context.getImage(), pngFile);
         } catch (IOException exception) {
             context.setErrorMessage(exception.getLocalizedMessage());
-            context.setState(ContextState.ERROR);
+            context.setAction(ContextAction.HANDLE_ERROR);
         }
     }
 }

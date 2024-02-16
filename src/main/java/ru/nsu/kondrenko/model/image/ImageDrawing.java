@@ -1,4 +1,4 @@
-package ru.nsu.kondrenko.model;
+package ru.nsu.kondrenko.model.image;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
@@ -7,7 +7,6 @@ import java.util.Stack;
 
 public final class ImageDrawing {
     private ImageDrawing() {
-
     }
 
     public static void drawLine(BufferedImage image, Color color, int thickness, int x1, int y1, int x2, int y2) {
@@ -30,7 +29,8 @@ public final class ImageDrawing {
     }
 
     public static void drawStar(BufferedImage image, Color color, int x, int y, int thickness, int n, int radius, int rotationDegrees) {
-        final Shape starShape = createStarShape(x, y, (double) radius / 2, radius, n, rotationDegrees);
+        final double innerRadius = (double) radius / 2;
+        final Shape starShape = createStarShape(x, y, innerRadius, radius, n, rotationDegrees);
         final Graphics2D graphics2D = (Graphics2D) image.getGraphics();
         graphics2D.setColor(color);
         graphics2D.setStroke(new BasicStroke(thickness));

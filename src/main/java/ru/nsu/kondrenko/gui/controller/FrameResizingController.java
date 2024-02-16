@@ -1,7 +1,7 @@
 package ru.nsu.kondrenko.gui.controller;
 
-import ru.nsu.kondrenko.model.Context;
-import ru.nsu.kondrenko.model.ImageUtils;
+import ru.nsu.kondrenko.model.context.Context;
+import ru.nsu.kondrenko.model.image.ImageUtils;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
