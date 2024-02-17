@@ -47,4 +47,6 @@ public interface Context {
     String getErrorMessage();
 
     void setErrorMessage(String errorMessage);
+
+    void pushError(String errorMessage);
 }

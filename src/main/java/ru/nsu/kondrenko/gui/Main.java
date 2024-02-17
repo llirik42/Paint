@@ -1,9 +1,6 @@
 package ru.nsu.kondrenko.gui;
 
-import ru.nsu.kondrenko.gui.controller.ButtonsController;
-import ru.nsu.kondrenko.gui.controller.FilesActionsController;
-import ru.nsu.kondrenko.gui.controller.FrameResizingController;
-import ru.nsu.kondrenko.gui.controller.MouseController;
+import ru.nsu.kondrenko.gui.controller.*;
 import ru.nsu.kondrenko.gui.view.View;
 import ru.nsu.kondrenko.model.context.Context;
 import ru.nsu.kondrenko.model.context.ContextImpl;
@@ -48,6 +45,19 @@ public class Main {
             final FilesActionsController filesActionsController = new FilesActionsController(context, imageReader, imageSaver);
             final MouseController mouseController = new MouseController(context);
             final FrameResizingController frameResizingController = new FrameResizingController(context);
+            final DialogWindowController dialogWindowController = new DialogWindowController();
+
+            final int MIN_THICKNESS = 1;
+            final int MAX_THICKNESS = 20;
+
+            final int MIN_NUMBER_OF_VERTICES = 3;
+            final int MAX_NUMBER_OF_VERTICES = 20;
+
+            final int MIN_RADIUS = 1;
+            final int MAX_RADIUS = 200;
+
+            final int MIN_ROTATION = 0;
+            final int MAX_ROTATION = 360;
 
             final View view = new View(
                     WINDOW_TITLE,
@@ -57,7 +67,8 @@ public class Main {
                     buttonsController,
                     filesActionsController,
                     mouseController,
-                    frameResizingController
+                    frameResizingController,
+                    dialogWindowController
             );
 
             context.addListener(view);

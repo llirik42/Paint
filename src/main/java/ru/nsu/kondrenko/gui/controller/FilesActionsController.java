@@ -49,8 +49,7 @@ public class FilesActionsController implements ActionListener {
             context.setImage(image);
             context.setAction(ContextAction.REPAINT);
         } catch (IOException exception) {
-            context.setErrorMessage(exception.getLocalizedMessage());
-            context.setAction(ContextAction.HANDLE_ERROR);
+            context.pushError(exception.getLocalizedMessage());
         }
     }
 
@@ -59,8 +58,7 @@ public class FilesActionsController implements ActionListener {
             final File pngFile = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".png");
             imageSaver.saveAsPNG(context.getImage(), pngFile);
         } catch (IOException exception) {
-            context.setErrorMessage(exception.getLocalizedMessage());
-            context.setAction(ContextAction.HANDLE_ERROR);
+            context.pushError(exception.getLocalizedMessage());
         }
     }
 }

@@ -1,5 +1,6 @@
 package ru.nsu.kondrenko.gui.view;
 
+import ru.nsu.kondrenko.gui.controller.DialogWindowController;
 import ru.nsu.kondrenko.model.context.Context;
 import ru.nsu.kondrenko.model.context.ContextListener;
 import ru.nsu.kondrenko.model.context.ContextAction;
@@ -29,8 +30,10 @@ public class View implements ContextListener {
     private final JFrame frame;
     private final DrawingArea drawingArea;
     private final ToolsArea toolsArea;
+    private final DialogWindowController dialogWindowController;
 
     private MenuArea menuArea;
+
 
     public View(String viewName,
                 int minWidth,
@@ -39,8 +42,11 @@ public class View implements ContextListener {
                 ActionListener buttonsListener,
                 ActionListener filesActionsListener,
                 MouseListener mouseListener,
-                ComponentListener drawingAreaListener
-    ) throws IOException {
+                ComponentListener drawingAreaListener,
+                DialogWindowController dialogWindowController
+                ) throws IOException {
+
+        this.dialogWindowController = dialogWindowController;
 
         contextStateChangeHandlers = new HashMap<>() {{
             put(ContextAction.IDLE, View.this::onIdle);
@@ -235,31 +241,16 @@ public class View implements ContextListener {
     }
 
     private int selectInteger(String message, int minValue, int maxValue, int startValue) {
-        final String incorrectValueMessage = String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
-
-        final int[] result = {startValue};
-
+        final String errorMessage = String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
         final JSlider slider = new JSlider(minValue, maxValue, startValue);
         final JTextField textField = new JTextField(Integer.toString(startValue));
 
-        slider.addChangeListener(changeEvent -> {
-            final JSlider source = (JSlider)changeEvent.getSource();
-            result[0] = source.getValue();
-            textField.setText(Integer.toString(result[0]));
-        });
-        textField.addActionListener(actionEvent -> {
-            final String actionCommand = actionEvent.getActionCommand();
-
-            try {
-                result[0] = Integer.parseInt(actionCommand);
-
-                if (result[0] < minValue || result[0] > maxValue) {
-                    throw new Exception();
-                }
-            } catch (Exception exception) {
-                showError(incorrectValueMessage);
-            }
-        });
+        dialogWindowController.resetError();
+        dialogWindowController.setSlider(slider);
+        dialogWindowController.setTextField(textField);
+        slider.addChangeListener(dialogWindowController);
+        textField.getDocument().addDocumentListener(dialogWindowController);
+        textField.addActionListener(dialogWindowController);
 
         final JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2, 1));
@@ -273,17 +264,12 @@ public class View implements ContextListener {
                 JOptionPane.PLAIN_MESSAGE
         );
 
-        try {
-            result[0] = Integer.parseInt(textField.getText());
-
-            if (result[0] < minValue || result[0] > maxValue) {
-                throw new Exception();
-            }
-        } catch (Exception exception) {
-            showError(incorrectValueMessage);
+        if (dialogWindowController.hasError()) {
+            showError(errorMessage);
+            return startValue;
         }
 
-        return result[0];
+        return dialogWindowController.getValue();
     }
 
     private void showError(String errorMessage) {

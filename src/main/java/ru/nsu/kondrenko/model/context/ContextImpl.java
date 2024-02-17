@@ -144,4 +144,10 @@ public class ContextImpl implements Context {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    @Override
+    public void pushError(String errorMessage) {
+        setErrorMessage(errorMessage);
+        setAction(ContextAction.HANDLE_ERROR);
+    }
 }
