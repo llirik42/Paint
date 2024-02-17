@@ -26,9 +26,20 @@ public class Main {
     private static final Color START_COLOR = Color.BLACK;
 
     private static final int START_THICKNESS = 1;
-    private static final int START_RADIUS = 100;
+    private static final int MIN_THICKNESS = 1;
+    private static final int MAX_THICKNESS = 20;
+
     private static final int START_NUMBER_OF_SIDES = 4;
+    private static final int MIN_NUMBER_OF_VERTICES = 3;
+    private static final int MAX_NUMBER_OF_VERTICES = 20;
+
+    private static final int START_RADIUS = 100;
+    private static final int MIN_RADIUS = 1;
+    private static final int MAX_RADIUS = 200;
+
     private static final int START_ROTATION = 0;
+    private static final int MIN_ROTATION = 0;
+    private static final int MAX_ROTATION = 360;
 
     public static void main(String[] args) {
         try {
@@ -41,28 +52,15 @@ public class Main {
                     START_ROTATION
             );
 
-            final ImageReader imageReader = new ImageReaderImpl();
-            final ImageSaver imageSaver = new ImageSaverImpl();
-
-            final ButtonsController buttonsController = new ButtonsController(context);
-            final FilesActionsController filesActionsController = new FilesActionsController(context, imageReader, imageSaver);
-            final MouseController mouseController = new MouseController(context);
-            final FrameResizingController frameResizingController = new FrameResizingController(context);
-            final DialogWindowController dialogWindowController = new DialogWindowController();
+            final var imageReader = new ImageReaderImpl();
+            final var imageSaver = new ImageSaverImpl();
+            final var buttonsController = new ButtonsController(context);
+            final var filesActionsController = new FilesActionsController(context, imageReader, imageSaver);
+            final var mouseController = new MouseController(context);
+            final var frameResizingController = new FrameResizingController(context);
+            final var dialogWindowController = new DialogWindowController();
 
             final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
-
-            final int MIN_THICKNESS = 1;
-            final int MAX_THICKNESS = 20;
-
-            final int MIN_NUMBER_OF_VERTICES = 3;
-            final int MAX_NUMBER_OF_VERTICES = 20;
-
-            final int MIN_RADIUS = 1;
-            final int MAX_RADIUS = 200;
-
-            final int MIN_ROTATION = 0;
-            final int MAX_ROTATION = 360;
 
             final View view = new View(
                     WINDOW_TITLE,
