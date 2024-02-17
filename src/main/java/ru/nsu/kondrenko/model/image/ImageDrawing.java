@@ -3,7 +3,8 @@ package ru.nsu.kondrenko.model.image;
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public final class ImageDrawing {
     private ImageDrawing() {
@@ -45,14 +46,14 @@ public final class ImageDrawing {
             return;
         }
 
-        final Stack<Point> spansPoints = new Stack<>();
+        final Deque<Point> spansPoints = new ArrayDeque<>();
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
 
         final Point startSpanPoint = new Point(x0, y0);
         spansPoints.add(startSpanPoint);
 
-        while (!spansPoints.empty()) {
+        while (!spansPoints.isEmpty()) {
             final Point currentSpanPoint = spansPoints.pop();
             final int y = currentSpanPoint.y;
 
@@ -78,7 +79,7 @@ public final class ImageDrawing {
         }
     }
 
-    private static void scanForSpans(int lx, int rx, int y, int startRGB, BufferedImage image, Stack<Point> spansPoints) {
+    private static void scanForSpans(int lx, int rx, int y, int startRGB, BufferedImage image, Deque<Point> spansPoints) {
         boolean foundSpan = false;
         int spanPointX = 0;
 

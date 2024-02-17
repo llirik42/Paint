@@ -55,13 +55,13 @@ public class MenuArea extends JPanel {
         menuBar = new JMenuBar();
         menuBar.setBackground(MENU_BACKGROUND_COLOR);
 
-        final List<Function<ActionListener, JMenu>> MENUS_CREATION_METHODS = Arrays.asList(
+        final List<Function<ActionListener, JMenu>> menusCreationMethods = Arrays.asList(
                 this::createFileMenu,
                 this::createEditMenu,
                 this::createHelpMenu
         );
 
-        for (final var it : MENUS_CREATION_METHODS) {
+        for (final var it : menusCreationMethods) {
             final JMenu menu = it.apply(actionListener);
             menuBar.add(menu);
         }

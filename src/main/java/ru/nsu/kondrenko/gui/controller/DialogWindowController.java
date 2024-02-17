@@ -68,12 +68,14 @@ public class DialogWindowController implements ChangeListener, ActionListener, D
 
     @Override
     public void changedUpdate(DocumentEvent documentEvent) {
+        // Method is empty because JTextField doesn't change it's state (only text)
     }
 
     private void handleDocumentTextChange(Document document) {
         try {
             readValueFromString(document.getText(0, document.getLength()));
         } catch (BadLocationException ignored) {
+            // Impossible case
         }
     }
 

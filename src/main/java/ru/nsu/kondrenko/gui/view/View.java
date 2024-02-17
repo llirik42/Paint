@@ -18,13 +18,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public class View implements ContextListener {
-    private static final Font HELP_ABOUT_FONT = new Font("Go", Font.BOLD, 14);
+    private static final Font HELP_ABOUT_FONT = new Font("Go", Font.PLAIN, 14);
     private static final String FILE_OPENING_ERROR_MESSAGE = "Cannot open file";
     private static final String FILE_SAVING_ERROR_MESSAGE = "Cannot save file";
     private static final String COLOR_SELECTION_DIALOG_TITLE = "Color";
@@ -36,7 +35,7 @@ public class View implements ContextListener {
     private static final String HELP_DIALOG_TITLE = "Help";
     private static final String ABOUT_DIALOG_TITLE = "About";
 
-    private final Map<ContextAction, Consumer<Context>> contextStateChangeHandlers;
+    private final Map<ContextAction, Consumer<Context>> contextStateChangeHandlers = new EnumMap<>(ContextAction.class);
     private final DialogWindowController dialogWindowController;
     private final JFileChooser imagesOpeningFileChoose;
     private final JFileChooser pngSavingFileChooser;
@@ -72,22 +71,21 @@ public class View implements ContextListener {
                 ComponentListener drawingAreaResizingListener,
                 DialogWindowController dialogWindowController,
                 ToolsIconsSupplier toolsIconsSupplier
-    ) throws IOException {
-        contextStateChangeHandlers = new HashMap<>() {{
-            put(ContextAction.IDLE, View.this::onIdle);
-            put(ContextAction.REPAINT, View.this::onRepainting);
-            put(ContextAction.OPEN_FILE, View.this::onOpeningFile);
-            put(ContextAction.SAVE_FILE, View.this::onSavingFile);
-            put(ContextAction.EXIT, View.this::onExiting);
-            put(ContextAction.SELECT_COLOR, View.this::onChoosingColor);
-            put(ContextAction.SELECT_THICKNESS, View.this::onSelectingThickness);
-            put(ContextAction.SELECT_NUMBER_OF_VERTICES, View.this::onSelectingNumberOfVertices);
-            put(ContextAction.SELECT_RADIUS, View.this::onSelectingRadius);
-            put(ContextAction.SELECT_ROTATION, View.this::onSelectingRotation);
-            put(ContextAction.HANDLE_ERROR, View.this::onError);
-            put(ContextAction.DISPLAY_HELP, View.this::onDisplayingHelp);
-            put(ContextAction.DISPLAY_ABOUT, View.this::onDisplayingAbout);
-        }};
+    ) {
+        contextStateChangeHandlers.put(ContextAction.IDLE, View.this::onIdle);
+        contextStateChangeHandlers.put(ContextAction.REPAINT, View.this::onRepainting);
+        contextStateChangeHandlers.put(ContextAction.OPEN_FILE, View.this::onOpeningFile);
+        contextStateChangeHandlers.put(ContextAction.SAVE_FILE, View.this::onSavingFile);
+        contextStateChangeHandlers.put(ContextAction.EXIT, View.this::onExiting);
+        contextStateChangeHandlers.put(ContextAction.SELECT_COLOR, View.this::onChoosingColor);
+        contextStateChangeHandlers.put(ContextAction.SELECT_THICKNESS, View.this::onSelectingThickness);
+        contextStateChangeHandlers.put(ContextAction.SELECT_NUMBER_OF_VERTICES, View.this::onSelectingNumberOfVertices);
+        contextStateChangeHandlers.put(ContextAction.SELECT_RADIUS, View.this::onSelectingRadius);
+        contextStateChangeHandlers.put(ContextAction.SELECT_ROTATION, View.this::onSelectingRotation);
+        contextStateChangeHandlers.put(ContextAction.HANDLE_ERROR, View.this::onError);
+        contextStateChangeHandlers.put(ContextAction.DISPLAY_HELP, View.this::onDisplayingHelp);
+        contextStateChangeHandlers.put(ContextAction.DISPLAY_ABOUT, View.this::onDisplayingAbout);
+
         this.dialogWindowController = dialogWindowController;
         this.imagesOpeningFileChoose = createImagesOpeningChooser(filesActionsListener, supportedImageFormats);
         this.pngSavingFileChooser = createPNGSavingChooser(filesActionsListener);
@@ -133,7 +131,7 @@ public class View implements ContextListener {
         result.setBackground(null);
         result.append("""
                 Simple Paint 1.0.0
-                                
+                
                 Created by Kondrenko Kirill in February 2024 as task for the course "engineering and computer graphics" in Novosibirsk State University""");
 
 
@@ -183,6 +181,7 @@ public class View implements ContextListener {
     }
 
     private void onIdle(Context context) {
+        // Method is empty because we don't want to do anything with action "IDLE" of context
     }
 
     private void onRepainting(Context context) {
@@ -252,58 +251,34 @@ public class View implements ContextListener {
     }
 
     private void onDisplayingHelp(Context context) {
-        // TODO: сделать нормальный help
 
-        final JEditorPane editorPane = new JEditorPane();
-        editorPane.setBackground(null);
-        editorPane.setFont(HELP_ABOUT_FONT);
-        editorPane.setEditable(false);
-        JScrollPane editorScrollPane = new JScrollPane(editorPane);
-        editorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        editorScrollPane.setPreferredSize(new Dimension(250, 145));
-        editorScrollPane.setMinimumSize(new Dimension(250, 145));
+        // TODO:
+        final SimpleTextPane textPane = new SimpleTextPane(HELP_ABOUT_FONT);
+        textPane.appendPlain("""
+                Menu
+                File
+                Open — opens file
+                Save — save file
+                Exit — exit
+                Tools
+                Line
+                Polygon
+                Star
+                Fill
+                Clear
+                Select color
+                Select thickness
+                Select number of vertices
+                Select radius
+                Select rotation
 
-        try {
-            editorPane.getDocument().insertString(0, "Hello", null);
-        } catch (Exception exception) {
+                Info
+                Help — show help
+                About — show about""");
 
-        }
-
-
-//
-//        area.append("""
-//                File:
-//                Open — opens file
-//                Save — save file
-//                Exit — exit
-//                Tools
-//                Line
-//                Polygon
-//                Star
-//                Fill
-//                Clear
-//                Select color
-//                Select thickness
-//                Select number of vertices
-//                Select radius
-//                Select rotation
-//
-//                Info
-//                Help
-//                About
-//
-//                1
-//                2
-//                3
-//                4
-//                5
-//                6
-//
-//                """);
-
-        JOptionPane.showInternalMessageDialog(
+        JOptionPane.showMessageDialog(
                 null,
-                editorPane,
+                textPane,
                 HELP_DIALOG_TITLE,
                 JOptionPane.INFORMATION_MESSAGE
         );
