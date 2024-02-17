@@ -27,5 +27,6 @@ public final class ActionCommands {
     public static final String SHOW_HELP = "SHOW-HELP";
     public static final String SHOW_ABOUT = "SHOW-ABOUT";
 
-    private ActionCommands() {}
+    private ActionCommands() {
+    }
 }

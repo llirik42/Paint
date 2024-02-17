@@ -7,14 +7,16 @@ import ru.nsu.kondrenko.gui.view.View;
 import ru.nsu.kondrenko.model.context.Context;
 import ru.nsu.kondrenko.model.context.ContextAction;
 import ru.nsu.kondrenko.model.context.ContextImpl;
-import ru.nsu.kondrenko.model.image.*;
+import ru.nsu.kondrenko.model.image.ImageReaderImpl;
+import ru.nsu.kondrenko.model.image.ImageSaverImpl;
+import ru.nsu.kondrenko.model.image.ImageUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Main {
-    private static final String WINDOW_TITLE = "Paint";
+    private static final String WINDOW_TITLE = "Simple Paint";
     private static final int MIN_FRAME_WIDTH = 640;
     private static final int MIN_FRAME_HEIGHT = 480;
 

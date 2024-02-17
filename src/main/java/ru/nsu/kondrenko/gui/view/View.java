@@ -2,13 +2,17 @@ package ru.nsu.kondrenko.gui.view;
 
 import ru.nsu.kondrenko.gui.controller.DialogWindowController;
 import ru.nsu.kondrenko.model.context.Context;
-import ru.nsu.kondrenko.model.context.ContextListener;
 import ru.nsu.kondrenko.model.context.ContextAction;
+import ru.nsu.kondrenko.model.context.ContextListener;
 import ru.nsu.kondrenko.model.context.ContextTools;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
@@ -20,6 +24,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class View implements ContextListener {
+    private static final Font HELP_ABOUT_FONT = new Font("Go", Font.BOLD, 14);
     private static final String FILE_OPENING_ERROR_MESSAGE = "Cannot open file";
     private static final String FILE_SAVING_ERROR_MESSAGE = "Cannot save file";
     private static final String COLOR_SELECTION_DIALOG_TITLE = "Color";
@@ -28,11 +33,14 @@ public class View implements ContextListener {
     private static final String RADIUS_SELECTION_DIALOG_TITLE = "Radius";
     private static final String ROTATION_DIALOG_TITLE = "Rotation";
     private static final String ERROR_DIALOG_TITLE = "Error";
+    private static final String HELP_DIALOG_TITLE = "Help";
+    private static final String ABOUT_DIALOG_TITLE = "About";
 
     private final Map<ContextAction, Consumer<Context>> contextStateChangeHandlers;
     private final DialogWindowController dialogWindowController;
     private final JFileChooser imagesOpeningFileChoose;
     private final JFileChooser pngSavingFileChooser;
+    private final JTextArea aboutTextArea;
     private final MenuArea menuArea;
     private final ToolsArea toolsArea;
     private final DrawingArea drawingArea;
@@ -83,6 +91,7 @@ public class View implements ContextListener {
         this.dialogWindowController = dialogWindowController;
         this.imagesOpeningFileChoose = createImagesOpeningChooser(filesActionsListener, supportedImageFormats);
         this.pngSavingFileChooser = createPNGSavingChooser(filesActionsListener);
+        this.aboutTextArea = createAboutTextArea();
         this.menuArea = new MenuArea(buttonsListener);
         this.toolsArea = new ToolsArea(toolsIconsSupplier, buttonsListener);
         this.drawingArea = new DrawingArea(mouseListener, drawingAreaResizingListener);
@@ -95,6 +104,44 @@ public class View implements ContextListener {
         this.minRotation = minRotation;
         this.maxRotation = maxRotation;
         this.frame = createFrame(viewName, minFrameWidth, minFrameHeight);
+    }
+
+    private static JFileChooser createImagesOpeningChooser(ActionListener actionListener, String[] supportedImageFormats) {
+        final FileFilter filesOpeningFilter = new FileNameExtensionFilter("Images", supportedImageFormats);
+        final JFileChooser result = new JFileChooser();
+        initFileChooser(result, filesOpeningFilter, actionListener);
+        return result;
+    }
+
+    private static JFileChooser createPNGSavingChooser(ActionListener actionListener) {
+        final FileFilter filesSavingFilter = new FileSavingFilter("PNG");
+        final JFileChooser result = new JFileChooser();
+        initFileChooser(result, filesSavingFilter, actionListener);
+        return result;
+    }
+
+    private static void initFileChooser(JFileChooser fileChooser, FileFilter fileFilter, ActionListener actionListener) {
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.addChoosableFileFilter(fileFilter);
+        fileChooser.addActionListener(actionListener);
+    }
+
+    private static JTextArea createAboutTextArea() {
+        final JTextArea result = new JTextArea();
+
+        result.setFont(HELP_ABOUT_FONT);
+        result.setBackground(null);
+        result.append("""
+                Simple Paint 1.0.0
+                                
+                Created by Kondrenko Kirill in February 2024 as task for the course "engineering and computer graphics" in Novosibirsk State University""");
+
+
+        return result;
+    }
+
+    private static String getIncorrectValueMessage(int minValue, int maxValue) {
+        return String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
     }
 
     public void show() {
@@ -135,7 +182,8 @@ public class View implements ContextListener {
         }
     }
 
-    private void onIdle(Context context) {}
+    private void onIdle(Context context) {
+    }
 
     private void onRepainting(Context context) {
         repaint(context.getImage());
@@ -190,24 +238,82 @@ public class View implements ContextListener {
         showError(context.getErrorMessage());
     }
 
+    private void appendToPane(JTextPane tp, String msg, Color c) {
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
+    }
+
     private void onDisplayingHelp(Context context) {
         // TODO: сделать нормальный help
 
-        JOptionPane.showMessageDialog(
+        final JEditorPane editorPane = new JEditorPane();
+        editorPane.setBackground(null);
+        editorPane.setFont(HELP_ABOUT_FONT);
+        editorPane.setEditable(false);
+        JScrollPane editorScrollPane = new JScrollPane(editorPane);
+        editorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        editorScrollPane.setPreferredSize(new Dimension(250, 145));
+        editorScrollPane.setMinimumSize(new Dimension(250, 145));
+
+        try {
+            editorPane.getDocument().insertString(0, "Hello", null);
+        } catch (Exception exception) {
+
+        }
+
+
+//
+//        area.append("""
+//                File:
+//                Open — opens file
+//                Save — save file
+//                Exit — exit
+//                Tools
+//                Line
+//                Polygon
+//                Star
+//                Fill
+//                Clear
+//                Select color
+//                Select thickness
+//                Select number of vertices
+//                Select radius
+//                Select rotation
+//
+//                Info
+//                Help
+//                About
+//
+//                1
+//                2
+//                3
+//                4
+//                5
+//                6
+//
+//                """);
+
+        JOptionPane.showInternalMessageDialog(
                 null,
-                "Help",
-                "Help",
+                editorPane,
+                HELP_DIALOG_TITLE,
                 JOptionPane.INFORMATION_MESSAGE
         );
     }
 
     private void onDisplayingAbout(Context context) {
-        // TODO: сделать нормальный help
-
         JOptionPane.showMessageDialog(
                 null,
-                "About",
-                "About",
+                aboutTextArea,
+                ABOUT_DIALOG_TITLE,
                 JOptionPane.INFORMATION_MESSAGE
         );
     }
@@ -296,29 +402,5 @@ public class View implements ContextListener {
         result.pack();
 
         return result;
-    }
-
-    private static JFileChooser createImagesOpeningChooser(ActionListener actionListener, String[] supportedImageFormats) {
-        final FileFilter filesOpeningFilter = new FileNameExtensionFilter("Images", supportedImageFormats);
-        final JFileChooser result = new JFileChooser();
-        initFileChooser(result, filesOpeningFilter, actionListener);
-        return result;
-    }
-
-    private static JFileChooser createPNGSavingChooser(ActionListener actionListener) {
-        final FileFilter filesSavingFilter = new FileSavingFilter("PNG");
-        final JFileChooser result = new JFileChooser();
-        initFileChooser(result, filesSavingFilter, actionListener);
-        return result;
-    }
-
-    private static void initFileChooser(JFileChooser fileChooser, FileFilter fileFilter, ActionListener actionListener) {
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.addChoosableFileFilter(fileFilter);
-        fileChooser.addActionListener(actionListener);
-    }
-
-    private static String getIncorrectValueMessage(int minValue, int maxValue) {
-        return String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
     }
 }

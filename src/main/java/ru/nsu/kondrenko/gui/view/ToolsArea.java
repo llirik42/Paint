@@ -79,6 +79,22 @@ public class ToolsArea extends JPanel {
         }
     }
 
+    private static ImageIcon scaleIcon(ImageIcon icon) {
+        final Image image = icon.getImage();
+        final Image scaledImage = image.getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
+    }
+
+    private static void initButton(AbstractButton button, String actionCommand, String tip, ActionListener actionListener) {
+        button.setFocusPainted(false);
+        button.setActionCommand(actionCommand);
+        button.setToolTipText(tip);
+        button.addActionListener(actionListener);
+        button.setPreferredSize(new Dimension(TOOL_SIZE, TOOL_SIZE));
+        button.setBackground(BUTTONS_BACKGROUND_COLOR);
+        button.setBorderPainted(false);
+    }
+
     public void setDrawLineSelected() {
         drawLineToggleButton.setSelected(true);
     }
@@ -112,21 +128,5 @@ public class ToolsArea extends JPanel {
         final JButton result = new JButton(scaleIcon(icon));
         initButton(result, actionCommand, tip, actionListener);
         return result;
-    }
-
-    private static ImageIcon scaleIcon(ImageIcon icon) {
-        final Image image = icon.getImage();
-        final Image scaledImage = image.getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledImage);
-    }
-
-    private static void initButton(AbstractButton button, String actionCommand, String tip, ActionListener actionListener) {
-        button.setFocusPainted(false);
-        button.setActionCommand(actionCommand);
-        button.setToolTipText(tip);
-        button.addActionListener(actionListener);
-        button.setPreferredSize(new Dimension(TOOL_SIZE, TOOL_SIZE));
-        button.setBackground(BUTTONS_BACKGROUND_COLOR);
-        button.setBorderPainted(false);
     }
 }

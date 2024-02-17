@@ -67,12 +67,14 @@ public class DialogWindowController implements ChangeListener, ActionListener, D
     }
 
     @Override
-    public void changedUpdate(DocumentEvent documentEvent) {}
+    public void changedUpdate(DocumentEvent documentEvent) {
+    }
 
     private void handleDocumentTextChange(Document document) {
         try {
             readValueFromString(document.getText(0, document.getLength()));
-        } catch (BadLocationException ignored) {}
+        } catch (BadLocationException ignored) {
+        }
     }
 
     private void readValueFromString(String string) {

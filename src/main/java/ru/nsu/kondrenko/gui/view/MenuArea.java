@@ -67,6 +67,41 @@ public class MenuArea extends JPanel {
         }
     }
 
+    private static JMenu createMenu(String label) {
+        JMenu result = new JMenu(label);
+        result.setBackground(MENU_BACKGROUND_COLOR);
+        result.setForeground(BUTTONS_FONT_COLOR);
+        result.setFont(FONT);
+        return result;
+    }
+
+    private static JMenuItem createMenuItem(String label, String actionCommand, ActionListener actionListener) {
+        final JMenuItem result = new JMenuItem(label);
+        initButton(result, actionCommand, actionListener);
+        return result;
+    }
+
+    private static JRadioButtonMenuItem createRadioButtonMenuItem(String label, String actionCommand, ActionListener actionListener) {
+        final JRadioButtonMenuItem result = new JRadioButtonMenuItem(label);
+        initButton(result, actionCommand, actionListener);
+        return result;
+    }
+
+    private static void initButton(AbstractButton button, String actionCommand, ActionListener actionListener) {
+        button.setBorderPainted(false);
+        button.setFont(FONT);
+        button.setForeground(BUTTONS_FONT_COLOR);
+        button.addActionListener(actionListener);
+        button.setActionCommand(actionCommand);
+    }
+
+    private static void pushItemToMenu(JMenu menu, List<MenuItem> items, ActionListener actionListener) {
+        for (final var it : items) {
+            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
+            menu.add(item);
+        }
+    }
+
     public void setDrawLineSelected() {
         drawButtonsGroup.setSelected(drawLineButtonModel, true);
     }
@@ -120,40 +155,5 @@ public class MenuArea extends JPanel {
         final JMenu result = createMenu(HELP_MENU_TITLE);
         pushItemToMenu(result, HELP_ABOUT_MENU_ITEMS, actionListener);
         return result;
-    }
-
-    private static JMenu createMenu(String label) {
-        JMenu result = new JMenu(label);
-        result.setBackground(MENU_BACKGROUND_COLOR);
-        result.setForeground(BUTTONS_FONT_COLOR);
-        result.setFont(FONT);
-        return result;
-    }
-
-    private static JMenuItem createMenuItem(String label, String actionCommand, ActionListener actionListener) {
-        final JMenuItem result = new JMenuItem(label);
-        initButton(result, actionCommand, actionListener);
-        return result;
-    }
-
-    private static JRadioButtonMenuItem createRadioButtonMenuItem(String label, String actionCommand, ActionListener actionListener) {
-        final JRadioButtonMenuItem result = new JRadioButtonMenuItem(label);
-        initButton(result, actionCommand, actionListener);
-        return result;
-    }
-
-    private static void initButton(AbstractButton button, String actionCommand, ActionListener actionListener) {
-        button.setBorderPainted(false);
-        button.setFont(FONT);
-        button.setForeground(BUTTONS_FONT_COLOR);
-        button.addActionListener(actionListener);
-        button.setActionCommand(actionCommand);
-    }
-
-    private static void pushItemToMenu(JMenu menu, List<MenuItem> items, ActionListener actionListener) {
-        for (final var it : items) {
-            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
-            menu.add(item);
-        }
     }
 }
