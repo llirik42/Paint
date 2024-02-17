@@ -1,6 +1,8 @@
 package ru.nsu.kondrenko.gui;
 
 import ru.nsu.kondrenko.gui.controller.*;
+import ru.nsu.kondrenko.gui.view.ToolsIconsSupplier;
+import ru.nsu.kondrenko.gui.view.ToolsIconsSupplierImpl;
 import ru.nsu.kondrenko.gui.view.View;
 import ru.nsu.kondrenko.model.context.Context;
 import ru.nsu.kondrenko.model.context.ContextAction;
@@ -48,6 +50,8 @@ public class Main {
             final FrameResizingController frameResizingController = new FrameResizingController(context);
             final DialogWindowController dialogWindowController = new DialogWindowController();
 
+            final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
+
             final int MIN_THICKNESS = 1;
             final int MAX_THICKNESS = 20;
 
@@ -64,12 +68,21 @@ public class Main {
                     WINDOW_TITLE,
                     MIN_FRAME_WIDTH,
                     MIN_FRAME_HEIGHT,
-                    START_IMAGE,
+                    MIN_THICKNESS,
+                    MAX_THICKNESS,
+                    MIN_NUMBER_OF_VERTICES,
+                    MAX_NUMBER_OF_VERTICES,
+                    MIN_RADIUS,
+                    MAX_RADIUS,
+                    MIN_ROTATION,
+                    MAX_ROTATION,
+                    imageReader.getSupportedFormats(),
                     buttonsController,
                     filesActionsController,
                     mouseController,
                     frameResizingController,
-                    dialogWindowController
+                    dialogWindowController,
+                    toolsIconsSupplier
             );
 
             context.addListener(view);

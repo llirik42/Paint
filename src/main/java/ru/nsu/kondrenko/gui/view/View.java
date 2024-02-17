@@ -20,34 +20,51 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class View implements ContextListener {
-    // TODO: вынести поддерживаемые типы в модель и читать оттуда
-    private static final FileFilter filesOpeningFilter = new FileNameExtensionFilter("Images", "png", "bmp", "jpeg", "jpg", "gif");
+    private static final String FILE_OPENING_ERROR_MESSAGE = "Cannot open file";
+    private static final String FILE_SAVING_ERROR_MESSAGE = "Cannot save file";
+    private static final String COLOR_SELECTION_DIALOG_TITLE = "Color";
+    private static final String THICKNESS_SELECTION_DIALOG_TITLE = "Thickness";
+    private static final String NUMBER_OF_VERTICES_SELECTION_DIALOG_TITLE = "Number of vertices";
+    private static final String RADIUS_SELECTION_DIALOG_TITLE = "Radius";
+    private static final String ROTATION_DIALOG_TITLE = "Rotation";
+    private static final String ERROR_DIALOG_TITLE = "Error";
 
     private final Map<ContextAction, Consumer<Context>> contextStateChangeHandlers;
-
-    private final JFileChooser openingFileChooser;
-    private final JFileChooser savingFileChooser;
-    private final JFrame frame;
-    private final DrawingArea drawingArea;
-    private final ToolsArea toolsArea;
     private final DialogWindowController dialogWindowController;
-
-    private MenuArea menuArea;
-
+    private final JFileChooser imagesOpeningFileChoose;
+    private final JFileChooser pngSavingFileChooser;
+    private final MenuArea menuArea;
+    private final ToolsArea toolsArea;
+    private final DrawingArea drawingArea;
+    private final JFrame frame;
+    private final int minThickness;
+    private final int maxThickness;
+    private final int minNumberOfVertices;
+    private final int maxNumberOfVertices;
+    private final int minRadius;
+    private final int maxRadius;
+    private final int minRotation;
+    private final int maxRotation;
 
     public View(String viewName,
-                int minWidth,
-                int minHeight,
-                BufferedImage startImage,
+                int minFrameWidth,
+                int minFrameHeight,
+                int minThickness,
+                int maxThickness,
+                int minNumberOfVertices,
+                int maxNumberOfVertices,
+                int minRadius,
+                int maxRadius,
+                int minRotation,
+                int maxRotation,
+                String[] supportedImageFormats,
                 ActionListener buttonsListener,
                 ActionListener filesActionsListener,
                 MouseListener mouseListener,
-                ComponentListener drawingAreaListener,
-                DialogWindowController dialogWindowController
-                ) throws IOException {
-
-        this.dialogWindowController = dialogWindowController;
-
+                ComponentListener drawingAreaResizingListener,
+                DialogWindowController dialogWindowController,
+                ToolsIconsSupplier toolsIconsSupplier
+    ) throws IOException {
         contextStateChangeHandlers = new HashMap<>() {{
             put(ContextAction.IDLE, View.this::onIdle);
             put(ContextAction.REPAINT, View.this::onRepainting);
@@ -63,21 +80,21 @@ public class View implements ContextListener {
             put(ContextAction.DISPLAY_HELP, View.this::onDisplayingHelp);
             put(ContextAction.DISPLAY_ABOUT, View.this::onDisplayingAbout);
         }};
-
-        final ToolsIconsSupplier toolsIconsSupplier = new ToolsIconsSupplierImpl();
-        toolsArea = new ToolsArea(toolsIconsSupplier, buttonsListener);
-
-        drawingArea = new DrawingArea(startImage.getWidth(), startImage.getHeight(), mouseListener);
-        drawingArea.addComponentListener(drawingAreaListener);
-
-        openingFileChooser = new JFileChooser();
-        initFileChooser(filesActionsListener);
-
-        savingFileChooser = new JFileChooser();
-        savingFileChooser.addActionListener(filesActionsListener);
-
-        frame = new JFrame(viewName);
-        initFrame(minWidth, minHeight, buttonsListener);
+        this.dialogWindowController = dialogWindowController;
+        this.imagesOpeningFileChoose = createImagesOpeningChooser(filesActionsListener, supportedImageFormats);
+        this.pngSavingFileChooser = createPNGSavingChooser(filesActionsListener);
+        this.menuArea = new MenuArea(buttonsListener);
+        this.toolsArea = new ToolsArea(toolsIconsSupplier, buttonsListener);
+        this.drawingArea = new DrawingArea(mouseListener, drawingAreaResizingListener);
+        this.minThickness = minThickness;
+        this.maxThickness = maxThickness;
+        this.minNumberOfVertices = minNumberOfVertices;
+        this.maxNumberOfVertices = maxNumberOfVertices;
+        this.minRadius = minRadius;
+        this.maxRadius = maxRadius;
+        this.minRotation = minRotation;
+        this.maxRotation = maxRotation;
+        this.frame = createFrame(viewName, minFrameWidth, minFrameHeight);
     }
 
     public void show() {
@@ -118,27 +135,25 @@ public class View implements ContextListener {
         }
     }
 
-    private void onIdle(Context context) {
-
-    }
+    private void onIdle(Context context) {}
 
     private void onRepainting(Context context) {
         repaint(context.getImage());
     }
 
     private void onOpeningFile(Context context) {
-        final int code = openingFileChooser.showOpenDialog(frame);
+        final int code = imagesOpeningFileChoose.showOpenDialog(frame);
 
         if (code == JFileChooser.ERROR_OPTION) {
-            showError("Cannot open file");
+            showError(FILE_OPENING_ERROR_MESSAGE);
         }
     }
 
     private void onSavingFile(Context context) {
-        final int code = savingFileChooser.showSaveDialog(frame);
+        final int code = pngSavingFileChooser.showSaveDialog(frame);
 
         if (code == JFileChooser.ERROR_OPTION) {
-            showError("Cannot save file");
+            showError(FILE_SAVING_ERROR_MESSAGE);
         }
     }
 
@@ -197,51 +212,28 @@ public class View implements ContextListener {
         );
     }
 
-    private void initFileChooser(ActionListener actionListener) {
-        openingFileChooser.setAcceptAllFileFilterUsed(false);
-        openingFileChooser.addChoosableFileFilter(filesOpeningFilter);
-        openingFileChooser.addActionListener(actionListener);
-    }
-
-    private void initFrame(int minWidth, int minHeight, ActionListener actionListener) {
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(minWidth, minHeight));
-
-        final JScrollPane scrollPane = new JScrollPane(drawingArea);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        frame.add(scrollPane, BorderLayout.CENTER);
-
-        menuArea = new MenuArea(actionListener);
-        frame.setJMenuBar(menuArea.getMenuBar());
-
-        frame.add(toolsArea, BorderLayout.NORTH);
-
-        frame.pack();
-    }
-
     private Color showChooseColorDialogWindow(Color startColor) {
-        return JColorChooser.showDialog(null, "Color selection", startColor);
+        return JColorChooser.showDialog(null, COLOR_SELECTION_DIALOG_TITLE, startColor);
     }
 
     private int showSelectThicknessDialogWindow(int startThickness) {
-        return selectInteger("Select thickness", 1, 20, startThickness);
+        return selectInteger(THICKNESS_SELECTION_DIALOG_TITLE, minThickness, maxThickness, startThickness);
     }
 
     private int showSelectNumberOfVerticesDialogWindow(int startNumberOfVertices) {
-        return selectInteger("Select number of vertices", 3, 20, startNumberOfVertices);
+        return selectInteger(NUMBER_OF_VERTICES_SELECTION_DIALOG_TITLE, minNumberOfVertices, maxNumberOfVertices, startNumberOfVertices);
     }
 
     private int showSelectRadiusDialogWindow(int startRadius) {
-        return selectInteger("Select radius", 10, 1000, startRadius);
+        return selectInteger(RADIUS_SELECTION_DIALOG_TITLE, minRadius, maxRadius, startRadius);
     }
 
     private int showSelectRotationDialogWindow(int startRotation) {
-        return selectInteger("Select rotation", 0, 360, startRotation);
+        return selectInteger(ROTATION_DIALOG_TITLE, minRotation, maxRotation, startRotation);
     }
 
     private int selectInteger(String message, int minValue, int maxValue, int startValue) {
-        final String errorMessage = String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
+        final String incorrectValueMessage = getIncorrectValueMessage(minValue, maxValue);
         final JSlider slider = new JSlider(minValue, maxValue, startValue);
         final JTextField textField = new JTextField(Integer.toString(startValue));
 
@@ -265,7 +257,7 @@ public class View implements ContextListener {
         );
 
         if (dialogWindowController.hasError()) {
-            showError(errorMessage);
+            showError(incorrectValueMessage);
             return startValue;
         }
 
@@ -276,7 +268,7 @@ public class View implements ContextListener {
         JOptionPane.showMessageDialog(
                 null,
                 errorMessage,
-                "Error",
+                ERROR_DIALOG_TITLE,
                 JOptionPane.ERROR_MESSAGE
         );
     }
@@ -287,5 +279,46 @@ public class View implements ContextListener {
         drawingArea.repaint();
         drawingArea.revalidate();
         frame.pack();
+    }
+
+    private JFrame createFrame(String frameName, int minFrameWidth, int minFrameHeight) {
+        final JFrame result = new JFrame(frameName);
+        result.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        result.setMinimumSize(new Dimension(minFrameWidth, minFrameHeight));
+
+        final JScrollPane scrollPane = new JScrollPane(drawingArea);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        result.add(scrollPane, BorderLayout.CENTER);
+        result.setJMenuBar(menuArea.getMenuBar());
+        result.add(toolsArea, BorderLayout.NORTH);
+        result.pack();
+
+        return result;
+    }
+
+    private static JFileChooser createImagesOpeningChooser(ActionListener actionListener, String[] supportedImageFormats) {
+        final FileFilter filesOpeningFilter = new FileNameExtensionFilter("Images", supportedImageFormats);
+        final JFileChooser result = new JFileChooser();
+        initFileChooser(result, filesOpeningFilter, actionListener);
+        return result;
+    }
+
+    private static JFileChooser createPNGSavingChooser(ActionListener actionListener) {
+        final FileFilter filesSavingFilter = new FileSavingFilter("PNG");
+        final JFileChooser result = new JFileChooser();
+        initFileChooser(result, filesSavingFilter, actionListener);
+        return result;
+    }
+
+    private static void initFileChooser(JFileChooser fileChooser, FileFilter fileFilter, ActionListener actionListener) {
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.addChoosableFileFilter(fileFilter);
+        fileChooser.addActionListener(actionListener);
+    }
+
+    private static String getIncorrectValueMessage(int minValue, int maxValue) {
+        return String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
     }
 }

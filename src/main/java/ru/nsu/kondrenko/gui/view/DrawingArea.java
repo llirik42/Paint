@@ -2,15 +2,17 @@ package ru.nsu.kondrenko.gui.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 public class DrawingArea extends JPanel {
     private BufferedImage image;
 
-    public DrawingArea(int startWidth, int startHeight, MouseListener mouseListener) {
+    public DrawingArea(MouseListener mouseListener, ComponentListener componentListener) {
+        setBackground(Color.WHITE);
         addMouseListener(mouseListener);
-        resizeSoftly(startWidth, startHeight);
+        addComponentListener(componentListener);
     }
 
     void setImage(BufferedImage image) {

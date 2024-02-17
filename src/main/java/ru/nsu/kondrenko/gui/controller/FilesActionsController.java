@@ -54,9 +54,15 @@ public class FilesActionsController implements ActionListener {
     }
 
     private void handleApproveSavingFile(JFileChooser fileChooser) {
+        final String filterDescription = fileChooser.getFileFilter().getDescription();
+
         try {
-            final File pngFile = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".png");
-            imageSaver.saveAsPNG(context.getImage(), pngFile);
+            if (Objects.equals(filterDescription, "PNG")) {
+                final File pngFile = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".png");
+                imageSaver.saveAsPNG(context.getImage(), pngFile);
+            } else {
+                throw new RuntimeException(String.format("saving an image in an unsupported format \"%s\"", filterDescription));
+            }
         } catch (IOException exception) {
             context.pushError(exception.getLocalizedMessage());
         }
