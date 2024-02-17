@@ -97,22 +97,22 @@ public class View implements ContextListener {
 
         switch (tool) {
             case DRAW_LINE -> {
-                this.menuArea.setDrawLineEnabled();
+                this.menuArea.setDrawLineSelected();
                 this.toolsArea.setDrawLine();
             }
 
             case DRAW_POLYGON -> {
-                this.menuArea.setDrawPolygonEnabled();
+                this.menuArea.setDrawPolygonSelected();
                 this.toolsArea.setDrawPolygon();
             }
 
             case DRAW_STAR -> {
-                this.menuArea.setDrawStarEnabled();
+                this.menuArea.setDrawStarSelected();
                 this.toolsArea.setDrawStar();
             }
 
             case FILL -> {
-                this.menuArea.setFillEnabled();
+                this.menuArea.setFillSelected();
                 this.toolsArea.setFill();
             }
         }

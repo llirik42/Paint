@@ -11,44 +11,42 @@ import java.util.function.Function;
 
 public class MenuArea extends JPanel {
     private static final Font FONT = new Font("Go", Font.BOLD, 14);
-
     private static final Color MENU_BACKGROUND_COLOR = new Color(0.85f, 0.85f, 0.85f);
     private static final Color BUTTONS_FONT_COLOR = new Color(0.14f, 0.13f, 0.13f);
-
     private static final String FILE_MENU_TITLE = "File";
     private static final String EDIT_MENU_TITLE = "Edit";
     private static final String HELP_MENU_TITLE = "Info";
 
-    private final List<MenuItemProperties> FILE_MENU_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Open", ActionCommands.OPEN),
-            new MenuItemProperties("Save", ActionCommands.SAVE),
-            new MenuItemProperties("Exit", ActionCommands.EXIT)
+    private static final List<MenuItem> FILE_MENU_ITEMS = Arrays.asList(
+            new MenuItem("Open", ActionCommands.OPEN),
+            new MenuItem("Save", ActionCommands.SAVE),
+            new MenuItem("Exit", ActionCommands.EXIT)
     );
-    private final List<MenuItemProperties> EDIT_MENU_DRAWING_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Draw line", ActionCommands.DRAW_LINE, MenuItemType.DRAW_LINE_TOOL),
-            new MenuItemProperties("Draw polygon", ActionCommands.DRAW_POLYGON, MenuItemType.DRAW_POLYGON_TOOL),
-            new MenuItemProperties("Draw star", ActionCommands.DRAW_STAR, MenuItemType.DRAW_STAR_TOOL),
-            new MenuItemProperties("Fill", ActionCommands.FILL, MenuItemType.FILL_TOOL)
+    private static final List<MenuItem> EDIT_MENU_DRAWING_ITEMS = Arrays.asList(
+            new MenuItem("Line", ActionCommands.DRAW_LINE, MenuItemType.DRAW_LINE_TOOL),
+            new MenuItem("Polygon", ActionCommands.DRAW_POLYGON, MenuItemType.DRAW_POLYGON_TOOL),
+            new MenuItem("Star", ActionCommands.DRAW_STAR, MenuItemType.DRAW_STAR_TOOL),
+            new MenuItem("Fill", ActionCommands.FILL, MenuItemType.FILL_TOOL)
     );
-    private final List<MenuItemProperties> EDIT_MENU_OTHER_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Clear", ActionCommands.CLEAR),
-            new MenuItemProperties("Select color", ActionCommands.SELECT_COLOR),
-            new MenuItemProperties("Select thickness", ActionCommands.SELECT_THICKNESS),
-            new MenuItemProperties("Select number of vertices", ActionCommands.SELECT_NUMBER_OF_VERTICES),
-            new MenuItemProperties("Select rotation", ActionCommands.SELECT_ROTATION),
-            new MenuItemProperties("Select radius", ActionCommands.SELECT_RADIUS)
+    private static final List<MenuItem> EDIT_MENU_OTHER_ITEMS = Arrays.asList(
+            new MenuItem("Clear", ActionCommands.CLEAR),
+            new MenuItem("Select color", ActionCommands.SELECT_COLOR),
+            new MenuItem("Select thickness", ActionCommands.SELECT_THICKNESS),
+            new MenuItem("Select number of vertices", ActionCommands.SELECT_NUMBER_OF_VERTICES),
+            new MenuItem("Select rotation", ActionCommands.SELECT_ROTATION),
+            new MenuItem("Select radius", ActionCommands.SELECT_RADIUS)
     );
-    private final List<MenuItemProperties> HELP_ABOUT_MENU_ITEMS_PROPERTIES = Arrays.asList(
-            new MenuItemProperties("Help", ActionCommands.SHOW_HELP),
-            new MenuItemProperties("About", ActionCommands.SHOW_ABOUT)
+    private static final List<MenuItem> HELP_ABOUT_MENU_ITEMS = Arrays.asList(
+            new MenuItem("Help", ActionCommands.SHOW_HELP),
+            new MenuItem("About", ActionCommands.SHOW_ABOUT)
     );
-    private final JMenuBar menuBar;
 
-    private JMenuItem drawLine;
-    private JRadioButtonMenuItem drawPolygon;
-    private JRadioButtonMenuItem drawStar;
-    private JRadioButtonMenuItem fill;
-    private ButtonGroup toolsGroup;
+    private final JMenuBar menuBar;
+    private ButtonModel drawLineButtonModel;
+    private ButtonModel drawPolygonButtonModel;
+    private ButtonModel drawStarButtonModel;
+    private ButtonModel fillButtonModel;
+    private ButtonGroup drawButtonsGroup;
 
     public MenuArea(ActionListener actionListener) {
         setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -57,83 +55,74 @@ public class MenuArea extends JPanel {
         menuBar = new JMenuBar();
         menuBar.setBackground(MENU_BACKGROUND_COLOR);
 
-        List<Function<ActionListener, JMenu>> MENUS_CREATION_METHODS = Arrays.asList(
+        final List<Function<ActionListener, JMenu>> MENUS_CREATION_METHODS = Arrays.asList(
                 this::createFileMenu,
                 this::createEditMenu,
                 this::createHelpMenu
         );
+
         for (final var it : MENUS_CREATION_METHODS) {
             final JMenu menu = it.apply(actionListener);
             menuBar.add(menu);
         }
     }
 
-    public void setDrawLineEnabled() {
-        toolsGroup.setSelected(drawLine.getModel(), true);
+    public void setDrawLineSelected() {
+        drawButtonsGroup.setSelected(drawLineButtonModel, true);
     }
 
-    public void setDrawPolygonEnabled() {
-        toolsGroup.setSelected(drawPolygon.getModel(), true);
+    public void setDrawPolygonSelected() {
+        drawButtonsGroup.setSelected(drawPolygonButtonModel, true);
     }
 
-    public void setDrawStarEnabled() {
-        toolsGroup.setSelected(drawStar.getModel(), true);
+    public void setDrawStarSelected() {
+        drawButtonsGroup.setSelected(drawStarButtonModel, true);
     }
 
-    public void setFillEnabled() {
-        toolsGroup.setSelected(fill.getModel(), true);
+    public void setFillSelected() {
+        drawButtonsGroup.setSelected(fillButtonModel, true);
+    }
+
+    public JMenuBar getMenuBar() {
+        return menuBar;
     }
 
     private JMenu createFileMenu(ActionListener actionListener) {
         final JMenu result = createMenu(FILE_MENU_TITLE);
-
-        for (final var it : FILE_MENU_ITEMS_PROPERTIES) {
-            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
-            result.add(item);
-        }
-
+        pushItemToMenu(result, FILE_MENU_ITEMS, actionListener);
         return result;
     }
 
     private JMenu createEditMenu(ActionListener actionListener) {
         final JMenu result = createMenu(EDIT_MENU_TITLE);
 
-        toolsGroup = new ButtonGroup();
-        for (final var it : EDIT_MENU_DRAWING_ITEMS_PROPERTIES) {
+        drawButtonsGroup = new ButtonGroup();
+        for (final var it : EDIT_MENU_DRAWING_ITEMS) {
             final JRadioButtonMenuItem item = createRadioButtonMenuItem(it.label(), it.actionCommand(), actionListener);
-            toolsGroup.add(item);
+            drawButtonsGroup.add(item);
             result.add(item);
-
             final MenuItemType type = it.type();
+            final ButtonModel buttonModel = item.getModel();
             switch (type) {
-                case DRAW_LINE_TOOL -> drawLine = item;
-                case DRAW_POLYGON_TOOL -> drawPolygon = item;
-                case DRAW_STAR_TOOL -> drawStar = item;
-                case FILL_TOOL -> fill = item;
+                case DRAW_LINE_TOOL -> drawLineButtonModel = buttonModel;
+                case DRAW_POLYGON_TOOL -> drawPolygonButtonModel = buttonModel;
+                case DRAW_STAR_TOOL -> drawStarButtonModel = buttonModel;
+                case FILL_TOOL -> fillButtonModel = buttonModel;
             }
         }
         result.add(new JSeparator());
-
-        for (final var it : EDIT_MENU_OTHER_ITEMS_PROPERTIES) {
-            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
-            result.add(item);
-        }
+        pushItemToMenu(result, EDIT_MENU_OTHER_ITEMS, actionListener);
 
         return result;
     }
 
     private JMenu createHelpMenu(ActionListener actionListener) {
         final JMenu result = createMenu(HELP_MENU_TITLE);
-
-        for (final var it : HELP_ABOUT_MENU_ITEMS_PROPERTIES) {
-            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
-            result.add(item);
-        }
-
+        pushItemToMenu(result, HELP_ABOUT_MENU_ITEMS, actionListener);
         return result;
     }
 
-    private JMenu createMenu(String label) {
+    private static JMenu createMenu(String label) {
         JMenu result = new JMenu(label);
         result.setBackground(MENU_BACKGROUND_COLOR);
         result.setForeground(BUTTONS_FONT_COLOR);
@@ -141,28 +130,30 @@ public class MenuArea extends JPanel {
         return result;
     }
 
-    private JMenuItem createMenuItem(String label, String actionCommand, ActionListener actionListener) {
+    private static JMenuItem createMenuItem(String label, String actionCommand, ActionListener actionListener) {
         final JMenuItem result = new JMenuItem(label);
-        initButton(result, actionListener);
-        result.setActionCommand(actionCommand);
+        initButton(result, actionCommand, actionListener);
         return result;
     }
 
-    private JRadioButtonMenuItem createRadioButtonMenuItem(String label, String actionCommand, ActionListener actionListener) {
+    private static JRadioButtonMenuItem createRadioButtonMenuItem(String label, String actionCommand, ActionListener actionListener) {
         final JRadioButtonMenuItem result = new JRadioButtonMenuItem(label);
-        initButton(result, actionListener);
-        result.setActionCommand(actionCommand);
+        initButton(result, actionCommand, actionListener);
         return result;
     }
 
-    private void initButton(AbstractButton button, ActionListener actionListener) {
+    private static void initButton(AbstractButton button, String actionCommand, ActionListener actionListener) {
         button.setBorderPainted(false);
         button.setFont(FONT);
         button.setForeground(BUTTONS_FONT_COLOR);
         button.addActionListener(actionListener);
+        button.setActionCommand(actionCommand);
     }
 
-    public JMenuBar getMenuBar() {
-        return menuBar;
+    private static void pushItemToMenu(JMenu menu, List<MenuItem> items, ActionListener actionListener) {
+        for (final var it : items) {
+            final JMenuItem item = createMenuItem(it.label(), it.actionCommand(), actionListener);
+            menu.add(item);
+        }
     }
 }

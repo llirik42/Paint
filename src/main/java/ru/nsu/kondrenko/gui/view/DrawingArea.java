@@ -9,7 +9,6 @@ public class DrawingArea extends JPanel {
     private BufferedImage image;
 
     public DrawingArea(int startWidth, int startHeight, MouseListener mouseListener) {
-        setBackground(Color.WHITE);
         addMouseListener(mouseListener);
         resizeSoftly(startWidth, startHeight);
     }

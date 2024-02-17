@@ -3,6 +3,7 @@ package ru.nsu.kondrenko.gui;
 import ru.nsu.kondrenko.gui.controller.*;
 import ru.nsu.kondrenko.gui.view.View;
 import ru.nsu.kondrenko.model.context.Context;
+import ru.nsu.kondrenko.model.context.ContextAction;
 import ru.nsu.kondrenko.model.context.ContextImpl;
 import ru.nsu.kondrenko.model.image.*;
 
@@ -72,6 +73,7 @@ public class Main {
             );
 
             context.addListener(view);
+            context.setAction(ContextAction.REPAINT);
             view.show();
         } catch (IOException exception) {
             System.err.printf("Cannot init view: %s%n", exception.getLocalizedMessage());
