@@ -13,12 +13,11 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     private final ImageIcon drawStarIcon;
     private final ImageIcon fillIcon;
     private final ImageIcon clearIcon;
-    private final ImageIcon chooseColorIcon;
-    private final ImageIcon chooseThicknessIcon;
-    private final ImageIcon chooseNumberOfSidesIcon;
-    private final ImageIcon chooseRadiusIcon;
-    private final ImageIcon chooseRotationIcon;
-
+    private final ImageIcon selectColorIcon;
+    private final ImageIcon selectThicknessIcon;
+    private final ImageIcon selectNumberOfSidesIcon;
+    private final ImageIcon selectRadiusIcon;
+    private final ImageIcon selectRotationIcon;
     private final ImageIcon blackIcon;
     private final ImageIcon whiteIcon;
     private final ImageIcon redIcon;
@@ -37,11 +36,11 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
         drawStarIcon = loadImageIcon("/icons/star.png");
         fillIcon = loadImageIcon("/icons/fill.png");
         clearIcon = loadImageIcon("/icons/clear.png");
-        chooseColorIcon = loadImageIcon("/icons/palette.png");
-        chooseThicknessIcon = loadImageIcon("/icons/thickness.png");
-        chooseNumberOfSidesIcon = loadImageIcon("/icons/shapes.png");
-        chooseRadiusIcon = loadImageIcon("/icons/radius.png");
-        chooseRotationIcon = loadImageIcon("/icons/rotation.png");
+        selectColorIcon = loadImageIcon("/icons/palette.png");
+        selectThicknessIcon = loadImageIcon("/icons/thickness.png");
+        selectNumberOfSidesIcon = loadImageIcon("/icons/shapes.png");
+        selectRadiusIcon = loadImageIcon("/icons/radius.png");
+        selectRotationIcon = loadImageIcon("/icons/rotation.png");
 
         blackIcon = loadColorIcon("black");
         whiteIcon = loadColorIcon("white");
@@ -82,27 +81,27 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
 
     @Override
     public ImageIcon getSelectColorIcon() {
-        return chooseColorIcon;
+        return selectColorIcon;
     }
 
     @Override
     public ImageIcon getSelectThicknessIcon() {
-        return chooseThicknessIcon;
+        return selectThicknessIcon;
     }
 
     @Override
     public ImageIcon getSelectNumberOfVerticesIcon() {
-        return chooseNumberOfSidesIcon;
+        return selectNumberOfSidesIcon;
     }
 
     @Override
     public ImageIcon getSelectRadiusIcon() {
-        return chooseRadiusIcon;
+        return selectRadiusIcon;
     }
 
     @Override
     public ImageIcon getSelectRotationIcon() {
-        return chooseRotationIcon;
+        return selectRotationIcon;
     }
 
     @Override
@@ -156,7 +155,7 @@ public class ToolsIconsSupplierImpl implements ToolsIconsSupplier {
     }
 
     private ImageIcon loadColorIcon(final String colorName) throws IOException {
-        return new ImageIcon(reader.readAsResource(String.format("/colors/%s.png", colorName)));
+        return loadImageIcon(String.format("/colors/%s.png", colorName));
     }
 
     private ImageIcon loadImageIcon(final String path) throws IOException {
