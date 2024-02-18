@@ -9,10 +9,6 @@ import ru.nsu.kondrenko.model.context.ContextTools;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
@@ -23,7 +19,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class View implements ContextListener {
-    private static final Font HELP_ABOUT_FONT = new Font("Go", Font.PLAIN, 14);
     private static final String FILE_OPENING_ERROR_MESSAGE = "Cannot open file";
     private static final String FILE_SAVING_ERROR_MESSAGE = "Cannot save file";
     private static final String COLOR_SELECTION_DIALOG_TITLE = "Color";
@@ -39,7 +34,8 @@ public class View implements ContextListener {
     private final DialogWindowController dialogWindowController;
     private final JFileChooser imagesOpeningFileChoose;
     private final JFileChooser pngSavingFileChooser;
-    private final JTextArea aboutTextArea;
+    private final JTextPane helpTextPane;
+    private final JTextPane aboutTextPane;
     private final MenuArea menuArea;
     private final ToolsArea toolsArea;
     private final DrawingArea drawingArea;
@@ -89,7 +85,8 @@ public class View implements ContextListener {
         this.dialogWindowController = dialogWindowController;
         this.imagesOpeningFileChoose = createImagesOpeningChooser(filesActionsListener, supportedImageFormats);
         this.pngSavingFileChooser = createPNGSavingChooser(filesActionsListener);
-        this.aboutTextArea = createAboutTextArea();
+        this.helpTextPane = createHelpTextPane();
+        this.aboutTextPane = createAboutTextArea();
         this.menuArea = new MenuArea(buttonsListener);
         this.toolsArea = new ToolsArea(toolsIconsSupplier, buttonsListener);
         this.drawingArea = new DrawingArea(mouseListener, drawingAreaResizingListener);
@@ -124,20 +121,86 @@ public class View implements ContextListener {
         fileChooser.addActionListener(actionListener);
     }
 
-    private static JTextArea createAboutTextArea() {
-        final JTextArea result = new JTextArea();
-
-        result.setFont(HELP_ABOUT_FONT);
-        result.setBackground(null);
-        result.append("""
-                Simple Paint 1.0.0
-                
-                Created by Kondrenko Kirill in February 2024 as task for the course "engineering and computer graphics" in Novosibirsk State University""");
-
-
+    private static JTextPane createHelpTextPane() {
+        final JTextPane result = createHelpAboutTextPane();
+        result.setText(getHelpText());
         return result;
     }
 
+    private static JTextPane createAboutTextArea() {
+        final JTextPane result = createHelpAboutTextPane();
+        result.setText(getAboutText());
+        return result;
+    }
+
+    private static String getHelpText() {
+        return """
+                <html>
+                    <p><b><i>Simple Paint</i></b> represents a simple program for drawing simple shapes and filling, it has 3 areas</p>
+                    <ul>
+                    <li><b>Canvas</b> — is a working area where all drawings and fillings are visible</li>
+                    <li><b>Menu</b> contains main functionality and consists of</li>
+                    <ul>
+                        <li>
+                            <i>File</i>
+                            <ul>
+                                <li><u>Open</u> — opens file, supported formats are: PNG, JPEG, BMP, GIF</li>
+                                <li><u>Save</u> — saves file as PNG-image</li>
+                                <li><u>Exit</u> — exits program without any saving</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <i>Edit</i>
+                            <ul>
+                                <li><u>Line</u> — draws line between 2 points of mouse-pressing</li>
+                                <li><u>Polygon</u> — draws polygon where mouse is pressed</li>
+                                <li><u>Star</u> — draws star where mouse is pressed, inner radius is equal to outer radius divided by 2</li>
+                                <li><u>Fill</u> — fills 4-connected area that contains point of mouse-pressing</li>
+                                <li><u>Clear</u> — clears <b>Canvas</b></li>
+                                <li><u>Select color</u> — opens dialog window to select current color</li>
+                                <li><u>Select thickness</u> — opens dialog window to select current thickness</li>
+                                <li><u>Select number of vertices</u> — opens dialog window to select current number of vertices</li>
+                                <li><u>Select rotation</u> — opens dialog window to select current rotation</li>
+                                <li><u>Select radius</u> — opens dialog window to select current radius</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <i>Info</i>
+                            <ul>
+                                <li><u>Help</u> — shows help</li>
+                                <li><u>About</u> — shows about</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <li><b>Tools</b> contains all functionality of <b>Menu</b> and adds additional tools (such as <i>change color to red</i>)</li>
+                    </ul>
+                    <p>There are <b>parameters</b> that are defined while the program is running</p>
+                    <ul>
+                        <li><i>color</i> — which color to use during drawing shapes and filling</li>
+                        <li><i>thickness</i> — thickness of shapes</li>
+                        <li><i>number of vertices</i> — number of vertices for shapes (such as polygons and stars)</li>
+                        <li><i>rotation</i> — how many degrees will the figure be rotated clockwise</li>
+                        <li><i>radius</i> — determines radius of shapes, for polygons and stars it means radius of the circumcircle</li>
+                    </ul>
+               </html>""";
+    }
+
+    private static String getAboutText() {
+        return """
+        <html>
+            <p><i><b>Simple Paint</b></i></p>
+            <p>Created by Kondrenko Kirill in February 2024 as task for the course "engineering and computer graphics" in Novosibirsk State University</p>
+        </html>""";
+    }
+
+    private static JTextPane createHelpAboutTextPane() {
+        final JTextPane result = new JTextPane();
+        result.setEditable(false);
+        result.setBackground(null);
+        result.setContentType("text/html");
+        return result;
+    }
+    
     private static String getIncorrectValueMessage(int minValue, int maxValue) {
         return String.format("Incorrect value! It must be in [%d, %d]", minValue, maxValue);
     }
@@ -237,48 +300,10 @@ public class View implements ContextListener {
         showError(context.getErrorMessage());
     }
 
-    private void appendToPane(JTextPane tp, String msg, Color c) {
-        StyleContext sc = StyleContext.getDefaultStyleContext();
-        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
-
-        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
-        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
-
-        int len = tp.getDocument().getLength();
-        tp.setCaretPosition(len);
-        tp.setCharacterAttributes(aset, false);
-        tp.replaceSelection(msg);
-    }
-
     private void onDisplayingHelp(Context context) {
-
-        // TODO:
-        final SimpleTextPane textPane = new SimpleTextPane(HELP_ABOUT_FONT);
-        textPane.appendPlain("""
-                Menu
-                File
-                Open — opens file
-                Save — save file
-                Exit — exit
-                Tools
-                Line
-                Polygon
-                Star
-                Fill
-                Clear
-                Select color
-                Select thickness
-                Select number of vertices
-                Select radius
-                Select rotation
-
-                Info
-                Help — show help
-                About — show about""");
-
         JOptionPane.showMessageDialog(
                 null,
-                textPane,
+                helpTextPane,
                 HELP_DIALOG_TITLE,
                 JOptionPane.INFORMATION_MESSAGE
         );
@@ -287,7 +312,7 @@ public class View implements ContextListener {
     private void onDisplayingAbout(Context context) {
         JOptionPane.showMessageDialog(
                 null,
-                aboutTextArea,
+                aboutTextPane,
                 ABOUT_DIALOG_TITLE,
                 JOptionPane.INFORMATION_MESSAGE
         );
