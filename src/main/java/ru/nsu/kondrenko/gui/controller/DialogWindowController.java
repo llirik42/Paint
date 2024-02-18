@@ -17,6 +17,7 @@ public class DialogWindowController implements ChangeListener, ActionListener, D
     private int maxValue;
     private int value;
     private boolean hasError;
+    private boolean hasValue;
 
     public void setTextField(JTextField textField) {
         this.textField = textField;
@@ -32,19 +33,24 @@ public class DialogWindowController implements ChangeListener, ActionListener, D
         return value;
     }
 
-    public void resetError() {
+    public void reset() {
         hasError = false;
+        hasValue = false;
     }
 
     public boolean hasError() {
         return hasError;
     }
 
+    public boolean hasValue() {
+        return hasValue;
+    }
+
     @Override
     public void stateChanged(ChangeEvent changeEvent) {
         final int oldValue = value;
         final int newValue = slider.getValue();
-        value = newValue;
+        updateValue(newValue);
 
         if (oldValue != newValue) {
             updateValueOfTextArea();
@@ -85,7 +91,7 @@ public class DialogWindowController implements ChangeListener, ActionListener, D
             hasError = tmp < minValue || tmp > maxValue;
 
             if (!hasError) {
-                value = tmp;
+                updateValue(tmp);
                 updateValueOfSlider();
             }
         } catch (Exception exception) {
@@ -99,5 +105,10 @@ public class DialogWindowController implements ChangeListener, ActionListener, D
 
     private void updateValueOfTextArea() {
         textField.setText(Integer.toString(value));
+    }
+
+    private void updateValue(int value) {
+        this.value = value;
+        hasValue = true;
     }
 }

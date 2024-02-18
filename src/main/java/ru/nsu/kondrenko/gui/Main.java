@@ -33,7 +33,7 @@ public class Main {
 
     private static final int START_NUMBER_OF_SIDES = 4;
     private static final int MIN_NUMBER_OF_VERTICES = 3;
-    private static final int MAX_NUMBER_OF_VERTICES = 20;
+    private static final int MAX_NUMBER_OF_VERTICES = 16;
 
     private static final int START_RADIUS = 100;
     private static final int MIN_RADIUS = 1;
@@ -41,7 +41,7 @@ public class Main {
 
     private static final int START_ROTATION = 0;
     private static final int MIN_ROTATION = 0;
-    private static final int MAX_ROTATION = 360;
+    private static final int MAX_ROTATION = 359;
 
     public static void main(String[] args) {
         try {

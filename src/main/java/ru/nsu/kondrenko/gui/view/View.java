@@ -318,7 +318,7 @@ public class View implements ContextListener {
         final JSlider slider = new JSlider(minValue, maxValue, startValue);
         final JTextField textField = new JTextField(Integer.toString(startValue));
 
-        dialogWindowController.resetError();
+        dialogWindowController.reset();
         dialogWindowController.setSlider(slider);
         dialogWindowController.setTextField(textField);
         slider.addChangeListener(dialogWindowController);
@@ -342,7 +342,7 @@ public class View implements ContextListener {
             return startValue;
         }
 
-        return dialogWindowController.getValue();
+        return dialogWindowController.hasValue() ? dialogWindowController.getValue() : startValue;
     }
 
     private void showError(String errorMessage) {
